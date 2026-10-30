@@ -57,6 +57,7 @@ The 100 meeting folders supplied with the assignment are not in this repo. Place
 | `app/` | `explorer.html` (self-contained), `build_explorer.py`, `explorer_tpl.html` |
 | `eval/` | `bakeoff.py`, `bakeoff_report.py`, `stage12_report.py`, `build_stage12_verdicts.py`, `demo_replay.py` (one call through Stages 1-2 in replay, for the video), hand-check verdicts `stage0/1/2_review_verdicts.json` |
 | `outputs/` | `stage0_final.csv`, `stage1/` (incl. `stage1_final.csv`, `taxonomy_v1.json`), `stage2/` (incl. `stage2_final.csv`), `stage12_metrics.json`, `analysis/{themes,sentiment,candidates}/`, `bakeoff/` |
+| `deck/` | The exported slide deck (.pptx) |
 | `docs/` | `analysis-themes.md`, `analysis-sentiment.md`, `analysis-candidates.md`, `stage1-discovery.md`, `bakeoff-report.md`, `model-selection.md`, `quotable_numbers.py` |
 | `tests/` | 89 tests across loader, LLM client, stages, analysis, explorer and notebooks |
 | `deploy/` | Placeholder only (see Status) |
@@ -66,7 +67,7 @@ The 100 meeting folders supplied with the assignment are not in this repo. Place
 
 These are private claude.ai artifacts. They open only for the owner until I share them, so the reviewer needs a shared link or the committed files.
 
-- Deck (22 slides: 16 main, 6 appendix): https://claude.ai/artifact/3P2fxeVuVfihK9hgbXNyCM
+- Deck (21 slides: 15 main, 6 appendix, with speaker notes), exported to `deck/transcript-intelligence-findings.pptx`; the live version is a private artifact: https://claude.ai/artifact/3P2fxeVuVfihK9hgbXNyCM
 - Explorer (same content as `app/explorer.html`): https://claude.ai/artifact/3RKUQFK2m1CURZcDjNNend
 - Assessment Navigator (my orientation tool, not a deliverable): https://claude.ai/artifact/HGqhuC4inwMcdJ4wXQ7ZAA
 
@@ -95,7 +96,7 @@ All numbers below are copied from `docs/analysis-*.md`, `outputs/stage12_metrics
 | Task 1: pipeline that categorizes by theme, with reasoning and examples | Frozen taxonomy, examples per theme (two clear, one borderline), approach rationale | `notebooks/02_stage1_categories.ipynb` (+ html), `docs/analysis-themes.md`, `outputs/analysis/themes/examples.json`, `docs/stage1-discovery.md`, deck | Done; hand-checked on 20 calls |
 | Task 2: sentiment across call types with trends, and what they mean | Scores by type and month, interpretation, "so what", what I would not claim | `notebooks/03_stage2_sentiment.ipynb`, `notebooks/04_trends_and_meaning.ipynb`, `docs/analysis-sentiment.md`, `outputs/analysis/sentiment/`, deck | Done; hand-checked on 15 calls |
 | Task 3: 2-3 additional insights for different stakeholders | Three built insights plus one described idea, ranked candidates | `notebooks/05_bonus_insights.ipynb`, `docs/analysis-candidates.md`, `outputs/analysis/candidates/`, deck | Done; churn list unvalidated (no outcomes) |
-| Deliverable: slide deck for product and engineering leadership | 22 slides with speaker notes | Deck artifact link above | Built; private artifact, must be shared or exported; not in the repo |
+| Deliverable: slide deck for product and engineering leadership | 21 slides with speaker notes | `deck/transcript-intelligence-findings.pptx` | Done (exported from the artifact) |
 | Deliverable: notebook or repo, readable, decisions explained | Repo, 7 notebooks, `DECISIONS.md`, tests | `notebooks/`, `src/ti/`, `tests/`, `DECISIONS.md` | Done; 89 tests pass |
 | Deliverable: 5-10 minute video demo | Script and checklist | prepared privately | Recording not made yet |
 | Demo any insights or visualizations built | Interactive explorer (Overview, Calls, Themes, Insights, Trust) | `app/explorer.html`, `app/build_explorer.py`, `tests/test_explorer.py` | Done |

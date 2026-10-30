@@ -54,7 +54,7 @@ The 100 meeting folders supplied with the assignment are not in this repo. Place
 | `prompts/` | Versioned prompts. Final: `stage0_v1`, `stage1_v1`, `stage2_v1`. Others are discovery prompts and bake-off drafts (`*_bakeoff_v0`, `stage1_v0`, `stage2_v0`) kept for the record |
 | `cache/` | Raw LLM responses keyed by input, prompt, model and params (committed; this is what replay serves) |
 | `notebooks/` | `00_overview` to `06_model_choice_and_limits` (`.ipynb`), HTML copies in `notebooks/html/` |
-| `app/` | `explorer.html` (self-contained), `build_explorer.py`, `explorer_tpl.html` |
+| `app/` | `explorer.html` (self-contained), `build_explorer.py`, `explorer_tpl.html`; `video_walkthrough.html`, `build_walkthrough.py` (the 7-scene page used in the video) |
 | `eval/` | `bakeoff.py`, `bakeoff_report.py`, `stage12_report.py`, `build_stage12_verdicts.py`, `demo_replay.py` (one call through Stages 1-2 in replay, for the video), hand-check verdicts `stage0/1/2_review_verdicts.json` |
 | `outputs/` | `stage0_final.csv`, `stage1/` (incl. `stage1_final.csv`, `taxonomy_v1.json`), `stage2/` (incl. `stage2_final.csv`), `stage12_metrics.json`, `analysis/{themes,sentiment,candidates}/`, `bakeoff/` |
 | `deck/` | The exported slide deck (.pptx) |

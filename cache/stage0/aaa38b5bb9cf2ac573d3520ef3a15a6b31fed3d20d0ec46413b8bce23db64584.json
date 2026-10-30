@@ -1,0 +1,69 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nKevin O'Brien: Hey Dominic, good to connect again — how's everything going over at Silverline?\nDominic Flores: Kevin! Yeah, things are good, things are good — it's been a busy quarter honestly, we just wrapped up our spring inventory push so I'm finally coming up for air a little bit.\nKevin O'Brien: Oh I can imagine, retail Q1 is no joke — glad you're through it.\nDominic Flores: Yeah exactly, and honestly the timing of this call is actually pretty good for us because we've got our PCI DSS renewal audit coming up in like six weeks so compliance is very top of mind right now.\nKevin O'Brien: Perfect, yeah that's — honestly that's exactly why I wanted to get you on early access for the Comply v2 demo because what you're about to see is going to be really relevant to that audit cycle.\nDominic Flores: Yeah I was looking at the invite notes you sent over, the on-demand reporting piece caught my eye immediately — like can you just walk me through what that actually means in practice?\nKevin O'Brien: Absolutely, so let me just pull up the environment here — bear with me one second — okay, so what you're looking at is the new Comply v2 dashboard and the big shift here is that previously, as you know, generating a compliance report was kind of a scheduled batch process, right, you'd request it and wait, sometimes hours.\nDominic Flores: Yeah that was — I'll be honest that was a pain point for us, like our auditors would ask for something and I'd have to say well come back tomorrow basically."
+  },
+  "response_text": "{\"label\": \"external\", \"evidence_quote\": \"I was looking at the invite notes you sent over, the on-demand reporting piece caught my eye immediately\", \"confidence\": \"high\", \"speaker_sides\": [{\"speaker\": \"Kevin O'Brien\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Dominic Flores\", \"side\": \"customer\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "I was looking at the invite notes you sent over, the on-demand reporting piece caught my eye immediately",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Kevin O'Brien",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Dominic Flores",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 124,
+    "prompt_tokens": 1943,
+    "total_tokens": 2067,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002563,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002563,
+      "upstream_inference_prompt_cost": 0.0001943,
+      "upstream_inference_completions_cost": 6.2e-05
+    }
+  },
+  "latency_s": 1.649,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:27.846375+00:00",
+  "key": "aaa38b5bb9cf2ac573d3520ef3a15a6b31fed3d20d0ec46413b8bce23db64584"
+}

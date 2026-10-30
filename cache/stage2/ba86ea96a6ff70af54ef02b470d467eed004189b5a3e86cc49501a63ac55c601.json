@@ -1,0 +1,232 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (41 turns, indices 0 to 40; per_turn needs exactly 41 entries, one per index in order):\n[0] David Kim (aegis_staff): Hi, this is David Kim calling from Aegis Cloud Security support, I have case number 3536 here for Stratos Cloud — am I speaking with Damien?\n[1] Damien Rowe (customer): Yeah, yeah that's me. Damien Rowe. Thanks for calling back, I've been waiting on this for like — look, we submitted this ticket yesterday morning and this is kind of urgent for us.\n[2] David Kim (aegis_staff): I completely understand, Damien, and I apologize for the wait. I also have my team lead Priya Patel joining us on the call today, she's been looped in given the priority of the case.\n[3] Priya Patel (aegis_staff): Hi Damien, thanks for your patience. We definitely want to get to the bottom of this with you today.\n[4] Damien Rowe (customer): Okay, sure. I appreciate that. So — look, I'll just get into it. We've been running Aegis Detect integrated with our LogVault environment, right, and starting around — I want to say April 18th, maybe 19th — we started seeing consistent timeout errors when Detect tries to push event data to our LogVault HTTP Event Collector endpoint. It's not intermittent, it's basically every... every batch that goes through.\n[5] David Kim (aegis_staff): Okay, so consistent timeouts hitting the HEC endpoint. And when you say every batch — are these on a scheduled interval or is this continuous streaming from Detect?\n[6] Damien Rowe (customer): We have it set to push every five minutes. And it was working fine, totally fine, for months before this. Nothing changed on our end — we didn't update LogVault, we didn't change the HEC token, nothing. So whatever broke, it broke on your side.\n[7] David Kim (aegis_staff): I hear you, and I want to be careful not to make assumptions before we dig into the logs, but I do want to look at this thoroughly. Can I ask — are you seeing any error codes coming back, or is it just a straight connection timeout with no response from the HEC endpoint?\n[8] Damien Rowe (customer): It's a connection timeout. We're not even getting a response code. The connection just... hangs and then drops. Our LogVault team confirmed the HEC endpoint itself is healthy — they're receiving data from other sources without any issues.\n[9] Priya Patel (aegis_staff): Okay so LogVault HEC is healthy, other sources pushing fine, only Aegis Detect is timing out. David, I'm wondering if this could be related to the event processing changes that were pushed in the pipeline update earlier this month.\n[10] David Kim (aegis_staff): Yeah, I was thinking the same thing. Damien, I want to ask — do you happen to know your Aegis Detect tenant version? It should be visible in the platform under Settings and then About.\n[11] Damien Rowe (customer): Uh, hold on. Let me — yeah, give me a second, I'm pulling it up now. Okay it says... Detect pipeline version 4.1.2, event processor build April 8th.\n[12] David Kim (aegis_staff): April 8th build. Okay. Priya, that would be the post-remediation build from after the March incident, right?\n[13] Priya Patel (aegis_staff): Yes, that's correct. So Damien, I don't know if you were made aware — in mid-March we had a significant incident with the Aegis Detect event processing pipeline. There was a cascading failure that caused monitoring gaps, and we pushed a remediation update that included redundant processing nodes and a circuit breaker pattern in the ingestion layer.\n[14] Damien Rowe (customer): Oh, I am very aware of that outage. Yeah, we were one of the customers affected. Six hours of no visibility — that was a really bad week for us. We had to explain to our own leadership why we had blind spots in our threat monitoring. That was not a fun conversation.\n[15] Priya Patel (aegis_staff): Yeah, we — we really do understand that, and I'm sorry again for the disruption that caused. What I'm wondering now though is whether the circuit breaker implementation in that fix might be contributing to what you're seeing with LogVault. If the outbound connector to your HEC endpoint is getting tripped by the circuit breaker under certain load conditions, that could explain the timeout pattern.\n[16] Damien Rowe (customer): So you're telling me the fix for one problem might have caused a new problem? That's — I mean, come on. That's not great to hear.\n[17] Priya Patel (aegis_staff): I want to be clear that I'm not confirming that yet, we need to look at the logs before I say anything definitively. But it's a hypothesis worth investigating. David, can you pull the outbound connector logs for Stratos on the Detect side?\n[18] David Kim (aegis_staff): Already on it. Damien, while I'm doing that — can you tell me roughly what volume of events Detect is processing in your environment? Like ballpark events per minute during peak hours?\n[19] Damien Rowe (customer): Uh, we're a pretty active environment. I'd say during peak — probably somewhere between eight and twelve thousand events per minute. We're a technology company, we've got a lot of infrastructure generating signal.\n[20] David Kim (aegis_staff): Okay, yeah that's — that's actually useful context. So I'm looking at the connector logs now and... okay, yeah. I'm seeing the circuit breaker state flipping to open on the LogVault HEC connector. It looks like it's tripping because the payload size on the five-minute batch is exceeding the default threshold that was set in the 4.1.2 build.\n[21] Damien Rowe (customer): So what does that mean exactly? In plain terms.\n[22] David Kim (aegis_staff): So the circuit breaker that was added to protect the pipeline — it has a payload threshold, and at your event volume, the five-minute batch is generating a payload that's hitting that limit. When the circuit breaker trips, it stops the outbound push to LogVault and the connection just drops, which is why you're seeing the timeout with no response code.\n[23] Damien Rowe (customer): So it's stopping itself from sending data to our SIEM. That means we've had gaps in our LogVault data since the 18th? That's — that's four days of incomplete data. Do you understand what that means for us from a security monitoring standpoint?\n[24] Priya Patel (aegis_staff): I do, and I want to be transparent with you — yes, the events during the tripped periods would not have been forwarded to LogVault. They are retained within Aegis Detect itself, so the data isn't lost, but it hasn't been pushed to your HEC endpoint during those windows.\n[25] Damien Rowe (customer): Okay so the data exists on your side. Can we backfill it? Can you push the missed events retroactively to our LogVault instance?\n[26] David Kim (aegis_staff): That's actually something we can do, yes. We have a manual replay function for the outbound connector. What I'd want to do first though is fix the underlying threshold issue so we're not in the same situation after the backfill.\n[27] Damien Rowe (customer): Yes, absolutely do that first. What's the fix?\n[28] David Kim (aegis_staff): So we have two options. One — we can adjust the circuit breaker payload threshold for your tenant specifically to accommodate your event volume. Two — we can switch your LogVault integration to use a streaming mode instead of batched pushes, which would distribute the load more evenly and avoid hitting the threshold altogether. Honestly for your volume, streaming is probably the better long-term configuration.\n[29] Damien Rowe (customer): How long does switching to streaming take to configure? And is there any disruption during the switchover?\n[30] David Kim (aegis_staff): The configuration change itself is pretty quick on our end, maybe fifteen minutes to apply and validate. There'd be a brief pause in forwarding during the switch — we're talking under a minute typically. And then we'd do the backfill right after to make sure you have everything.\n[31] Damien Rowe (customer): Okay. Do the streaming mode. And I want a written summary of what happened here — the root cause, the timeline, what data was affected, and what was done to fix it. I need to take that to my leadership and frankly I'm going to need to share it with our security team so they can assess any gaps in coverage.\n[32] Priya Patel (aegis_staff): Absolutely, Damien. I'll personally make sure a detailed incident summary is drafted and sent to you — I'd say end of business tomorrow at the latest. And I want to flag that given this is the second significant disruption to your Detect environment this year, I'd like to schedule a call with you and our customer success team to review your overall configuration and make sure we're set up in a way that's more resilient for your environment going forward.\n[33] Damien Rowe (customer): Yeah, that conversation needs to happen. I'll be honest with you — my team has been asking questions about whether Aegis Detect is the right platform for us. We're a fast-growing company, we can't be absorbing incidents like this. So that conversation with customer success, fine, but it better be substantive.\n[34] Priya Patel (aegis_staff): Understood, and I appreciate you being direct with us about that. That feedback is important and I won't minimize it. Let's get the immediate fix applied today, get you the backfill, and then we'll make sure the follow-up conversation is meaningful. David, can you go ahead and initiate the streaming mode switch for Stratos now?\n[35] David Kim (aegis_staff): Yeah, doing it now. Damien, you might see a very brief pause in the LogVault feed — like I said, under a minute — and then it should resume and you'll see the stream mode active. I'll confirm with you on the call when it's validated.\n[36] Damien Rowe (customer): Fine. And the backfill — how long will that take to actually show up in LogVault?\n[37] David Kim (aegis_staff): Given the volume we're talking about, probably one to two hours for the full four-day backfill to complete. It runs as a background job. I'll send you a confirmation email when it kicks off and another when it completes.\n[38] Damien Rowe (customer): Alright. I'll take that. Look — I appreciate you both getting on the call and actually diagnosing this today. I'm still frustrated with the situation, I won't pretend I'm not. But at least we have a path forward.\n[39] Priya Patel (aegis_staff): That's completely fair, Damien. We'll get everything wrapped up and make sure you have the documentation you need. Keep an eye out for my email and I'll be in touch as soon as the backfill is confirmed running.\n[40] Damien Rowe (customer): Sounds good. Thanks."
+  },
+  "response_text": "{\n  \"call_score\": 2.5,\n  \"customer_score\": 2.0,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"negative\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"negative\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"negative\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"negative\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"negative\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"negative\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"negative\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 2.5,\n    \"end\": 2.5\n  },\n  \"evidence_quote\": \"I'll be honest with you — my team has been asking questions about whether Aegis Detect is the right platform for us.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "negative"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "negative"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "negative"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "negative"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "negative"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "negative"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.5,
+      "end": 2.5
+    },
+    "evidence_quote": "I'll be honest with you — my team has been asking questions about whether Aegis Detect is the right platform for us.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 713,
+    "prompt_tokens": 5010,
+    "total_tokens": 5723,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 2274,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0048963,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0048963,
+      "upstream_inference_prompt_cost": 0.00222255,
+      "upstream_inference_completions_cost": 0.00267375
+    }
+  },
+  "latency_s": 5.308,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:53.399960+00:00",
+  "key": "ba86ea96a6ff70af54ef02b470d467eed004189b5a3e86cc49501a63ac55c601"
+}

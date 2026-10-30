@@ -1,0 +1,73 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 1
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 1 from Aegis, 2 from outside Aegis\n\nopening:\nDavid Kim: Hi, this is David Kim from Aegis Cloud Security support, I have support case number 6147 open here — am I speaking with Alicia Monroe?\nAlicia Monroe: Yes, hi David, this is Alicia, and I also have Gregory Fisk our IT Director on the line with me today.\nDavid Kim: Gregory, Alicia, great — thanks for jumping on. I've reviewed the case notes you submitted, but I'd love to hear it in your own words. What exactly are you seeing with the alert delays?\nAlicia Monroe: Yeah, so — okay, I'll let Gregory kind of walk through the technical side, but from my perspective as risk manager, the core issue is that we're in financial services, we have regulatory obligations, and our threat alerts are coming in anywhere from 20 to 45 minutes late. That is not acceptable for us.\nGregory Fisk: Right, and to add to what Alicia said — we started noticing this around, I want to say, April 9th or 10th, so just last week. Our SOC team flagged it because they were correlating timestamps on alerts versus when the actual events were logged in our SIEM, and there's a consistent lag. It's not occasional, it's every single alert.\nDavid Kim: Every single alert, okay — and Gregory, when you say you're comparing against your SIEM, what are you using on that side, just so I have the full picture?\nGregory Fisk: We're running LogVault for our primary SIEM integration, and we have Aegis Detect configured to push alerts via webhook. The events are hitting LogVault with the correct original timestamps, but the Aegis alert notification — the one our security team acts on — that's the thing that's delayed.\nDavid Kim: Okay, that's helpful. And — I do want to be upfront with you both — you may be aware that we had a significant outage with Detect back in mid-March, the event processing pipeline issue. We addressed that with some architectural changes. I want to make sure what you're seeing now isn't a residual effect of those changes."
+  },
+  "response_text": "{\"label\":\"support\",\"evidence_quote\":\"I have support case number 6147 open here\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"David Kim\",\"side\":\"aegis_staff\"},{\"speaker\":\"Alicia Monroe\",\"side\":\"customer\"},{\"speaker\":\"Gregory Fisk\",\"side\":\"customer\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "I have support case number 6147 open here",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "David Kim",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Alicia Monroe",
+        "side": "customer"
+      },
+      {
+        "speaker": "Gregory Fisk",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 115,
+    "prompt_tokens": 2078,
+    "total_tokens": 2193,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002653,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002653,
+      "upstream_inference_prompt_cost": 0.0002078,
+      "upstream_inference_completions_cost": 5.75e-05
+    }
+  },
+  "latency_s": 1.366,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:00.458412+00:00",
+  "key": "900fbecce1c0efc69f9292e5e506be45f36f0d611c2271215a803827193c7772"
+}

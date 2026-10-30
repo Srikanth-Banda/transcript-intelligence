@@ -1,0 +1,69 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nDaniel Okafor: Paula, hey, thanks for making time today. I know Thursdays are usually pretty packed for you.\nPaula Schneider: Yeah, no, it's fine. We had a planning session move to next week so actually the morning opened up a bit. Good timing.\nDaniel Okafor: Perfect. Well I appreciate it. So the agenda I had in mind — I wanted to walk through where we are on the Identity roadmap, get your input on some of the features we're scoping, and then just make sure we're aligned on what Ridgeline actually needs over the next couple of quarters. Does that work?\nPaula Schneider: Yeah that works. I've got a few things on my end I wanted to raise too, so we can weave those in.\nDaniel Okafor: Absolutely, let's do it. So, starting with Aegis Identity — you've been on the platform, I think it's been about eight months now since you fully deployed the IAM module. How's day-to-day been with it?\nPaula Schneider: It's been okay. I mean, the core IAM stuff works fine, provisioning and deprovisioning is faster than what we had before. MFA rollout went smoother than expected honestly, given that we're dealing with, you know, warehouse floor workers who aren't exactly used to that kind of workflow.\nDaniel Okafor: Yeah that's actually a use case we hear a lot from manufacturing customers specifically. The non-desk worker angle is tricky.\nPaula Schneider: Right, and we made it work, but it required some customization on our end. Which brings me to one of the things I wanted to flag — we need better support for shared workstation scenarios. So like, on the floor we have terminals that multiple workers log into across shifts, and right now the session management is kind of clunky. There's no clean handoff."
+  },
+  "response_text": "{\"label\":\"external\",\"evidence_quote\":\"I wanted to walk through where we are on the Identity roadmap, get your input on some of the features we're scoping\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"Daniel Okafor\",\"side\":\"aegis_staff\"},{\"speaker\":\"Paula Schneider\",\"side\":\"customer\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "I wanted to walk through where we are on the Identity roadmap, get your input on some of the features we're scoping",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Daniel Okafor",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Paula Schneider",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 118,
+    "prompt_tokens": 2000,
+    "total_tokens": 2118,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.000259,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.000259,
+      "upstream_inference_prompt_cost": 0.0002,
+      "upstream_inference_completions_cost": 5.9e-05
+    }
+  },
+  "latency_s": 2.136,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:17.078542+00:00",
+  "key": "a507cc811132ed272d0e21a69980c1ac0671442333bef4560016bdb5407f9b94"
+}

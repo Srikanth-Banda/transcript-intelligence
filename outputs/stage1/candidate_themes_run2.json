@@ -1,0 +1,2186 @@
+{
+  "run": 2,
+  "split_seed": 23,
+  "batches": [
+    [
+      "036285",
+      "099E75",
+      "16916D",
+      "25FEC8",
+      "2F2C03",
+      "31FAFD",
+      "3FB020",
+      "4DC695",
+      "571940",
+      "657CF1",
+      "71D752",
+      "7315E7",
+      "754FB8",
+      "7814CB",
+      "94B6C4",
+      "970775",
+      "973B16",
+      "A9FF60",
+      "B62A59",
+      "C898C9",
+      "D10880",
+      "DC89B6",
+      "E7A00D",
+      "EA6697",
+      "EB4171"
+    ],
+    [
+      "01AB1C",
+      "0540CA",
+      "0571F1",
+      "0D70E2",
+      "0D92AB",
+      "174FDD",
+      "1ED8F5",
+      "1FF9CE",
+      "2AB5AF",
+      "39CFC7",
+      "4B6251",
+      "653175",
+      "70206E",
+      "7CDAB4",
+      "8022CA",
+      "91F2C3",
+      "9597D0",
+      "A8C495",
+      "A98889",
+      "AAFF8B",
+      "AB668D",
+      "B09D1E",
+      "C9E300",
+      "CA1F5A",
+      "DB40BD"
+    ],
+    [
+      "00227D",
+      "05678C",
+      "0AE694",
+      "107F0F",
+      "2AA9F5",
+      "547007",
+      "5798C7",
+      "580008",
+      "698E84",
+      "6CCBE7",
+      "74D53C",
+      "8C81E8",
+      "8DCF95",
+      "92B34B",
+      "99EE7D",
+      "9EDE37",
+      "A24D4F",
+      "A7F71B",
+      "AD7C35",
+      "B0C7D9",
+      "B1B5EC",
+      "C9FE34",
+      "CAB747",
+      "D57E90",
+      "DC6D94"
+    ],
+    [
+      "05B3F0",
+      "13B60D",
+      "24624D",
+      "26FFAD",
+      "30237B",
+      "3D3491",
+      "3DA9C2",
+      "433FFC",
+      "458216",
+      "4B7D41",
+      "51360A",
+      "57F042",
+      "5ADCF8",
+      "632514",
+      "670E6D",
+      "A19AF2",
+      "A55CCD",
+      "B089CA",
+      "B52846",
+      "D2AE7F",
+      "D897A0",
+      "DD7656",
+      "EF0B75",
+      "EFB1A6",
+      "F02331"
+    ]
+  ],
+  "batch_outputs": [
+    {
+      "themes": [
+        {
+          "name": "Comply v2 Feature Adoption",
+          "definition": "Calls where Aegis staff demonstrate or pitch the newly released Aegis Comply v2 capabilities, focusing on multi-framework support and on-demand reporting to accelerate customer audit cycles.",
+          "distinguishing": "Focuses on commercial positioning, feature demos, and customer onboarding for new compliance reporting capabilities, rather than managing internal audit evidence or resolving billing errors.",
+          "owner": "sales / account manager",
+          "actionable_because": "Account managers can identify accounts preparing for upcoming audits and schedule targeted Comply v2 upgrade demos and cross-sell campaigns.",
+          "meeting_ids": [
+            "036285",
+            "16916D",
+            "571940",
+            "754FB8",
+            "E7A00D",
+            "EB4171"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "036285",
+              "quote": "So with Comply v2 — and this just went GA two days ago, April 7th — we've built out on-demand reporting that's fully mapped to PCI DSS controls."
+            },
+            {
+              "meeting_id": "16916D",
+              "quote": "The output is a structured PDF — it's formatted specifically for auditor consumption, so it's got your control mapping, your evidence artifacts, timestamps, everything organized by control category."
+            },
+            {
+              "meeting_id": "571940",
+              "quote": "So I'm clicking on PCI DSS here, you select your scope — in your case this would be your cardholder data environment, your point of sale systems, whatever you've got mapped — and then you just hit generate, and watch how fast this comes back."
+            }
+          ]
+        },
+        {
+          "name": "Detect Pipeline Outage Fallout",
+          "definition": "Calls discussing the operational, commercial, or compliance repercussions of the March cascading failure and event ingestion loss in Aegis Detect.",
+          "distinguishing": "Deals broadly with customer churn risk, post-incident reviews, SLA credits, and competitive pressure stemming specifically from the March multi-hour ingestion outage.",
+          "owner": "engineering lead",
+          "actionable_because": "Engineering leads must prioritize pipeline resilience, redundant nodes, circuit breaker patterns, and post-incident technical documentation to prevent churn and SLA penalties.",
+          "meeting_ids": [
+            "31FAFD",
+            "4DC695",
+            "7315E7",
+            "7814CB",
+            "970775",
+            "C898C9",
+            "DC89B6",
+            "EA6697",
+            "EB4171"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "4DC695",
+              "quote": "What happened was we had a cascading failure that started around 11 PM on the 10th and by about 5 AM on the 11th we had essentially zero threat monitoring visibility for customers on the Detect module."
+            },
+            {
+              "meeting_id": "7315E7",
+              "quote": "The last event we see in the dashboard is timestamped at 7:14 AM this morning and it is now almost 10:30 and I have a team of analysts sitting here staring at a dead screen."
+            },
+            {
+              "meeting_id": "7814CB",
+              "quote": "We're implementing redundant processing nodes and we're adding a circuit breaker pattern so that if one node degrades, traffic gets redistributed rather than causing a full outage."
+            }
+          ]
+        },
+        {
+          "name": "Identity Directory Integration Failures",
+          "definition": "Calls involving operational failures and authentication breakages when synchronizing or federating Aegis Identity with corporate identity directories.",
+          "distinguishing": "Focuses on active technical breakdowns like LDAP handshake errors or SAML certificate rotation bugs affecting employee access, rather than prospective onboarding planning or feature gap requests.",
+          "owner": "support lead",
+          "actionable_because": "Support leads can create specific troubleshooting playbooks for SSL/TLS certificates and push for UI error messaging improvements to reduce time-to-resolution on directory connector cases.",
+          "meeting_ids": [
+            "099E75",
+            "B62A59"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "099E75",
+              "quote": "If your certificate was issued by an internal certificate authority, our connector doesn't inherently trust that CA. You need to upload your internal CA's root certificate into Aegis Identity so that we can validate the chain."
+            },
+            {
+              "meeting_id": "B62A59",
+              "quote": "We rotated our SAML signing certificate yesterday, standard procedure, we do this every six months, and after the rotation a significant portion of our users are getting authentication failures when they try to SSO into our internal tools."
+            }
+          ]
+        },
+        {
+          "name": "Threat Detection False Positives",
+          "definition": "Calls where customers seek assistance tuning detection sensitivity, rulesets, and baselines due to an overwhelming volume of false alerts and SOC fatigue.",
+          "distinguishing": "Concerns noisy, improperly calibrated, or patch-reset alert rules generating false positives, distinct from complete pipeline blindness or ingestion outages.",
+          "owner": "product manager",
+          "actionable_because": "Product managers can refine default baseline learning algorithms, prevent patches from wiping custom thresholds, and provide more intuitive location/work-schedule tuning controls.",
+          "meeting_ids": [
+            "3FB020",
+            "657CF1"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "3FB020",
+              "quote": "The false positive issue is honestly top of mind right now. Our SOC team is getting fatigued — they're seeing a ton of alerts that aren't actionable and it's starting to affect response times on the stuff that actually matters."
+            },
+            {
+              "meeting_id": "657CF1",
+              "quote": "The patch included updates to the behavioral detection engine and in some environments it's basically starting the learning period over from scratch."
+            }
+          ]
+        },
+        {
+          "name": "Enterprise Audit Readiness Preparation",
+          "definition": "Internal meetings dedicated to organizing, auditing, and validating control evidence across access, change management, and logging in advance of external regulatory or SOC 2 reviews.",
+          "distinguishing": "Pertains to internal Aegis teams conducting evidence reviews and operational checks for their own corporate audits, rather than selling compliance tools to customers.",
+          "owner": "engineering lead",
+          "actionable_because": "Engineering leads can enforce automated CI/CD deployment gates, standardize log retention policies, and remediate integration gaps to satisfy auditor requirements.",
+          "meeting_ids": [
+            "25FEC8",
+            "D10880"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "25FEC8",
+              "quote": "Can we add a gate in the CI/CD pipeline so that anything touching production requires a ticket reference? Like, a hard gate, not just a reminder."
+            },
+            {
+              "meeting_id": "D10880",
+              "quote": "Really the reason I pulled everyone together today is we need to do a final walk-through of the SOC 2 Type II materials before we hand them off to the auditors, and honestly I'm — I'm feeling pretty good about where we landed."
+            }
+          ]
+        },
+        {
+          "name": "Contract Renewals and Commercial Retention",
+          "definition": "Commercial discussions regarding multi-year contract renewals, annual pricing uplifts, SLA credits for previous service disruptions, and competitive retention.",
+          "distinguishing": "Focuses on commercial terms, licensing structures, pricing negotiations, and retention strategies, rather than routine technical support or initial product demos.",
+          "owner": "sales / account manager",
+          "actionable_because": "Sales managers can structure renewal concessions, multi-module bundles, and enhanced SLA terms to protect recurring revenue against competitor offers.",
+          "meeting_ids": [
+            "31FAFD",
+            "C898C9",
+            "E7A00D",
+            "EA6697"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "31FAFD",
+              "quote": "We're proposing a renewal of both of those, same tier, with a three percent uplift which is honestly below our standard rate increase — and I'll explain why in a second."
+            },
+            {
+              "meeting_id": "C898C9",
+              "quote": "So your current contract has a 99.5% uptime SLA for Detect, and the six-hour outage did breach that. I'm going to be honest with you — I've been working with our team on a service credit for the affected period, and I have something concrete to bring to you today."
+            },
+            {
+              "meeting_id": "EA6697",
+              "quote": "We're proposing 99.9% uptime on Detect, which is up from the 99.5% that was in your current contract. And there are remediation credits tied to that if we fall below."
+            }
+          ]
+        }
+      ],
+      "product_areas": [
+        {
+          "name": "Aegis Comply",
+          "meeting_ids": [
+            "036285",
+            "16916D",
+            "2F2C03",
+            "31FAFD",
+            "571940",
+            "754FB8",
+            "94B6C4",
+            "C898C9",
+            "D10880",
+            "E7A00D",
+            "EA6697",
+            "EB4171"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "036285",
+              "quote": "So with Comply v2 — and this just went GA two days ago, April 7th — we've built out on-demand reporting that's fully mapped to PCI DSS controls."
+            },
+            {
+              "meeting_id": "571940",
+              "quote": "Yeah that's a really common thing we're hearing, and that's kind of the whole value prop of pulling it into Aegis Comply — so let me show you the PCI DSS report generation since that's what's most relevant for you right now."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Detect",
+          "meeting_ids": [
+            "31FAFD",
+            "3FB020",
+            "4DC695",
+            "657CF1",
+            "7315E7",
+            "7814CB",
+            "970775",
+            "C898C9",
+            "DC89B6",
+            "EA6697",
+            "EB4171"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "3FB020",
+              "quote": "So the plan for today is — we want to walk through your current Aegis Detect configuration, understand what alert thresholds you have set, talk about any false positive pain points you're running into, and then start mapping out what a tuned detection profile looks like for a financial services environment like yours."
+            },
+            {
+              "meeting_id": "7315E7",
+              "quote": "The event feed in Aegis Detect, it just... stopped. No alerts, no events, nothing."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Protect",
+          "meeting_ids": [
+            "71D752",
+            "A9FF60"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "71D752",
+              "quote": "And that's actually one of the areas where Aegis Protect really shines — you get that single pane of glass across your hybrid environment."
+            },
+            {
+              "meeting_id": "A9FF60",
+              "quote": "So I pulled up the case before hopping on — looks like you're looking at granular restore capabilities within Aegis Protect, is that the right starting point?"
+            }
+          ]
+        },
+        {
+          "name": "Aegis Identity",
+          "meeting_ids": [
+            "099E75",
+            "94B6C4",
+            "973B16",
+            "B62A59"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "099E75",
+              "quote": "The Aegis Identity LDAP connector needs outbound access on port 389 for standard LDAP or 636 for LDAPS — are you running LDAPS by any chance?"
+            },
+            {
+              "meeting_id": "973B16",
+              "quote": "And Aegis Identity handles that really well — you can set up conditional access policies that treat contractors differently from full-time staff, different MFA requirements, session timeouts, all of that."
+            }
+          ]
+        }
+      ],
+      "other_note": "Calls 2F2C03 (billing proration issue for Comply v2), 71D752 (implementation kickoff for Protect), 94B6C4 (feature request for hierarchical IAM roles in Identity), 973B16 (kickoff for Identity SSO/MFA onboarding), and A9FF60 (feature request for granular file-level restore in Protect) represent isolated single-call scenarios not covered by the proposed multi-call themes."
+    },
+    {
+      "themes": [
+        {
+          "name": "Unexpected Usage Overage Charges",
+          "definition": "Calls where a customer questions, disputes, or reviews surprise invoice overages stemming from ingestion volume, data retention limits, or report generation caps.",
+          "distinguishing": "Focuses on customer friction around billed consumption spikes and unclear tier thresholds, distinct from general contract renewal scoping or technical system failures.",
+          "owner": "support lead",
+          "actionable_because": "Implement default threshold alerts for migrated accounts and establish standardized billing verification workflows for disputed ingestion spikes.",
+          "meeting_ids": [
+            "01AB1C",
+            "1ED8F5",
+            "A98889"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "01AB1C",
+              "quote": "Yeah, so — look, I'll be direct. We got our April invoice and there are overage charges totaling just over four thousand dollars that I do not understand and frankly did not expect. At all."
+            },
+            {
+              "meeting_id": "1ED8F5",
+              "quote": "So the main one is — there's an overage charge on both invoices under the Aegis Detect module. And honestly our team wasn't totally aware that we had a usage cap on that tier."
+            },
+            {
+              "meeting_id": "A98889",
+              "quote": "So there's a line item that says, um, overage charges — data retention overage — and it's for something like 2.3 terabytes. And we just, we weren't expecting that at all."
+            }
+          ]
+        },
+        {
+          "name": "Detect Ingestion Pipeline Resilience",
+          "definition": "Calls discussing single points of failure, cascading outages, and architectural remediations like redundant processing nodes and circuit breakers in the Detect ingestion pipeline.",
+          "distinguishing": "Centers on internal engineering design and remediation of pipeline architecture rather than customer commercial fallout or launch readiness.",
+          "owner": "engineering lead",
+          "actionable_because": "Prioritize sprint tasks for redundant ingestion nodes, Kafka configurations, circuit breaker failover logic, and load testing.",
+          "meeting_ids": [
+            "0540CA",
+            "0D92AB",
+            "70206E",
+            "C9E300"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "0540CA",
+              "quote": "The part I'm less sure about is how the redundant node setup interacts with our current Kafka config. We haven't fully mapped that out yet."
+            },
+            {
+              "meeting_id": "0D92AB",
+              "quote": "I think we need to add redundant processing nodes and probably implement a circuit breaker pattern to prevent cascading failures."
+            },
+            {
+              "meeting_id": "C9E300",
+              "quote": "Okay, so on my end this week — I finished deploying the second set of redundant processing nodes for Detect."
+            }
+          ]
+        },
+        {
+          "name": "Outage Fallout and Competitive Threat",
+          "definition": "Calls where customers or Aegis sales teams address customer trust erosion, renewal risk, or competitor poaching following service downtime.",
+          "distinguishing": "Focuses on commercial retention, customer trust repair, and competitor pressure following an outage rather than billing disputes or internal code fixes.",
+          "owner": "sales / account manager",
+          "actionable_because": "Equip account teams with technical post-mortem collateral, battlecards, and executive sponsor meetings to defend at-risk renewals.",
+          "meeting_ids": [
+            "0571F1",
+            "0D70E2",
+            "4B6251",
+            "AB668D",
+            "DB40BD"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "0571F1",
+              "quote": "We had some low-level grumblings about Aegis Detect before March — the alert fatigue issue I mentioned back in, I think it was January — but the outage kind of pushed us to actually go out and look at alternatives."
+            },
+            {
+              "meeting_id": "0D70E2",
+              "quote": "The outage last week was bad. I don't think any of us are going to sugarcoat that. Six hours of zero threat monitoring visibility is not something our customers are just going to brush off, and our competitors are absolutely going to use this against us."
+            },
+            {
+              "meeting_id": "AB668D",
+              "quote": "My CISO is now asking me to put together a competitive evaluation. Those were her words. Competitive evaluation. She specifically mentioned SentinelShield."
+            }
+          ]
+        },
+        {
+          "name": "Comply v2 Feature Adoption",
+          "definition": "Calls where customers explore, plan onboarding for, or kickoff the use of Comply v2 multi-framework and on-demand compliance reporting.",
+          "distinguishing": "Focuses on customer onboarding, framework scoping, and early access exploration rather than internal product release readiness or engineering deployment.",
+          "owner": "product manager",
+          "actionable_because": "Streamline customer migration assistants and refine framework report templates based on user audit priorities.",
+          "meeting_ids": [
+            "174FDD",
+            "2AB5AF",
+            "8022CA"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "174FDD",
+              "quote": "And we just — we really want to know if there's any way to get early access before the general release because our SOC 2 audit window is coming up and the timing would be really helpful."
+            },
+            {
+              "meeting_id": "2AB5AF",
+              "quote": "Great — so, big news, and I mean this is actually really good timing for you guys, Comply v2 went GA literally today, April 7th, so you are among the very first customers to be onboarding onto the new version."
+            },
+            {
+              "meeting_id": "8022CA",
+              "quote": "You can now generate a full ISO 27001 readiness report at any point, and it maps your current control posture directly to the Annex A controls — so you're not having to manually cross-reference anything, the platform does that work for you."
+            }
+          ]
+        },
+        {
+          "name": "Comply v2 Launch Readiness",
+          "definition": "Internal team syncs focused on technical specifications, QA testing, documentation, and operational rollout timelines for the Comply v2 release.",
+          "distinguishing": "Covers internal planning, architecture design, and release runbooks rather than live customer onboarding sessions.",
+          "owner": "product manager",
+          "actionable_because": "Track launch-blocking dependencies across documentation, load testing, and framework mapping to protect release deadlines.",
+          "meeting_ids": [
+            "653175",
+            "7CDAB4",
+            "9597D0"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "653175",
+              "quote": "The main thing I wanted to go through today is just the launch readiness checklist for Comply v2."
+            },
+            {
+              "meeting_id": "7CDAB4",
+              "quote": "Perfect. So the plan right now is to do the actual infrastructure changes on the night of April 6th — like a late evening deploy, probably around 10 PM Eastern — and then flip the feature flag to GA on the morning of the 7th."
+            },
+            {
+              "meeting_id": "9597D0",
+              "quote": "Alright, so the purpose of today's call is really to do a proper design review for Comply v2 before we lock the spec."
+            }
+          ]
+        },
+        {
+          "name": "Identity Sync and Authentication Failures",
+          "definition": "Customer calls reporting technical defects in Aegis Identity, specifically around policy synchronization latency and MFA token validation errors.",
+          "distinguishing": "Addresses operational failures and break-fix debugging within Identity rather than strategic roadmap planning or initial provisioning setup.",
+          "owner": "support lead",
+          "actionable_because": "Escalate high-severity tenant outages to backend engineering and establish immediate tactical workarounds for user lockouts.",
+          "meeting_ids": [
+            "AAFF8B",
+            "B09D1E"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "AAFF8B",
+              "quote": "So basically, we push policy updates through Identity — role assignments, access group changes — and they're just... not propagating."
+            },
+            {
+              "meeting_id": "B09D1E",
+              "quote": "So it started, um, I'd say around 7 AM this morning, and it's not all users — it seems to be specifically the users who are enrolled in TOTP-based MFA through Aegis Identity, they're getting token validation failures even though the tokens are generating correctly on their authenticator apps."
+            }
+          ]
+        },
+        {
+          "name": "Contract Renewal and Volume Rightsizing",
+          "definition": "Account management discussions focused on evaluating term length, module expansion, and pricing adjustments aligned to customer data growth.",
+          "distinguishing": "Focuses on scheduled commercial renegotiation and capacity adjustments rather than emergency post-incident dispute handling.",
+          "owner": "sales / account manager",
+          "actionable_because": "Present tiered quotes and multi-year options that eliminate anticipated overages and reflect customer footprint changes.",
+          "meeting_ids": [
+            "1ED8F5",
+            "39CFC7"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "1ED8F5",
+              "quote": "Your current contract runs through end of March, so we wanted to get ahead of it a bit, talk through the current structure, see if anything needs to be adjusted going into the next term."
+            },
+            {
+              "meeting_id": "39CFC7",
+              "quote": "I was thinking we'd do a quick look at where you are with the platform overall, talk through the renewal terms, and then get into any open items or concerns you have."
+            }
+          ]
+        }
+      ],
+      "product_areas": [
+        {
+          "name": "Aegis Comply",
+          "meeting_ids": [
+            "01AB1C",
+            "0540CA",
+            "0571F1",
+            "0D70E2",
+            "174FDD",
+            "1ED8F5",
+            "1FF9CE",
+            "2AB5AF",
+            "39CFC7",
+            "4B6251",
+            "653175",
+            "7CDAB4",
+            "8022CA",
+            "9597D0",
+            "C9E300",
+            "DB40BD"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "174FDD",
+              "quote": "So, um, we've been on Aegis Comply for about eight months now and it's been really solid for us."
+            },
+            {
+              "meeting_id": "1ED8F5",
+              "quote": "Yes, that falls under Aegis Comply — you're currently not subscribed to that module but it's something we can definitely talk through."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Detect",
+          "meeting_ids": [
+            "01AB1C",
+            "0540CA",
+            "0571F1",
+            "0D70E2",
+            "0D92AB",
+            "1ED8F5",
+            "39CFC7",
+            "4B6251",
+            "70206E",
+            "A8C495",
+            "A98889",
+            "AAFF8B",
+            "AB668D",
+            "C9E300",
+            "DB40BD"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "1ED8F5",
+              "quote": "So the main one is — there's an overage charge on both invoices under the Aegis Detect module."
+            },
+            {
+              "meeting_id": "A8C495",
+              "quote": "James Mitchell (aegis_staff): Alright. So the plan for today — I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout. Does that work for you?"
+            }
+          ]
+        },
+        {
+          "name": "Aegis Protect",
+          "meeting_ids": [
+            "0571F1",
+            "39CFC7",
+            "91F2C3",
+            "A98889",
+            "DB40BD"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "0571F1",
+              "quote": "Yeah, so Aegis Protect has been fine — backup and recovery has done what it's supposed to do."
+            },
+            {
+              "meeting_id": "A98889",
+              "quote": "The overage charge is listed under Aegis Protect, it's flagging 2.31 terabytes above your contracted tier."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Identity",
+          "meeting_ids": [
+            "1FF9CE",
+            "AAFF8B",
+            "B09D1E",
+            "CA1F5A"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "1FF9CE",
+              "quote": "Yeah sure, so case 3546 came in, looks like Tuesday — the subject line is SCIM provisioning request for Aegis Identity, and the initial description mentions wanting to automate user provisioning and deprovisioning from an external identity provider."
+            },
+            {
+              "meeting_id": "CA1F5A",
+              "quote": "Right now the feedback we're getting from sales is that the IAM side feels a little thin compared to what SentinelShield is putting out there."
+            }
+          ]
+        }
+      ],
+      "other_note": "Calls 1FF9CE (customer SCIM 2.0 provisioning request), 91F2C3 (Protect Q2 backup performance planning), A8C495 (Brightpath Detect technical onboarding kickoff), and CA1F5A (Identity Q2 roadmap planning) represent standalone operational, roadmap, or onboarding discussions that do not have enough peer calls in this batch to warrant separate themes."
+    },
+    {
+      "themes": [
+        {
+          "name": "Detect Pipeline Outage & Remediation",
+          "definition": "Calls concerning the March platform outage in the Detect event ingestion pipeline, customer impact from lost threat visibility, and architectural remediation like redundant nodes or circuit breakers.",
+          "distinguishing": "Focuses on the acute March platform-level failure and architectural recovery of Aegis Detect, rather than routine telemetry integration bugs or scheduled renewal discussions.",
+          "owner": "engineering lead",
+          "actionable_because": "Engineering leads must prioritize architectural hardening, chaos testing, and redundant node implementations to eliminate single points of failure in event ingestion.",
+          "meeting_ids": [
+            "0AE694",
+            "6CCBE7",
+            "74D53C",
+            "9EDE37",
+            "A24D4F",
+            "A7F71B",
+            "CAB747"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "0AE694",
+              "quote": "So, um, the short version is — we had a cascading failure in the event ingestion layer."
+            },
+            {
+              "meeting_id": "74D53C",
+              "quote": "Kevin, you want to kick us off with the technical summary?"
+            },
+            {
+              "meeting_id": "CAB747",
+              "quote": "The short version is there was a single point of failure in the event ingestion pipeline — basically one component went down and it cascaded."
+            }
+          ]
+        },
+        {
+          "name": "Comply Framework & Reporting Expansion",
+          "definition": "Calls discussing customer requirements or feature requests for compliance reporting in Aegis Comply, such as custom control templates, cross-framework mapping, scheduled delivery, or multi-framework support.",
+          "distinguishing": "Focuses specifically on feature gaps, custom templates, and framework report enhancements in Aegis Comply rather than overall contract negotiations or pre-sales onboarding workshops.",
+          "owner": "product manager",
+          "actionable_because": "Product managers can prioritize compliance roadmap items such as bespoke audit frameworks, matrix exports, and scheduled automated delivery.",
+          "meeting_ids": [
+            "00227D",
+            "05678C",
+            "547007",
+            "5798C7",
+            "B1B5EC"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "00227D",
+              "quote": "And I'm wondering if there's any way to build a custom template inside Comply that maps to those internal controls."
+            },
+            {
+              "meeting_id": "05678C",
+              "quote": "Right now whoever pulls the report kind of has to manually distribute it. Is there any plan for scheduled report delivery?"
+            },
+            {
+              "meeting_id": "5798C7",
+              "quote": "But what we need is the ability to kind of cross-reference controls across multiple frameworks in a single report."
+            }
+          ]
+        },
+        {
+          "name": "Contract Renewal & Multi-Module Expansion",
+          "definition": "Calls between account managers and existing customers reviewing contract terms, workload tiers, annual pricing locks, and opportunities to add modules.",
+          "distinguishing": "Focuses on commercial terms, renewals, and multi-product licensing negotiations rather than technical implementation details or incident triage.",
+          "owner": "sales / account manager",
+          "actionable_because": "Account managers can adjust commercial packaging, negotiate multi-year locks, handle competitive pressure, and address past incidents to secure renewals.",
+          "meeting_ids": [
+            "2AA9F5",
+            "580008",
+            "8C81E8",
+            "99EE7D"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "2AA9F5",
+              "quote": "So we want to make this as smooth as possible for you — your current contract is up at the end of April, and we've put together a renewal proposal that keeps your Protect and Comply licensing at the same rate with a three-year lock, and then we've got a bundle option that folds in Detect at a meaningful discount if you want to explore that after the demo."
+            },
+            {
+              "meeting_id": "580008",
+              "quote": "So, there is a standard escalator built into the contract — I believe it's three percent — and that would apply."
+            },
+            {
+              "meeting_id": "99EE7D",
+              "quote": "We're looking at a three-year proposal, and the numbers I'm going to share reflect a significant improvement over your current per-seat rates."
+            }
+          ]
+        },
+        {
+          "name": "Identity Access & Session Management Issues",
+          "definition": "Calls addressing functional issues, configuration constraints, or policy administration within Aegis Identity, including SSO authentication failures and shared workstation session policies.",
+          "distinguishing": "Focuses specifically on authentication, SAML/SSO errors, and IAM policy management rather than billing disputes over seat counts.",
+          "owner": "support lead",
+          "actionable_because": "Support leads can develop escalation playbooks for SSO patch regressions and coordinate temporary admin override procedures.",
+          "meeting_ids": [
+            "698E84",
+            "C9FE34"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "698E84",
+              "quote": "About 38 to 42 percent of our user base is hitting the failure."
+            },
+            {
+              "meeting_id": "C9FE34",
+              "quote": "So the session timeout is set globally right now, and we can't scope it by device group or location."
+            }
+          ]
+        },
+        {
+          "name": "Protect Configuration & Implementation Setup",
+          "definition": "Calls covering the onboarding, technical architecture planning, and environment integration for Aegis Protect, including hybrid VMware and cloud data backups.",
+          "distinguishing": "Focuses on initial design, RTO/RPO requirements, and onboarding project plans rather than reactive troubleshooting of existing failing jobs.",
+          "owner": "sales / account manager",
+          "actionable_because": "Account and customer success managers can structure phased deployment checklists, schedule recovery drills, and manage onboarding milestones.",
+          "meeting_ids": [
+            "B0C7D9",
+            "D57E90"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "B0C7D9",
+              "quote": "So Raymond, just to set the stage for today — the goal of this workshop is really to dig into your backup strategy, understand your current environment at Vanta Health, and start mapping out how Aegis Protect can fit into what you're already doing, does that sound right to you?"
+            },
+            {
+              "meeting_id": "D57E90",
+              "quote": "So generally for Aegis Protect we're looking at about a four to six week process broken into three phases."
+            }
+          ]
+        },
+        {
+          "name": "Protect Backup Performance & Connector Failures",
+          "definition": "Calls regarding active technical problems with Aegis Protect, including connector permissions/endpoint misconfigurations and extended backup window durations.",
+          "distinguishing": "Deals with technical failure analysis, throughput drops, and connector errors for active backup operations rather than initial customer onboarding planning.",
+          "owner": "support lead",
+          "actionable_because": "Support leads can diagnose connector configuration errors, guide agent updates, and adjust workload job priorities to restore backup throughput.",
+          "meeting_ids": [
+            "8DCF95",
+            "92B34B"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "8DCF95",
+              "quote": "It says — let me actually pull it up — it says, uh, 'connector write operation terminated, upstream response code 403.'"
+            },
+            {
+              "meeting_id": "92B34B",
+              "quote": "Okay, so I'm seeing the backup throughput dropped pretty substantially — it looks like you were averaging around 800 megabytes per second before March 27th and now you're sitting around 180 to 220."
+            }
+          ]
+        }
+      ],
+      "product_areas": [
+        {
+          "name": "Aegis Comply",
+          "meeting_ids": [
+            "00227D",
+            "05678C",
+            "107F0F",
+            "2AA9F5",
+            "547007",
+            "5798C7",
+            "580008",
+            "8C81E8",
+            "99EE7D",
+            "A24D4F",
+            "B1B5EC",
+            "C9FE34",
+            "D57E90"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "00227D",
+              "quote": "So I've got the case here, case number 8811, and it looks like you're coming in with a feature request around custom compliance templates in Aegis Comply."
+            },
+            {
+              "meeting_id": "B1B5EC",
+              "quote": "Right? Like, I've been living in the Comply v2 ticket queue for what feels like six months."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Detect",
+          "meeting_ids": [
+            "0AE694",
+            "107F0F",
+            "2AA9F5",
+            "547007",
+            "580008",
+            "6CCBE7",
+            "74D53C",
+            "8C81E8",
+            "92B34B",
+            "99EE7D",
+            "9EDE37",
+            "A24D4F",
+            "A7F71B",
+            "CAB747",
+            "DC6D94"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "2AA9F5",
+              "quote": "Right, so — and we don't want to pressure you on any of this, just want to make sure you're aware of what's available — but we did want to bring up Aegis Detect, because you're not currently on that module and given the threat landscape in healthcare right now, um, it's something a lot of our health system customers have been adding."
+            },
+            {
+              "meeting_id": "6CCBE7",
+              "quote": "Aegis Detect is currently experiencing a platform-wide outage affecting the event processing pipeline."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Protect",
+          "meeting_ids": [
+            "107F0F",
+            "2AA9F5",
+            "580008",
+            "8C81E8",
+            "8DCF95",
+            "92B34B",
+            "99EE7D",
+            "A24D4F",
+            "B0C7D9",
+            "C9FE34",
+            "D57E90"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "8DCF95",
+              "quote": "Sure, yeah. So basically, we set up the S3 connector in Aegis Protect about three weeks ago, it was working fine initially."
+            },
+            {
+              "meeting_id": "B0C7D9",
+              "quote": "So Raymond, just to set the stage for today — the goal of this workshop is really to dig into your backup strategy, understand your current environment at Vanta Health, and start mapping out how Aegis Protect can fit into what you're already doing, does that sound right to you?"
+            }
+          ]
+        },
+        {
+          "name": "Aegis Identity",
+          "meeting_ids": [
+            "107F0F",
+            "698E84",
+            "6CCBE7",
+            "8C81E8",
+            "99EE7D",
+            "A24D4F",
+            "AD7C35",
+            "C9FE34"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "698E84",
+              "quote": "About 38 to 42 percent of our user base is hitting the failure. We have around 1,200 users in Aegis Identity and somewhere between 450 and 500 of them are completely locked out."
+            },
+            {
+              "meeting_id": "AD7C35",
+              "quote": "It's showing a charge for — let me pull this up — okay, it's showing a charge for 1,400 seats under Aegis Identity, but we only have 1,200 licensed users."
+            }
+          ]
+        }
+      ],
+      "other_note": "Call AD7C35 is a single call specifically regarding an invoice seat count discrepancy caused by un-deprovisioned test accounts, which did not form a broader multi-call billing theme. Call 107F0F is an exploratory pre-sales demo and scoping session for Comply v2 with Blackridge Health Finance that bridges compliance evaluation and general product overview. Call DC6D94 involves troubleshooting an outbound LogVault HEC connector timeout resulting from a post-remediation circuit breaker payload limit, which is a standalone integration issue."
+    },
+    {
+      "themes": [
+        {
+          "name": "Detect Pipeline Outage Remediation",
+          "definition": "Calls focused on investigating, responding to, remediating, or explaining the March cascading failure and loss of threat monitoring visibility in Aegis Detect.",
+          "distinguishing": "Focuses on the widespread platform event ingestion failure and its operational/architectural fixes, distinct from routine individual customer support issues or general roadmap planning.",
+          "owner": "engineering lead",
+          "actionable_because": "Engineering leads will implement architectural redundancy, circuit breakers, and pipeline health alerts to prevent single-point-of-failure outages.",
+          "meeting_ids": [
+            "05B3F0",
+            "3D3491",
+            "433FFC",
+            "458216",
+            "4B7D41",
+            "670E6D",
+            "B089CA",
+            "B52846",
+            "D897A0",
+            "DD7656",
+            "EFB1A6",
+            "F02331"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "05B3F0",
+              "quote": "So, uh, officially this is the retro for the reliability sprint we kicked off after the March outage, and honestly I want to start by just saying — I think you both crushed it."
+            },
+            {
+              "meeting_id": "433FFC",
+              "quote": "So the incident started around 2:14 AM Pacific on March 10th. The event ingestion pipeline — this is the core processing layer that pulls in telemetry from customer environments — it had a cascading failure."
+            },
+            {
+              "meeting_id": "D897A0",
+              "quote": "We're seeing a cascading failure that started in the ingestion layer and basically knocked out the entire threat monitoring feed for Detect. Nobody is getting alerts right now."
+            }
+          ]
+        },
+        {
+          "name": "Comply v2 Feature Adoption",
+          "definition": "Calls reviewing the launch, adoption metrics, audit readiness benefits, or preview demos of Aegis Comply version 2 multi-framework reporting.",
+          "distinguishing": "Focuses on the new automated multi-framework compliance reporting capabilities rather than bug investigations or identity deployments.",
+          "owner": "product manager",
+          "actionable_because": "Product managers can track framework demand (e.g., SOC 2, HIPAA, ISO), prioritize requested frameworks like GDPR, and refine report export workflows.",
+          "meeting_ids": [
+            "26FFAD",
+            "30237B",
+            "A19AF2",
+            "EF0B75"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "26FFAD",
+              "quote": "Okay so as of yesterday, April 21st, we've had 847 unique tenants generate at least one on-demand report. That's out of, um, roughly 2,200 eligible accounts."
+            },
+            {
+              "meeting_id": "30237B",
+              "quote": "The headline feature is on-demand compliance reporting, so you'll be able to generate SOC 2 reports, PCI DSS, HIPAA, ISO 27001 — all from within the platform, whenever you need them, without having to go through a manual evidence collection process."
+            },
+            {
+              "meeting_id": "EF0B75",
+              "quote": "So instead of exporting a package manually, you can generate a full SOC 2 report on demand, right from the dashboard. It's going to be a big deal."
+            }
+          ]
+        },
+        {
+          "name": "Contract Renewal and Retention",
+          "definition": "Calls where account managers negotiate renewals, address churn threats driven by competitors or past outages, and negotiate contract terms.",
+          "distinguishing": "Centers on the commercial agreement, pricing, and overall relationship retention rather than day-to-day bug resolution.",
+          "owner": "sales / account manager",
+          "actionable_because": "Account managers will structure concession packages, offer post-incident assurances or SLAs, and negotiate multi-year terms to retain at-risk revenue.",
+          "meeting_ids": [
+            "30237B",
+            "458216",
+            "4B7D41",
+            "B52846",
+            "DD7656"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "458216",
+              "quote": "Perfect. So, Evelyn, today's really about finalizing the renewal for Bridgeport and making sure you're set up well going into the next contract year. But honestly, I also just wanted to take a step back and hear how things have been feeling from your side before we get into the paperwork side of things."
+            },
+            {
+              "meeting_id": "4B7D41",
+              "quote": "Look, I'll be honest with you — our renewal is coming up and I'm getting pressure from my CISO and from our compliance team and everyone is sort of, uh, looking at the platform and asking questions that I'm finding it hard to answer right now."
+            },
+            {
+              "meeting_id": "DD7656",
+              "quote": "Okay. So let's talk about the renewal because that's technically why we're here. Our contract comes up end of Q2 and, uh, I'll be transparent — the board is asking questions. They want to know if we have alternatives."
+            }
+          ]
+        },
+        {
+          "name": "Protect Backup Performance Degradation",
+          "definition": "Calls addressing severe backup throughput drops, extended backup windows, API failures, or scheduler capacity limits in Aegis Protect.",
+          "distinguishing": "Specifically involves backup performance bottlenecks and job failures in Aegis Protect, distinct from Detect pipeline outages.",
+          "owner": "support lead",
+          "actionable_because": "Support leads can develop escalation playbooks for agent version incompatibilities and coordinate with infrastructure teams on job throttling and workarounds.",
+          "meeting_ids": [
+            "13B60D",
+            "51360A",
+            "5ADCF8"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "13B60D",
+              "quote": "Our nightly backup jobs are taking, uh, somewhere between four and six hours to complete. They used to finish in under ninety minutes. This started maybe three weeks ago, and it's just... it's not getting better."
+            },
+            {
+              "meeting_id": "51360A",
+              "quote": "So we have our EHR system — it's a custom-built platform — integrated with Aegis Protect through your REST API, and starting Sunday we started getting 503 errors on the backup initiation endpoint. Specifically the... um, it's the /v2/backup/jobs/create endpoint."
+            },
+            {
+              "meeting_id": "5ADCF8",
+              "quote": "Throughput started degrading at around the 60% load mark, and by the time we hit full simulated load we were seeing backup job queue times spike to like — I think the worst number was 47 minutes for a job that should complete in under five."
+            }
+          ]
+        },
+        {
+          "name": "Identity Configuration and Deployment",
+          "definition": "Calls involving the implementation, roadmap planning, or technical configuration of Aegis Identity features like SSO, SCIM provisioning, and MFA policies.",
+          "distinguishing": "Focuses specifically on IAM setups, directory integrations, and user authentication workflows, rather than threat monitoring or backup jobs.",
+          "owner": "product manager",
+          "actionable_because": "Product managers can prioritize self-serve attribute mapping UIs, adaptive MFA policies, and streamlined SCIM setup to reduce implementation friction.",
+          "meeting_ids": [
+            "4B7D41",
+            "632514",
+            "A55CCD",
+            "D2AE7F"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "632514",
+              "quote": "So let me just go through what we did complete — the SCIM provisioning bug fixes, that was four story points. The SSO metadata refresh refactor, that was eight points. And the initial IAM role hierarchy work, that was three points, partially done."
+            },
+            {
+              "meeting_id": "A55CCD",
+              "quote": "Okay so — three big themes for Q2. First is JIT provisioning and SCIM improvements, second is adaptive MFA policies, and third is what I'm calling the Identity audit trail, which ties into the Comply integration story."
+            },
+            {
+              "meeting_id": "D2AE7F",
+              "quote": "Phase one is directory sync and SSO configuration — basically getting Aegis Identity talking to your Entra ID environment, setting up the SAML or OIDC connectors, depending on what your apps support."
+            }
+          ]
+        },
+        {
+          "name": "SIEM Integration and Alert Latency",
+          "definition": "Calls addressing technical issues, dropped event buffers, or significant latency when forwarding Aegis Detect telemetry to external SIEM systems like LogVault.",
+          "distinguishing": "Focuses specifically on the connector/forwarding bridge and latency between Aegis Detect and third-party SIEMs, rather than total platform-wide ingestion outages.",
+          "owner": "engineering lead",
+          "actionable_because": "Engineering leads will fix connector buffer retry logic on network timeouts and resolve tenant processing queue imbalances.",
+          "meeting_ids": [
+            "24624D",
+            "3DA9C2",
+            "670E6D",
+            "EFB1A6"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "3DA9C2",
+              "quote": "Okay so here's what I think is happening — in connector version 3.4.1, there's a known issue where if the HEC endpoint returns a connection timeout, specifically due to upstream throttling from something like an F5, the connector's retry logic doesn't kick in correctly, it treats the timeout as a terminal error rather than a transient one, and it flushes the buffer."
+            },
+            {
+              "meeting_id": "670E6D",
+              "quote": "The events are hitting LogVault with the correct original timestamps, but the Aegis alert notification — the one our security team acts on — that's the thing that's delayed."
+            },
+            {
+              "meeting_id": "EFB1A6",
+              "quote": "First one is expanded SIEM integration — we're adding native connectors for a couple of the major SIEM platforms in Q2, which I know you're running LogVault, so that should reduce the time from event to alert in your existing workflow."
+            }
+          ]
+        }
+      ],
+      "product_areas": [
+        {
+          "name": "Aegis Detect",
+          "meeting_ids": [
+            "05B3F0",
+            "24624D",
+            "30237B",
+            "3D3491",
+            "3DA9C2",
+            "433FFC",
+            "458216",
+            "670E6D",
+            "A19AF2",
+            "B089CA",
+            "B52846",
+            "D897A0",
+            "DD7656",
+            "EFB1A6",
+            "F02331"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "30237B",
+              "quote": "Aegis Detect, hands down. The threat monitoring visibility we have now compared to what we were doing before — it's night and day."
+            },
+            {
+              "meeting_id": "433FFC",
+              "quote": "Okay so — this is the post-incident review for the Detect outage, March 10th through the 18th, well, the outage itself was March 10th, we're just closing it out today."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Protect",
+          "meeting_ids": [
+            "13B60D",
+            "24624D",
+            "30237B",
+            "458216",
+            "51360A",
+            "5ADCF8"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "13B60D",
+              "quote": "So you're seeing slow backup performance with Aegis Protect — can you walk me through what you're experiencing?"
+            },
+            {
+              "meeting_id": "51360A",
+              "quote": "The case notes mention an API integration error with Aegis Protect but I want to hear it directly from you."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Comply",
+          "meeting_ids": [
+            "24624D",
+            "26FFAD",
+            "30237B",
+            "458216",
+            "57F042",
+            "A19AF2",
+            "B52846",
+            "D2AE7F",
+            "EF0B75",
+            "EFB1A6"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "57F042",
+              "quote": "So I'm pulling up support case number 3296 here — you're reporting a formatting issue with Aegis Comply v2 reports?"
+            },
+            {
+              "meeting_id": "EF0B75",
+              "quote": "And that's actually the exact problem Aegis Comply is built to solve."
+            }
+          ]
+        },
+        {
+          "name": "Aegis Identity",
+          "meeting_ids": [
+            "24624D",
+            "458216",
+            "4B7D41",
+            "632514",
+            "A55CCD",
+            "D2AE7F"
+          ],
+          "evidence": [
+            {
+              "meeting_id": "4B7D41",
+              "quote": "Honestly? Identity. Aegis Identity. That's the one that's causing me the most grief right now with my internal stakeholders."
+            },
+            {
+              "meeting_id": "D2AE7F",
+              "quote": "Phase two is MFA policy configuration and enrollment, which is where we'd handle that phased migration you mentioned. And then phase three is privileged access management, which sounds like it's actually going to be really important for you given what the auditors flagged."
+            }
+          ]
+        }
+      ],
+      "other_note": "Call 57F042 covers a single-instance PDF formatting and pagination rendering bug in Comply v2 reports that did not recur across multiple calls in this batch."
+    }
+  ],
+  "batch_validation": [
+    {
+      "n": 23,
+      "known_id": 23,
+      "exact": 21,
+      "loose": 23,
+      "ids_total": 54,
+      "ids_unknown": 0,
+      "n_themes": 6,
+      "n_products": 4
+    },
+    {
+      "n": 27,
+      "known_id": 27,
+      "exact": 25,
+      "loose": 26,
+      "ids_total": 62,
+      "ids_unknown": 0,
+      "n_themes": 7,
+      "n_products": 4
+    },
+    {
+      "n": 23,
+      "known_id": 23,
+      "exact": 22,
+      "loose": 22,
+      "ids_total": 69,
+      "ids_unknown": 0,
+      "n_themes": 6,
+      "n_products": 4
+    },
+    {
+      "n": 26,
+      "known_id": 26,
+      "exact": 25,
+      "loose": 26,
+      "ids_total": 69,
+      "ids_unknown": 0,
+      "n_themes": 6,
+      "n_products": 4
+    }
+  ],
+  "batch_usage": [
+    {
+      "completion_tokens": 3210,
+      "prompt_tokens": 58981,
+      "total_tokens": 62191,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.05627325,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.05627325,
+        "upstream_inference_prompt_cost": 0.04423575,
+        "upstream_inference_completions_cost": 0.0120375
+      }
+    },
+    {
+      "completion_tokens": 3451,
+      "prompt_tokens": 53935,
+      "total_tokens": 57386,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.0533925,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0533925,
+        "upstream_inference_prompt_cost": 0.04045125,
+        "upstream_inference_completions_cost": 0.01294125
+      }
+    },
+    {
+      "completion_tokens": 3074,
+      "prompt_tokens": 55335,
+      "total_tokens": 58409,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.05302875,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.05302875,
+        "upstream_inference_prompt_cost": 0.04150125,
+        "upstream_inference_completions_cost": 0.0115275
+      }
+    },
+    {
+      "completion_tokens": 3589,
+      "prompt_tokens": 55349,
+      "total_tokens": 58938,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.0549705,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0549705,
+        "upstream_inference_prompt_cost": 0.04151175,
+        "upstream_inference_completions_cost": 0.01345875
+      }
+    }
+  ],
+  "consolidation": {
+    "themes": [
+      {
+        "name": "Detect Ingestion Pipeline Remediation",
+        "definition": "Calls addressing the architectural resilience, root cause investigation, and infrastructure remediation following platform outages in the Detect ingestion pipeline.",
+        "distinguishing": "Focuses on internal backend architectural fixes and technical incident post-mortems for Detect, rather than commercial retention negotiations or routine SIEM export latency.",
+        "owner": "engineering lead",
+        "actionable_because": "Engineering leads can prioritize sprint tasks for redundant processing nodes, circuit breaker patterns, and pipeline health monitoring to prevent single-point failures.",
+        "merged_from": [
+          "b1.t2",
+          "b2.t2",
+          "b3.t1",
+          "b4.t1"
+        ]
+      },
+      {
+        "name": "Comply v2 Reporting Expansion",
+        "definition": "Calls concerning customer demonstrations, roadmap scoping, audit template customization, and rollout readiness for Comply v2 multi-framework reporting.",
+        "distinguishing": "Focuses on feature adoption, reporting frameworks, and release readiness for Aegis Comply rather than internal corporate compliance checks or contract pricing.",
+        "owner": "product manager",
+        "actionable_because": "Product managers can prioritize requested framework mappings such as ISO and GDPR while streamlining automated export templates and launch runbooks.",
+        "merged_from": [
+          "b1.t1",
+          "b2.t4",
+          "b2.t5",
+          "b3.t2",
+          "b4.t2"
+        ]
+      },
+      {
+        "name": "Contract Renewals and Retention",
+        "definition": "Commercial discussions covering contract renewals, multi-module packaging, volume rightsizing, and defending accounts against churn following service disruptions.",
+        "distinguishing": "Focuses on contractual terms, commercial pricing concessions, and overall retention strategy rather than day-to-day invoice overage triage or technical support debugging.",
+        "owner": "sales / account manager",
+        "actionable_because": "Account managers can assemble competitive battlecards, structure multi-year renewal incentives, and offer tailored SLA concessions to preserve recurring revenue.",
+        "merged_from": [
+          "b1.t6",
+          "b2.t3",
+          "b2.t7",
+          "b3.t3",
+          "b4.t3"
+        ]
+      },
+      {
+        "name": "Identity Authentication and Integration",
+        "definition": "Calls regarding directory synchronization breakdowns, SSO authentication failures, MFA validation issues, and IAM policy provisioning in Aegis Identity.",
+        "distinguishing": "Focuses on identity directory connector and authentication failures rather than threat alert calibration or backup job throughput.",
+        "owner": "support lead",
+        "actionable_because": "Support leads can develop targeted troubleshooting playbooks for SSL/TLS handshakes and establish rapid escalation protocols for tenant-wide lockouts.",
+        "merged_from": [
+          "b1.t3",
+          "b2.t6",
+          "b3.t4",
+          "b4.t5"
+        ]
+      },
+      {
+        "name": "Protect Backup Performance Bottlenecks",
+        "definition": "Calls concerning extended backup windows, connector permission failures, agent version incompatibilities, and throughput drops within Aegis Protect.",
+        "distinguishing": "Focuses on runtime performance degradation and connector job failures in backup workflows rather than initial environment architecture and deployment planning.",
+        "owner": "support lead",
+        "actionable_because": "Support leads can guide agent patch deployments, resolve connector configuration errors, and adjust workload job throttling to restore SLA throughput.",
+        "merged_from": [
+          "b3.t6",
+          "b4.t4"
+        ]
+      },
+      {
+        "name": "Protect Onboarding and Architecture",
+        "definition": "Calls covering technical architecture design, RTO/RPO scoping, and deployment planning for initial customer implementations of Aegis Protect.",
+        "distinguishing": "Focuses on pre-deployment architecture planning and onboarding milestone management rather than active troubleshooting of degraded backup jobs.",
+        "owner": "sales / account manager",
+        "actionable_because": "Customer success and account managers can deliver structured deployment checklists and coordinate disaster recovery validation drills.",
+        "merged_from": [
+          "b3.t5"
+        ]
+      },
+      {
+        "name": "Threat Detection Rule Tuning",
+        "definition": "Calls assisting customers with tuning detection thresholds, suppressing noisy alert baselines, and mitigating SOC fatigue caused by false positives.",
+        "distinguishing": "Deals with alert rule sensitivity and baseline calibration in Aegis Detect rather than complete event ingestion outages or SIEM bridge latency.",
+        "owner": "product manager",
+        "actionable_because": "Product managers can refine automated baseline learning algorithms and protect customized detection thresholds from being overwritten by routine updates.",
+        "merged_from": [
+          "b1.t4"
+        ]
+      },
+      {
+        "name": "SIEM Connector Forwarding Latency",
+        "definition": "Calls addressing telemetry forwarding delays, connector buffer retries, and dropped event queues between Aegis Detect and external SIEM solutions.",
+        "distinguishing": "Focuses specifically on the third-party SIEM egress connector and queue buffering rather than internal Detect ingestion pipeline failures.",
+        "owner": "engineering lead",
+        "actionable_because": "Engineering leads can optimize connector buffer retry logic on network timeouts and balance queue allocation across tenant partitions.",
+        "merged_from": [
+          "b4.t6"
+        ]
+      },
+      {
+        "name": "Usage Ingestion Overage Disputes",
+        "definition": "Calls where customers question, review, or dispute surprise invoice overage charges stemming from ingestion spikes and data retention limits.",
+        "distinguishing": "Centers on transactional billing disputes and consumption threshold visibility rather than broader multi-year contract renewals or technical platform bugs.",
+        "owner": "support lead",
+        "actionable_because": "Support leads can implement automated consumption alert thresholds and standardize disputed-usage audit workflows with finance.",
+        "merged_from": [
+          "b2.t1"
+        ]
+      },
+      {
+        "name": "Internal Enterprise Audit Readiness",
+        "definition": "Internal meetings dedicated to organizing, auditing, and validating internal technical control evidence across access and CI/CD for upcoming SOC 2 audits.",
+        "distinguishing": "Focuses on Aegis's own internal compliance posture and control evidence rather than customer-facing Comply v2 product features.",
+        "owner": "engineering lead",
+        "actionable_because": "Engineering leads can institute automated CI/CD deployment gates, standardize internal access logs, and enforce evidence collection pipelines.",
+        "merged_from": [
+          "b1.t5"
+        ]
+      }
+    ],
+    "product_areas": [
+      {
+        "name": "Aegis Comply",
+        "merged_from": [
+          "b1.p1",
+          "b2.p1",
+          "b3.p1",
+          "b4.p3"
+        ]
+      },
+      {
+        "name": "Aegis Detect",
+        "merged_from": [
+          "b1.p2",
+          "b2.p2",
+          "b3.p2",
+          "b4.p1"
+        ]
+      },
+      {
+        "name": "Aegis Protect",
+        "merged_from": [
+          "b1.p3",
+          "b2.p3",
+          "b3.p3",
+          "b4.p2"
+        ]
+      },
+      {
+        "name": "Aegis Identity",
+        "merged_from": [
+          "b1.p4",
+          "b2.p4",
+          "b3.p4",
+          "b4.p4"
+        ]
+      }
+    ],
+    "dropped": [],
+    "other_note": "Calls that do not fit into the primary product or operational themes generally consist of routine administrative check-ins, broad exploratory discussions, or isolated general inquiries that lack recurring patterns."
+  },
+  "consolidation_checks": {
+    "themes_unknown": [],
+    "themes_missing": [],
+    "themes_duplicated": [],
+    "products_unknown": [],
+    "products_missing": [],
+    "products_duplicated": [],
+    "n_themes": 10
+  },
+  "consolidated": {
+    "themes": [
+      {
+        "name": "Detect Ingestion Pipeline Remediation",
+        "definition": "Calls addressing the architectural resilience, root cause investigation, and infrastructure remediation following platform outages in the Detect ingestion pipeline.",
+        "distinguishing": "Focuses on internal backend architectural fixes and technical incident post-mortems for Detect, rather than commercial retention negotiations or routine SIEM export latency.",
+        "owner": "engineering lead",
+        "actionable_because": "Engineering leads can prioritize sprint tasks for redundant processing nodes, circuit breaker patterns, and pipeline health monitoring to prevent single-point failures.",
+        "merged_from": [
+          "b1.t2",
+          "b2.t2",
+          "b3.t1",
+          "b4.t1"
+        ],
+        "id": "c1",
+        "meeting_ids": [
+          "0540CA",
+          "05B3F0",
+          "0AE694",
+          "0D92AB",
+          "31FAFD",
+          "3D3491",
+          "433FFC",
+          "458216",
+          "4B7D41",
+          "4DC695",
+          "670E6D",
+          "6CCBE7",
+          "70206E",
+          "7315E7",
+          "74D53C",
+          "7814CB",
+          "970775",
+          "9EDE37",
+          "A24D4F",
+          "A7F71B",
+          "B089CA",
+          "B52846",
+          "C898C9",
+          "C9E300",
+          "CAB747",
+          "D897A0",
+          "DC89B6",
+          "DD7656",
+          "EA6697",
+          "EB4171",
+          "EFB1A6",
+          "F02331"
+        ],
+        "n_calls": 32,
+        "evidence": [
+          {
+            "meeting_id": "4DC695",
+            "quote": "What happened was we had a cascading failure that started around 11 PM on the 10th and by about 5 AM on the 11th we had essentially zero threat monitoring visibility for customers on the Detect module."
+          },
+          {
+            "meeting_id": "7315E7",
+            "quote": "The last event we see in the dashboard is timestamped at 7:14 AM this morning and it is now almost 10:30 and I have a team of analysts sitting here staring at a dead screen."
+          },
+          {
+            "meeting_id": "7814CB",
+            "quote": "We're implementing redundant processing nodes and we're adding a circuit breaker pattern so that if one node degrades, traffic gets redistributed rather than causing a full outage."
+          },
+          {
+            "meeting_id": "0540CA",
+            "quote": "The part I'm less sure about is how the redundant node setup interacts with our current Kafka config. We haven't fully mapped that out yet."
+          },
+          {
+            "meeting_id": "0D92AB",
+            "quote": "I think we need to add redundant processing nodes and probably implement a circuit breaker pattern to prevent cascading failures."
+          },
+          {
+            "meeting_id": "C9E300",
+            "quote": "Okay, so on my end this week — I finished deploying the second set of redundant processing nodes for Detect."
+          }
+        ]
+      },
+      {
+        "name": "Comply v2 Reporting Expansion",
+        "definition": "Calls concerning customer demonstrations, roadmap scoping, audit template customization, and rollout readiness for Comply v2 multi-framework reporting.",
+        "distinguishing": "Focuses on feature adoption, reporting frameworks, and release readiness for Aegis Comply rather than internal corporate compliance checks or contract pricing.",
+        "owner": "product manager",
+        "actionable_because": "Product managers can prioritize requested framework mappings such as ISO and GDPR while streamlining automated export templates and launch runbooks.",
+        "merged_from": [
+          "b1.t1",
+          "b2.t4",
+          "b2.t5",
+          "b3.t2",
+          "b4.t2"
+        ],
+        "id": "c2",
+        "meeting_ids": [
+          "00227D",
+          "036285",
+          "05678C",
+          "16916D",
+          "174FDD",
+          "26FFAD",
+          "2AB5AF",
+          "30237B",
+          "547007",
+          "571940",
+          "5798C7",
+          "653175",
+          "754FB8",
+          "7CDAB4",
+          "8022CA",
+          "9597D0",
+          "A19AF2",
+          "B1B5EC",
+          "E7A00D",
+          "EB4171",
+          "EF0B75"
+        ],
+        "n_calls": 21,
+        "evidence": [
+          {
+            "meeting_id": "036285",
+            "quote": "So with Comply v2 — and this just went GA two days ago, April 7th — we've built out on-demand reporting that's fully mapped to PCI DSS controls."
+          },
+          {
+            "meeting_id": "16916D",
+            "quote": "The output is a structured PDF — it's formatted specifically for auditor consumption, so it's got your control mapping, your evidence artifacts, timestamps, everything organized by control category."
+          },
+          {
+            "meeting_id": "571940",
+            "quote": "So I'm clicking on PCI DSS here, you select your scope — in your case this would be your cardholder data environment, your point of sale systems, whatever you've got mapped — and then you just hit generate, and watch how fast this comes back."
+          },
+          {
+            "meeting_id": "174FDD",
+            "quote": "And we just — we really want to know if there's any way to get early access before the general release because our SOC 2 audit window is coming up and the timing would be really helpful."
+          },
+          {
+            "meeting_id": "2AB5AF",
+            "quote": "Great — so, big news, and I mean this is actually really good timing for you guys, Comply v2 went GA literally today, April 7th, so you are among the very first customers to be onboarding onto the new version."
+          },
+          {
+            "meeting_id": "8022CA",
+            "quote": "You can now generate a full ISO 27001 readiness report at any point, and it maps your current control posture directly to the Annex A controls — so you're not having to manually cross-reference anything, the platform does that work for you."
+          }
+        ]
+      },
+      {
+        "name": "Contract Renewals and Retention",
+        "definition": "Commercial discussions covering contract renewals, multi-module packaging, volume rightsizing, and defending accounts against churn following service disruptions.",
+        "distinguishing": "Focuses on contractual terms, commercial pricing concessions, and overall retention strategy rather than day-to-day invoice overage triage or technical support debugging.",
+        "owner": "sales / account manager",
+        "actionable_because": "Account managers can assemble competitive battlecards, structure multi-year renewal incentives, and offer tailored SLA concessions to preserve recurring revenue.",
+        "merged_from": [
+          "b1.t6",
+          "b2.t3",
+          "b2.t7",
+          "b3.t3",
+          "b4.t3"
+        ],
+        "id": "c3",
+        "meeting_ids": [
+          "0571F1",
+          "0D70E2",
+          "1ED8F5",
+          "2AA9F5",
+          "30237B",
+          "31FAFD",
+          "39CFC7",
+          "458216",
+          "4B6251",
+          "4B7D41",
+          "580008",
+          "8C81E8",
+          "99EE7D",
+          "AB668D",
+          "B52846",
+          "C898C9",
+          "DB40BD",
+          "DD7656",
+          "E7A00D",
+          "EA6697"
+        ],
+        "n_calls": 20,
+        "evidence": [
+          {
+            "meeting_id": "31FAFD",
+            "quote": "We're proposing a renewal of both of those, same tier, with a three percent uplift which is honestly below our standard rate increase — and I'll explain why in a second."
+          },
+          {
+            "meeting_id": "C898C9",
+            "quote": "So your current contract has a 99.5% uptime SLA for Detect, and the six-hour outage did breach that. I'm going to be honest with you — I've been working with our team on a service credit for the affected period, and I have something concrete to bring to you today."
+          },
+          {
+            "meeting_id": "EA6697",
+            "quote": "We're proposing 99.9% uptime on Detect, which is up from the 99.5% that was in your current contract. And there are remediation credits tied to that if we fall below."
+          },
+          {
+            "meeting_id": "0571F1",
+            "quote": "We had some low-level grumblings about Aegis Detect before March — the alert fatigue issue I mentioned back in, I think it was January — but the outage kind of pushed us to actually go out and look at alternatives."
+          },
+          {
+            "meeting_id": "0D70E2",
+            "quote": "The outage last week was bad. I don't think any of us are going to sugarcoat that. Six hours of zero threat monitoring visibility is not something our customers are just going to brush off, and our competitors are absolutely going to use this against us."
+          },
+          {
+            "meeting_id": "AB668D",
+            "quote": "My CISO is now asking me to put together a competitive evaluation. Those were her words. Competitive evaluation. She specifically mentioned SentinelShield."
+          }
+        ]
+      },
+      {
+        "name": "Identity Authentication and Integration",
+        "definition": "Calls regarding directory synchronization breakdowns, SSO authentication failures, MFA validation issues, and IAM policy provisioning in Aegis Identity.",
+        "distinguishing": "Focuses on identity directory connector and authentication failures rather than threat alert calibration or backup job throughput.",
+        "owner": "support lead",
+        "actionable_because": "Support leads can develop targeted troubleshooting playbooks for SSL/TLS handshakes and establish rapid escalation protocols for tenant-wide lockouts.",
+        "merged_from": [
+          "b1.t3",
+          "b2.t6",
+          "b3.t4",
+          "b4.t5"
+        ],
+        "id": "c4",
+        "meeting_ids": [
+          "099E75",
+          "4B7D41",
+          "632514",
+          "698E84",
+          "A55CCD",
+          "AAFF8B",
+          "B09D1E",
+          "B62A59",
+          "C9FE34",
+          "D2AE7F"
+        ],
+        "n_calls": 10,
+        "evidence": [
+          {
+            "meeting_id": "099E75",
+            "quote": "If your certificate was issued by an internal certificate authority, our connector doesn't inherently trust that CA. You need to upload your internal CA's root certificate into Aegis Identity so that we can validate the chain."
+          },
+          {
+            "meeting_id": "B62A59",
+            "quote": "We rotated our SAML signing certificate yesterday, standard procedure, we do this every six months, and after the rotation a significant portion of our users are getting authentication failures when they try to SSO into our internal tools."
+          },
+          {
+            "meeting_id": "AAFF8B",
+            "quote": "So basically, we push policy updates through Identity — role assignments, access group changes — and they're just... not propagating."
+          },
+          {
+            "meeting_id": "B09D1E",
+            "quote": "So it started, um, I'd say around 7 AM this morning, and it's not all users — it seems to be specifically the users who are enrolled in TOTP-based MFA through Aegis Identity, they're getting token validation failures even though the tokens are generating correctly on their authenticator apps."
+          },
+          {
+            "meeting_id": "698E84",
+            "quote": "About 38 to 42 percent of our user base is hitting the failure."
+          },
+          {
+            "meeting_id": "C9FE34",
+            "quote": "So the session timeout is set globally right now, and we can't scope it by device group or location."
+          }
+        ]
+      },
+      {
+        "name": "Protect Backup Performance Bottlenecks",
+        "definition": "Calls concerning extended backup windows, connector permission failures, agent version incompatibilities, and throughput drops within Aegis Protect.",
+        "distinguishing": "Focuses on runtime performance degradation and connector job failures in backup workflows rather than initial environment architecture and deployment planning.",
+        "owner": "support lead",
+        "actionable_because": "Support leads can guide agent patch deployments, resolve connector configuration errors, and adjust workload job throttling to restore SLA throughput.",
+        "merged_from": [
+          "b3.t6",
+          "b4.t4"
+        ],
+        "id": "c5",
+        "meeting_ids": [
+          "13B60D",
+          "51360A",
+          "5ADCF8",
+          "8DCF95",
+          "92B34B"
+        ],
+        "n_calls": 5,
+        "evidence": [
+          {
+            "meeting_id": "8DCF95",
+            "quote": "It says — let me actually pull it up — it says, uh, 'connector write operation terminated, upstream response code 403.'"
+          },
+          {
+            "meeting_id": "92B34B",
+            "quote": "Okay, so I'm seeing the backup throughput dropped pretty substantially — it looks like you were averaging around 800 megabytes per second before March 27th and now you're sitting around 180 to 220."
+          },
+          {
+            "meeting_id": "13B60D",
+            "quote": "Our nightly backup jobs are taking, uh, somewhere between four and six hours to complete. They used to finish in under ninety minutes. This started maybe three weeks ago, and it's just... it's not getting better."
+          },
+          {
+            "meeting_id": "51360A",
+            "quote": "So we have our EHR system — it's a custom-built platform — integrated with Aegis Protect through your REST API, and starting Sunday we started getting 503 errors on the backup initiation endpoint. Specifically the... um, it's the /v2/backup/jobs/create endpoint."
+          },
+          {
+            "meeting_id": "5ADCF8",
+            "quote": "Throughput started degrading at around the 60% load mark, and by the time we hit full simulated load we were seeing backup job queue times spike to like — I think the worst number was 47 minutes for a job that should complete in under five."
+          }
+        ]
+      },
+      {
+        "name": "Protect Onboarding and Architecture",
+        "definition": "Calls covering technical architecture design, RTO/RPO scoping, and deployment planning for initial customer implementations of Aegis Protect.",
+        "distinguishing": "Focuses on pre-deployment architecture planning and onboarding milestone management rather than active troubleshooting of degraded backup jobs.",
+        "owner": "sales / account manager",
+        "actionable_because": "Customer success and account managers can deliver structured deployment checklists and coordinate disaster recovery validation drills.",
+        "merged_from": [
+          "b3.t5"
+        ],
+        "id": "c6",
+        "meeting_ids": [
+          "B0C7D9",
+          "D57E90"
+        ],
+        "n_calls": 2,
+        "evidence": [
+          {
+            "meeting_id": "B0C7D9",
+            "quote": "So Raymond, just to set the stage for today — the goal of this workshop is really to dig into your backup strategy, understand your current environment at Vanta Health, and start mapping out how Aegis Protect can fit into what you're already doing, does that sound right to you?"
+          },
+          {
+            "meeting_id": "D57E90",
+            "quote": "So generally for Aegis Protect we're looking at about a four to six week process broken into three phases."
+          }
+        ]
+      },
+      {
+        "name": "Threat Detection Rule Tuning",
+        "definition": "Calls assisting customers with tuning detection thresholds, suppressing noisy alert baselines, and mitigating SOC fatigue caused by false positives.",
+        "distinguishing": "Deals with alert rule sensitivity and baseline calibration in Aegis Detect rather than complete event ingestion outages or SIEM bridge latency.",
+        "owner": "product manager",
+        "actionable_because": "Product managers can refine automated baseline learning algorithms and protect customized detection thresholds from being overwritten by routine updates.",
+        "merged_from": [
+          "b1.t4"
+        ],
+        "id": "c7",
+        "meeting_ids": [
+          "3FB020",
+          "657CF1"
+        ],
+        "n_calls": 2,
+        "evidence": [
+          {
+            "meeting_id": "3FB020",
+            "quote": "The false positive issue is honestly top of mind right now. Our SOC team is getting fatigued — they're seeing a ton of alerts that aren't actionable and it's starting to affect response times on the stuff that actually matters."
+          },
+          {
+            "meeting_id": "657CF1",
+            "quote": "The patch included updates to the behavioral detection engine and in some environments it's basically starting the learning period over from scratch."
+          }
+        ]
+      },
+      {
+        "name": "SIEM Connector Forwarding Latency",
+        "definition": "Calls addressing telemetry forwarding delays, connector buffer retries, and dropped event queues between Aegis Detect and external SIEM solutions.",
+        "distinguishing": "Focuses specifically on the third-party SIEM egress connector and queue buffering rather than internal Detect ingestion pipeline failures.",
+        "owner": "engineering lead",
+        "actionable_because": "Engineering leads can optimize connector buffer retry logic on network timeouts and balance queue allocation across tenant partitions.",
+        "merged_from": [
+          "b4.t6"
+        ],
+        "id": "c8",
+        "meeting_ids": [
+          "24624D",
+          "3DA9C2",
+          "670E6D",
+          "EFB1A6"
+        ],
+        "n_calls": 4,
+        "evidence": [
+          {
+            "meeting_id": "3DA9C2",
+            "quote": "Okay so here's what I think is happening — in connector version 3.4.1, there's a known issue where if the HEC endpoint returns a connection timeout, specifically due to upstream throttling from something like an F5, the connector's retry logic doesn't kick in correctly, it treats the timeout as a terminal error rather than a transient one, and it flushes the buffer."
+          },
+          {
+            "meeting_id": "670E6D",
+            "quote": "The events are hitting LogVault with the correct original timestamps, but the Aegis alert notification — the one our security team acts on — that's the thing that's delayed."
+          },
+          {
+            "meeting_id": "EFB1A6",
+            "quote": "First one is expanded SIEM integration — we're adding native connectors for a couple of the major SIEM platforms in Q2, which I know you're running LogVault, so that should reduce the time from event to alert in your existing workflow."
+          }
+        ]
+      },
+      {
+        "name": "Usage Ingestion Overage Disputes",
+        "definition": "Calls where customers question, review, or dispute surprise invoice overage charges stemming from ingestion spikes and data retention limits.",
+        "distinguishing": "Centers on transactional billing disputes and consumption threshold visibility rather than broader multi-year contract renewals or technical platform bugs.",
+        "owner": "support lead",
+        "actionable_because": "Support leads can implement automated consumption alert thresholds and standardize disputed-usage audit workflows with finance.",
+        "merged_from": [
+          "b2.t1"
+        ],
+        "id": "c9",
+        "meeting_ids": [
+          "01AB1C",
+          "1ED8F5",
+          "A98889"
+        ],
+        "n_calls": 3,
+        "evidence": [
+          {
+            "meeting_id": "01AB1C",
+            "quote": "Yeah, so — look, I'll be direct. We got our April invoice and there are overage charges totaling just over four thousand dollars that I do not understand and frankly did not expect. At all."
+          },
+          {
+            "meeting_id": "1ED8F5",
+            "quote": "So the main one is — there's an overage charge on both invoices under the Aegis Detect module. And honestly our team wasn't totally aware that we had a usage cap on that tier."
+          },
+          {
+            "meeting_id": "A98889",
+            "quote": "So there's a line item that says, um, overage charges — data retention overage — and it's for something like 2.3 terabytes. And we just, we weren't expecting that at all."
+          }
+        ]
+      },
+      {
+        "name": "Internal Enterprise Audit Readiness",
+        "definition": "Internal meetings dedicated to organizing, auditing, and validating internal technical control evidence across access and CI/CD for upcoming SOC 2 audits.",
+        "distinguishing": "Focuses on Aegis's own internal compliance posture and control evidence rather than customer-facing Comply v2 product features.",
+        "owner": "engineering lead",
+        "actionable_because": "Engineering leads can institute automated CI/CD deployment gates, standardize internal access logs, and enforce evidence collection pipelines.",
+        "merged_from": [
+          "b1.t5"
+        ],
+        "id": "c10",
+        "meeting_ids": [
+          "25FEC8",
+          "D10880"
+        ],
+        "n_calls": 2,
+        "evidence": [
+          {
+            "meeting_id": "25FEC8",
+            "quote": "Can we add a gate in the CI/CD pipeline so that anything touching production requires a ticket reference? Like, a hard gate, not just a reminder."
+          },
+          {
+            "meeting_id": "D10880",
+            "quote": "Really the reason I pulled everyone together today is we need to do a final walk-through of the SOC 2 Type II materials before we hand them off to the auditors, and honestly I'm — I'm feeling pretty good about where we landed."
+          }
+        ]
+      }
+    ],
+    "product_areas": [
+      {
+        "name": "Aegis Comply",
+        "merged_from": [
+          "b1.p1",
+          "b2.p1",
+          "b3.p1",
+          "b4.p3"
+        ],
+        "id": "p1",
+        "meeting_ids": [
+          "00227D",
+          "01AB1C",
+          "036285",
+          "0540CA",
+          "05678C",
+          "0571F1",
+          "0D70E2",
+          "107F0F",
+          "16916D",
+          "174FDD",
+          "1ED8F5",
+          "1FF9CE",
+          "24624D",
+          "26FFAD",
+          "2AA9F5",
+          "2AB5AF",
+          "2F2C03",
+          "30237B",
+          "31FAFD",
+          "39CFC7",
+          "458216",
+          "4B6251",
+          "547007",
+          "571940",
+          "5798C7",
+          "57F042",
+          "580008",
+          "653175",
+          "754FB8",
+          "7CDAB4",
+          "8022CA",
+          "8C81E8",
+          "94B6C4",
+          "9597D0",
+          "99EE7D",
+          "A19AF2",
+          "A24D4F",
+          "B1B5EC",
+          "B52846",
+          "C898C9",
+          "C9E300",
+          "C9FE34",
+          "D10880",
+          "D2AE7F",
+          "D57E90",
+          "DB40BD",
+          "E7A00D",
+          "EA6697",
+          "EB4171",
+          "EF0B75",
+          "EFB1A6"
+        ],
+        "n_calls": 51
+      },
+      {
+        "name": "Aegis Detect",
+        "merged_from": [
+          "b1.p2",
+          "b2.p2",
+          "b3.p2",
+          "b4.p1"
+        ],
+        "id": "p2",
+        "meeting_ids": [
+          "01AB1C",
+          "0540CA",
+          "0571F1",
+          "05B3F0",
+          "0AE694",
+          "0D70E2",
+          "0D92AB",
+          "107F0F",
+          "1ED8F5",
+          "24624D",
+          "2AA9F5",
+          "30237B",
+          "31FAFD",
+          "39CFC7",
+          "3D3491",
+          "3DA9C2",
+          "3FB020",
+          "433FFC",
+          "458216",
+          "4B6251",
+          "4DC695",
+          "547007",
+          "580008",
+          "657CF1",
+          "670E6D",
+          "6CCBE7",
+          "70206E",
+          "7315E7",
+          "74D53C",
+          "7814CB",
+          "8C81E8",
+          "92B34B",
+          "970775",
+          "99EE7D",
+          "9EDE37",
+          "A19AF2",
+          "A24D4F",
+          "A7F71B",
+          "A8C495",
+          "A98889",
+          "AAFF8B",
+          "AB668D",
+          "B089CA",
+          "B52846",
+          "C898C9",
+          "C9E300",
+          "CAB747",
+          "D897A0",
+          "DB40BD",
+          "DC6D94",
+          "DC89B6",
+          "DD7656",
+          "EA6697",
+          "EB4171",
+          "EFB1A6",
+          "F02331"
+        ],
+        "n_calls": 56
+      },
+      {
+        "name": "Aegis Protect",
+        "merged_from": [
+          "b1.p3",
+          "b2.p3",
+          "b3.p3",
+          "b4.p2"
+        ],
+        "id": "p3",
+        "meeting_ids": [
+          "0571F1",
+          "107F0F",
+          "13B60D",
+          "24624D",
+          "2AA9F5",
+          "30237B",
+          "39CFC7",
+          "458216",
+          "51360A",
+          "580008",
+          "5ADCF8",
+          "71D752",
+          "8C81E8",
+          "8DCF95",
+          "91F2C3",
+          "92B34B",
+          "99EE7D",
+          "A24D4F",
+          "A98889",
+          "A9FF60",
+          "B0C7D9",
+          "C9FE34",
+          "D57E90",
+          "DB40BD"
+        ],
+        "n_calls": 24
+      },
+      {
+        "name": "Aegis Identity",
+        "merged_from": [
+          "b1.p4",
+          "b2.p4",
+          "b3.p4",
+          "b4.p4"
+        ],
+        "id": "p4",
+        "meeting_ids": [
+          "099E75",
+          "107F0F",
+          "1FF9CE",
+          "24624D",
+          "458216",
+          "4B7D41",
+          "632514",
+          "698E84",
+          "6CCBE7",
+          "8C81E8",
+          "94B6C4",
+          "973B16",
+          "99EE7D",
+          "A24D4F",
+          "A55CCD",
+          "AAFF8B",
+          "AD7C35",
+          "B09D1E",
+          "B62A59",
+          "C9FE34",
+          "CA1F5A",
+          "D2AE7F"
+        ],
+        "n_calls": 22
+      }
+    ],
+    "dropped": [],
+    "other_note": "Calls that do not fit into the primary product or operational themes generally consist of routine administrative check-ins, broad exploratory discussions, or isolated general inquiries that lack recurring patterns."
+  },
+  "consolidation_usage": {
+    "completion_tokens": 1724,
+    "prompt_tokens": 4531,
+    "total_tokens": 6255,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00986325,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00986325,
+      "upstream_inference_prompt_cost": 0.00339825,
+      "upstream_inference_completions_cost": 0.006465
+    }
+  }
+}

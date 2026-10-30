@@ -1,0 +1,224 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (39 turns, indices 0 to 38; per_turn needs exactly 39 entries, one per index in order):\n[0] Priya Patel (aegis_staff): Hi, this is Priya Patel from Aegis Cloud Security support, am I speaking with Dr. Cheng?\n[1] Dr. Linda Cheng (customer): Yes, this is Linda Cheng, and I have to say I'm — I'm really frustrated right now, we've been dealing with this API issue for going on three days and it is actively impacting our backup workflows.\n[2] Priya Patel (aegis_staff): I completely understand, Dr. Cheng, and I sincerely apologize for the disruption — I've pulled up your support case, number 3286, and I want to make sure we get to the bottom of this today.\n[3] Dr. Linda Cheng (customer): Three days, Priya. We're a healthcare organization, we have patient data, we have regulatory obligations — this isn't a minor inconvenience, this is a serious problem.\n[4] Priya Patel (aegis_staff): Absolutely, and I take that very seriously, I do. Can you walk me through what you're seeing on your end? The case notes mention an API integration error with Aegis Protect but I want to hear it directly from you.\n[5] Dr. Linda Cheng (customer): So we have our EHR system — it's a custom-built platform — integrated with Aegis Protect through your REST API, and starting Sunday we started getting 503 errors on the backup initiation endpoint. Specifically the... um, it's the /v2/backup/jobs/create endpoint.\n[6] Priya Patel (aegis_staff): Okay, the /v2/backup/jobs/create endpoint, got it. And are these errors consistent or intermittent? Like are they happening on every call or—\n[7] Dr. Linda Cheng (customer): Every single call. One hundred percent failure rate since Sunday morning, approximately 6 AM our time, which is Pacific. We have zero successful backup jobs since then.\n[8] Priya Patel (aegis_staff): Zero successful jobs in three days, okay, that's — yeah, that's significant. And are you seeing anything in the response body with the 503? Any error message or is it just the status code?\n[9] Dr. Linda Cheng (customer): We get a very unhelpful message that says 'service temporarily unavailable, please retry' — which we have been retrying, with exponential backoff as your documentation specifies, and it hasn't made a difference.\n[10] Priya Patel (aegis_staff): Right, right. And the retry behavior — are you using our SDK or are you making direct HTTP calls?\n[11] Dr. Linda Cheng (customer): Direct HTTP calls, our dev team built a custom integration because your SDK didn't support some of the authentication patterns we needed for our environment.\n[12] Priya Patel (aegis_staff): Okay, and what authentication method are you using? Bearer token, API key, or—\n[13] Dr. Linda Cheng (customer): Bearer token, OAuth 2.0 client credentials flow. And before you ask — yes, the tokens are valid, yes they're being refreshed properly, we're not hitting any 401s or 403s, the 503s start immediately after auth succeeds.\n[14] Priya Patel (aegis_staff): That's — that's actually really helpful context, thank you. So authentication is working fine, it's specifically the job creation call that's failing. Okay. Can I ask, do you have a request ID from any of the failed calls? That would help me trace it on our backend.\n[15] Dr. Linda Cheng (customer): I have several. I'll read you one — it's X-Request-ID: ae7f2c-b339-48d1-9cf2-7744d0a8e312. My team logged about two hundred of them over the past three days.\n[16] Priya Patel (aegis_staff): Perfect, let me pull that up... okay, I'm in our trace logs now. Give me just a second here.\n[17] Dr. Linda Cheng (customer): And while you're doing that, I want to raise something else — we noticed that when we try to manually trigger backups through the Aegis Protect web console, those also fail. So this doesn't seem like it's purely an API integration issue on our side, this looks like something is broken on your end.\n[18] Priya Patel (aegis_staff): Oh, that's — that's a really important data point, the console failures too. That does shift the picture significantly. Okay so I'm looking at this request ID and I can see... hm. Okay. So it looks like the job is hitting our backup orchestration service and it's timing out before it can queue. Let me see what's upstream from that.\n[19] Dr. Linda Cheng (customer): What does that mean in plain English? Because I need to understand whether this is something my team caused or something on Aegis's end, because right now my CTO position — I'm the one responsible for data integrity and I need to give my board an explanation.\n[20] Priya Patel (aegis_staff): I understand, and I want to be transparent with you. What I'm seeing in the logs is that the backup orchestration layer is rejecting job submissions, and it's not a client-side error — this is happening at our infrastructure level. This is not something your team did wrong.\n[21] Dr. Linda Cheng (customer): Okay, so Aegis broke something. And it took three days and a support call for someone to tell me that.\n[22] Priya Patel (aegis_staff): Dr. Cheng, I — I hear you, and that is a fair criticism. We should have proactive alerting that catches this for affected customers and reaches out. I'm going to escalate this right now to our Protect infrastructure team while we're on this call.\n[23] Dr. Linda Cheng (customer): Good. And in the meantime, what are my options? Because we have a — we have a compliance window coming up, we need to demonstrate backup continuity for our HIPAA audit, and right now I cannot do that.\n[24] Priya Patel (aegis_staff): So there are a couple of things we can do right now. First, I can have our team manually trigger backup snapshots on your behalf from our admin side, which would bypass the orchestration layer that's having the issue. That's not a long-term solution but it would get your data protected while we work on the fix.\n[25] Dr. Linda Cheng (customer): Okay. How quickly can that happen?\n[26] Priya Patel (aegis_staff): I can get that initiated within the next hour — I'll coordinate with our Protect ops team directly. Second thing — I want to make sure we document everything for your audit purposes, so I'll send you a written incident summary that you can use to demonstrate to your HIPAA auditors that there was a platform-level issue and what mitigation steps were taken.\n[27] Dr. Linda Cheng (customer): That — okay, that's actually helpful. A written incident summary, that I can work with. But I want a timeline on when the actual fix is going to be deployed because we cannot operate indefinitely with manual backups being triggered by your team.\n[28] Priya Patel (aegis_staff): Absolutely, that's a completely reasonable ask. I'm going to be honest with you — I don't have that answer right now because I need the infrastructure team to assess the root cause, but I will have a timeline for you within four hours, and I will personally follow up via email and phone call.\n[29] Dr. Linda Cheng (customer): Four hours. Okay. And I want to be clear — I'm not just frustrated about the technical issue, I'm frustrated about the communication. Three days of radio silence from Aegis is not acceptable for a healthcare customer. We are handling protected health information.\n[30] Priya Patel (aegis_staff): You're completely right, and I'm not going to make excuses for that. The lack of proactive communication on our end was a failure, and I'm going to make sure that's fed back to our leadership and that you receive a formal apology along with that incident report.\n[31] Dr. Linda Cheng (customer): I appreciate you saying that. And look — I don't want to tear apart the whole relationship with Aegis, we've had a good experience overall with Protect up until this point, but this is serious and I need to see it treated seriously.\n[32] Priya Patel (aegis_staff): And it will be, I promise you that. Can I also ask — are any other modules affected? Are you seeing anything unusual with Identity or anything else on the platform?\n[33] Dr. Linda Cheng (customer): No, just Protect. Identity and SSO seem to be working fine, it's specifically the backup functionality.\n[34] Priya Patel (aegis_staff): Okay, good — that actually helps narrow down the scope. Alright, so to recap what we're doing: I'm escalating to Protect infrastructure right now, we'll initiate manual backup snapshots for your environment within the hour, I'll send you a written incident summary by end of day, and I'll follow up with a root cause and fix timeline within four hours. Does that all sound right?\n[35] Dr. Linda Cheng (customer): Yes, that covers it. And Priya — I want your direct contact information, not the general support queue. If something changes or if I need to escalate further, I need to be able to reach you directly.\n[36] Priya Patel (aegis_staff): Of course. I'll include my direct email and my direct line in the confirmation email I'm sending you in the next few minutes. And Dr. Cheng, I am sorry — genuinely — for the disruption this has caused. We're going to make this right.\n[37] Dr. Linda Cheng (customer): I'm going to hold you to that. Thank you for finally getting some clarity on this, I'll be waiting for your follow-up.\n[38] Priya Patel (aegis_staff): Absolutely. Talk soon, Dr. Cheng."
+  },
+  "response_text": "{\n  \"call_score\": 2.5,\n  \"customer_score\": 2.0,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"negative\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"negative\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"negative\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"positive\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"negative\"},\n    {\"index\": 18, \"label\": \"positive\"},\n    {\"index\": 19, \"label\": \"negative\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"negative\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"negative\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"positive\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"negative\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"positive\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"positive\"},\n    {\"index\": 38, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 2.0,\n    \"end\": 3.0\n  },\n  \"evidence_quote\": \"Three days of radio silence from Aegis is not acceptable for a healthcare customer.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "negative"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "negative"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "negative"
+      },
+      {
+        "index": 18,
+        "label": "positive"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "negative"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.0,
+      "end": 3.0
+    },
+    "evidence_quote": "Three days of radio silence from Aegis is not acceptable for a healthcare customer.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 672,
+    "prompt_tokens": 4747,
+    "total_tokens": 5419,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00608025,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00608025,
+      "upstream_inference_prompt_cost": 0.00356025,
+      "upstream_inference_completions_cost": 0.00252
+    }
+  },
+  "latency_s": 5.505,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:22:35.267436+00:00",
+  "key": "f28815e3aa8d0b1a9c07ca180f04947c83bc6f86a7958f3055ad02bb8f7c89ee"
+}

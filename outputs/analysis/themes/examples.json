@@ -1,0 +1,210 @@
+{
+ "Billing and Usage Disputes": [
+  {
+   "kind": "clear",
+   "title": "Support Case #9279 - Summit Trust Billing Inquiry",
+   "date": "2026-02-06",
+   "type": "support",
+   "quote": "Yeah so, uh, we received our January invoice last week and there's a line item on there that doesn't quite match what we expected based on our contract.",
+   "why": "High confidence; the provided topics point to the same theme; 1 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Support Case #7572 - Brightpath Commerce Invoice Discrepancy",
+   "date": "2026-02-27",
+   "type": "support",
+   "quote": "So there's a line item that says, um, overage charges \u2014 data retention overage \u2014 and it's for something like 2.3 terabytes. And we just, we weren't expecting that at all.",
+   "why": "High confidence; the provided topics point to the same theme; 1 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "Support Case #7570 - Silverline Brands Comply v2 License Upgrade",
+   "date": "2026-04-18",
+   "type": "support",
+   "quote": "And basically the issue is we upgraded to Comply v2 when it launched on the seventh and we're seeing a billing discrepancy that we can't quite figure out.",
+   "why": "also tagged: Product Adoption, Feedback and Expansion; the provided topics alone would suggest 'Product Adoption, Feedback and Expansion'"
+  }
+ ],
+ "Commercial Renewals and Retention": [
+  {
+   "kind": "clear",
+   "title": "Aegis / Blackridge Investments - Renewal Discussion",
+   "date": "2026-02-07",
+   "type": "external",
+   "quote": "I was thinking we'd kind of do a quick check-in on how the platform's been performing for you this year, and then we can talk about the renewal terms and what the next contract period might look like.",
+   "why": "High confidence; the provided topics point to the same theme; 1 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Aegis / Crestline Wealth - Account Review",
+   "date": "2026-02-17",
+   "type": "external",
+   "quote": "Okay so your current contract runs through, let's see, end of March 2026, so we've got about six weeks before that comes up. I want to make sure we're not scrambling at the last minute on this.",
+   "why": "High confidence; the provided topics point to the same theme; 1 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "Aegis / Atlas Precision - Contract Discussion",
+   "date": "2026-02-25",
+   "type": "external",
+   "quote": "Your current contract runs through end of March, so we wanted to get ahead of it a bit, talk through the current structure, see if anything needs to be adjusted going into the next term.",
+   "why": "also tagged: Billing and Usage Disputes; Product Adoption, Feedback and Expansion; the provided topics alone would suggest 'Billing and Usage Disputes'"
+  }
+ ],
+ "Competitive Strategy and Win/Loss": [
+  {
+   "kind": "clear",
+   "title": "Competitive Threat Assessment - Post Outage",
+   "date": "2026-03-20",
+   "type": "internal",
+   "quote": "So, let's talk competitive positioning because that's really why we're on this call.",
+   "why": "High confidence; the provided topics point to the same theme; 2 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Competitive Response Strategy",
+   "date": "2026-04-10",
+   "type": "internal",
+   "quote": "No worries. Okay, so, the reason I called this is \u2014 we've had three deals in the last two weeks where SentinelShield came up pretty aggressively in late-stage conversations, and I want to make sure we're all aligned on how we're positioning against them going forward.",
+   "why": "High confidence; the provided topics point to the same theme; 2 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "Aegis / Brightpath Commerce - Competitive Evaluation",
+   "date": "2026-04-22",
+   "type": "external",
+   "quote": "Because honestly Aisha, I'll just be upfront with you, we've been doing a broader security vendor evaluation over the last six weeks or so and it's been... eye-opening.",
+   "why": "also tagged: Commercial Renewals and Retention; Incident and Outage Response; the provided topics alone would suggest 'Commercial Renewals and Retention'"
+  }
+ ],
+ "Incident and Outage Response": [
+  {
+   "kind": "clear",
+   "title": "Detect Outage - Remediation Plan Review",
+   "date": "2026-03-16",
+   "type": "internal",
+   "quote": "So, uh, the reason I wanted to get us together today \u2014 obviously we're still in the middle of this, day three of the outage window \u2014 I want to make sure we have a clear remediation plan and that we're all aligned before we send anything else externally.",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Detect Outage - Escalation Bridge",
+   "date": "2026-03-11",
+   "type": "internal",
+   "quote": "So \u2014 so the event processing pipeline went down at approximately 2:47 AM this morning. We're seeing a cascading failure that started in the ingestion layer and basically knocked out the entire threat monitoring feed for Detect. Nobody is getting alerts right now.",
+   "why": "High confidence; the provided topics point to the same theme; 1 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "INCIDENT: Detect Pipeline Failure - War Room",
+   "date": "2026-03-10",
+   "type": "internal",
+   "quote": "So, uh, at approximately 9:14 AM Pacific we started seeing alerts \u2014 or rather, the absence of alerts \u2014 from the Detect event processing pipeline.",
+   "why": "the provided topics alone would suggest 'Technical Integration and Performance Issues'"
+  }
+ ],
+ "Internal Planning and Delivery Cadence": [
+  {
+   "kind": "clear",
+   "title": "Weekly Engineering Standup",
+   "date": "2026-02-16",
+   "type": "internal",
+   "quote": "Okay, so usual format \u2014 let's do a quick status round, then I want to spend some time on the Detect pipeline work and the Comply v2 timeline.",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Protect Team - Quarterly Planning",
+   "date": "2026-02-23",
+   "type": "internal",
+   "quote": "Okay so \u2014 quarterly planning for Protect, Q2 is coming up fast, I want to make sure we actually go into it with a solid plan this time and not scrambling like we did in Q4.",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "All Hands - April Update",
+   "date": "2026-04-26",
+   "type": "internal",
+   "quote": "So I want to cover a few things \u2014 we'll do a quick retrospective on the March Detect outage, then talk about the Comply v2 launch, and then get into Q2 planning for the roadmap.",
+   "why": "also tagged: Incident and Outage Response; Product Adoption, Feedback and Expansion; the provided topics alone would suggest 'Competitive Strategy and Win/Loss'"
+  }
+ ],
+ "Onboarding and Implementation Scoping": [
+  {
+   "kind": "clear",
+   "title": "Aegis / Frostbyte AI - Identity Module Setup",
+   "date": "2026-02-19",
+   "type": "external",
+   "quote": "and she's going to be your main technical point of contact through the onboarding process.",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Aegis / Vanta Health Systems - Backup Strategy Workshop",
+   "date": "2026-02-28",
+   "type": "external",
+   "quote": "the goal of this workshop is really to dig into your backup strategy, understand your current environment at Vanta Health, and start mapping out how Aegis Protect can fit into what you're already doing",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "Aegis / Brightpath Commerce - Detect Module Deployment",
+   "date": "2026-02-11",
+   "type": "external",
+   "quote": "I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout.",
+   "why": "also tagged: Incident and Outage Response; the provided topics alone would suggest 'Internal Planning and Delivery Cadence'"
+  }
+ ],
+ "Product Adoption, Feedback and Expansion": [
+  {
+   "kind": "clear",
+   "title": "Aegis / Bridgeport Health - Compliance Review",
+   "date": "2026-02-13",
+   "type": "external",
+   "quote": "And then honestly, the third thing I'd say is \u2014 let's get you a sandbox look at some of the Comply v2 features before they go GA",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Aegis / Silverline Brands - Comply v2 Early Access Demo",
+   "date": "2026-04-03",
+   "type": "external",
+   "quote": "honestly that's exactly why I wanted to get you on early access for the Comply v2 demo because what you're about to see is going to be really relevant to that audit cycle.",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "Aegis / Pineridge Systems - Q1 Business Review",
+   "date": "2026-03-03",
+   "type": "external",
+   "quote": "We're targeting April 7th for general availability. I can make sure you're on the early access communication list so you get all the details as soon as they're finalized.",
+   "why": "also tagged: Commercial Renewals and Retention; the provided topics alone would suggest 'Commercial Renewals and Retention'"
+  }
+ ],
+ "Technical Integration and Performance Issues": [
+  {
+   "kind": "clear",
+   "title": "Support Case #1750 - Vanta Health Systems SIEM Connector Issue",
+   "date": "2026-02-18",
+   "type": "support",
+   "quote": "Of course, so I've had a chance to look at your case notes, Support Case 1750, and I understand you're seeing issues with your SIEM connector in Aegis Detect",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "clear",
+   "title": "Support Case #6977 - Brightpath Commerce Slow Backup Performance",
+   "date": "2026-02-21",
+   "type": "support",
+   "quote": "So you're seeing slow backup performance with Aegis Protect \u2014 can you walk me through what you're experiencing?",
+   "why": "High confidence; the provided topics point to the same theme; 0 extra tag(s)."
+  },
+  {
+   "kind": "borderline",
+   "title": "Support Case #3103 - Silverline Brands Detect False Positives After Patch",
+   "date": "2026-03-16",
+   "type": "support",
+   "quote": "So I pulled up Support Case 3103 before this call \u2014 you're seeing a spike in false positives from Aegis Detect after a patch was applied, is that right?",
+   "why": "also tagged: Commercial Renewals and Retention; Competitive Strategy and Win/Loss; the provided topics alone would suggest 'Incident and Outage Response'"
+  }
+ ]
+}

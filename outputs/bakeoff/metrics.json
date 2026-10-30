@@ -1,0 +1,622 @@
+{
+  "stage0": {
+    "haiku": {
+      "calls": 140,
+      "schema_valid_first_attempt": 100.0,
+      "failed": 0,
+      "retried": 0,
+      "truncated": 0,
+      "latency_median_s": 1.663,
+      "latency_p90_s": 3.07,
+      "cost_usd": 0.0400588,
+      "mean_completion_tokens": 184.87142857142857,
+      "quote_valid_exact": 100.0,
+      "quote_valid_loose": 100.0,
+      "agree_title_rule": 92.85714285714286,
+      "sides_agree_deterministic": 98.57142857142857,
+      "run_to_run_label_agreement": 100.0,
+      "run_to_run_quote_identical": 64.28571428571429,
+      "confidence_run1": {
+        "high": 64,
+        "medium": 6
+      },
+      "disagreements_run1": [
+        {
+          "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "this is David Kim, how can I help you today?"
+        },
+        {
+          "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "Thank you for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?"
+        },
+        {
+          "title": "Aegis / Northstar Pharma - Urgent: Detect Outage Impact",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "We've had zero visibility into our threat monitoring since yesterday morning"
+        },
+        {
+          "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "I have your case pulled up here"
+        },
+        {
+          "title": "Aegis / Quantum Edge - Renewal Concerns",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "medium",
+          "quote": "I've seen your support tickets come through and I definitely want to make sure we address what you've been seeing."
+        }
+      ],
+      "escalation_calls": {
+        "URGENT: Cobalt Software": {
+          "run1": "support (high)",
+          "run2": "support (high)"
+        },
+        "URGENT: Blackridge Investments": {
+          "run1": "support (high)",
+          "run2": "support (high)"
+        },
+        "ESCALATION: Northstar Pharma": {
+          "run1": "support (high)",
+          "run2": "support (high)"
+        }
+      }
+    },
+    "gemini": {
+      "calls": 140,
+      "schema_valid_first_attempt": 100.0,
+      "failed": 0,
+      "retried": 0,
+      "truncated": 0,
+      "latency_median_s": 2.355,
+      "latency_p90_s": 2.863,
+      "cost_usd": 0.1656435,
+      "mean_completion_tokens": 138.31428571428572,
+      "quote_valid_exact": 98.57142857142857,
+      "quote_valid_loose": 100.0,
+      "agree_title_rule": 95.71428571428571,
+      "sides_agree_deterministic": 100.0,
+      "run_to_run_label_agreement": 100.0,
+      "run_to_run_quote_identical": 100.0,
+      "confidence_run1": {
+        "high": 70
+      },
+      "disagreements_run1": [
+        {
+          "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "Thank you for calling Aegis Cloud Security support, this is David Kim, how can I help you today?"
+        },
+        {
+          "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "Thank you for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?"
+        },
+        {
+          "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+          "title_rule": "external",
+          "model": "support",
+          "confidence": "high",
+          "quote": "this is Elena Vasquez from Aegis Cloud Security senior support, I have your case pulled up here"
+        }
+      ],
+      "escalation_calls": {
+        "URGENT: Cobalt Software": {
+          "run1": "support (high)",
+          "run2": "support (high)"
+        },
+        "URGENT: Blackridge Investments": {
+          "run1": "support (high)",
+          "run2": "support (high)"
+        },
+        "ESCALATION: Northstar Pharma": {
+          "run1": "support (high)",
+          "run2": "support (high)"
+        }
+      }
+    }
+  },
+  "stage12": {
+    "sonnet": {
+      "stage1": {
+        "calls": 30,
+        "schema_valid_first_attempt": 100.0,
+        "failed": 0,
+        "retried": 0,
+        "truncated": 0,
+        "latency_median_s": 1.933,
+        "latency_p90_s": 4.17,
+        "cost_usd": 0.30996,
+        "mean_completion_tokens": 126.86666666666666,
+        "quote_valid_exact": 100.0,
+        "quote_valid_loose": 100.0,
+        "list_membership_ok": 100.0,
+        "theme_agreement_run1_run2": 100.0,
+        "product_area_agreement_run1_run2": 100.0,
+        "theme_distribution_run1": {
+          "Product roadmap & planning": 3,
+          "Outage & incident response": 7,
+          "Onboarding & rollout": 2,
+          "Identity & access": 2,
+          "Integrations, backup & data": 1
+        },
+        "escalation_calls_run1": {
+          "URGENT: Cobalt Software": "Outage & incident response | Detect",
+          "URGENT: Blackridge Investments": "Outage & incident response | Detect",
+          "ESCALATION: Northstar Pharma": "Outage & incident response | Detect"
+        }
+      },
+      "stage2": {
+        "calls": 30,
+        "schema_valid_first_attempt": 100.0,
+        "failed": 0,
+        "retried": 0,
+        "truncated": 0,
+        "latency_median_s": 4.391,
+        "latency_p90_s": 7.021,
+        "cost_usd": 0.5255,
+        "mean_completion_tokens": 734.9333333333333,
+        "quote_valid_exact": 100.0,
+        "quote_valid_loose": 100.0,
+        "per_turn_complete": 100.0,
+        "customer_null_ok": 100.0,
+        "call_score_mad_run1_run2": 0.0,
+        "call_score_exact_same_run1_run2": 100.0,
+        "customer_score_mad_run1_run2": 0.0,
+        "per_turn_label_agreement_run1_run2": 97.25245479925003,
+        "trajectory_mad_run1_run2": 0.0,
+        "corr_with_provided_score": 0.9571602207510681,
+        "mad_vs_provided_score": 0.21333333333333335,
+        "mean_score_model": 2.966666666666667,
+        "mean_score_provided": 2.9,
+        "per_turn_agreement_with_provided_labels": 76.13651259000096,
+        "call_score_by_type_run1": {
+          "support": 2.6,
+          "external": 2.7,
+          "internal": 3.6
+        },
+        "escalation_scores_run1": {
+          "URGENT: Cobalt Software": {
+            "call": 2.0,
+            "customer": 1.5,
+            "provided": 1.8
+          },
+          "URGENT: Blackridge Investments": {
+            "call": 2.0,
+            "customer": 1.5,
+            "provided": 1.6
+          },
+          "ESCALATION: Northstar Pharma": {
+            "call": 2.0,
+            "customer": 2.0,
+            "provided": 2.1
+          }
+        }
+      }
+    },
+    "terra": {
+      "stage1": {
+        "calls": 30,
+        "schema_valid_first_attempt": 100.0,
+        "failed": 0,
+        "retried": 0,
+        "truncated": 0,
+        "latency_median_s": 2.6315,
+        "latency_p90_s": 4.165,
+        "cost_usd": 0.0714982,
+        "mean_completion_tokens": 117.13333333333334,
+        "quote_valid_exact": 100.0,
+        "quote_valid_loose": 100.0,
+        "list_membership_ok": 100.0,
+        "theme_agreement_run1_run2": 100.0,
+        "product_area_agreement_run1_run2": 100.0,
+        "theme_distribution_run1": {
+          "Product roadmap & planning": 4,
+          "Outage & incident response": 9,
+          "Onboarding & rollout": 2
+        },
+        "escalation_calls_run1": {
+          "URGENT: Cobalt Software": "Outage & incident response | Detect",
+          "URGENT: Blackridge Investments": "Outage & incident response | Detect",
+          "ESCALATION: Northstar Pharma": "Outage & incident response | Detect"
+        }
+      },
+      "stage2": {
+        "calls": 30,
+        "schema_valid_first_attempt": 100.0,
+        "failed": 0,
+        "retried": 0,
+        "truncated": 0,
+        "latency_median_s": 11.7275,
+        "latency_p90_s": 13.644,
+        "cost_usd": 0.1986787,
+        "mean_completion_tokens": 915.7333333333333,
+        "quote_valid_exact": 100.0,
+        "quote_valid_loose": 100.0,
+        "per_turn_complete": 100.0,
+        "customer_null_ok": 100.0,
+        "call_score_mad_run1_run2": 0.16666666666666666,
+        "call_score_exact_same_run1_run2": 66.66666666666667,
+        "customer_score_mad_run1_run2": 0.1,
+        "per_turn_label_agreement_run1_run2": 95.29242309730115,
+        "trajectory_mad_run1_run2": 0.11666666666666667,
+        "corr_with_provided_score": 0.9225929972773218,
+        "mad_vs_provided_score": 0.27666666666666667,
+        "mean_score_model": 3.0166666666666666,
+        "mean_score_provided": 2.9,
+        "per_turn_agreement_with_provided_labels": 67.7920088909879,
+        "call_score_by_type_run1": {
+          "support": 2.5,
+          "external": 2.6,
+          "internal": 3.8
+        },
+        "escalation_scores_run1": {
+          "URGENT: Cobalt Software": {
+            "call": 2.0,
+            "customer": 2.0,
+            "provided": 1.8
+          },
+          "URGENT: Blackridge Investments": {
+            "call": 2.0,
+            "customer": 2.0,
+            "provided": 1.6
+          },
+          "ESCALATION: Northstar Pharma": {
+            "call": 2.0,
+            "customer": 2.0,
+            "provided": 2.1
+          }
+        }
+      }
+    },
+    "gemini": {
+      "stage1": {
+        "calls": 30,
+        "schema_valid_first_attempt": 100.0,
+        "failed": 0,
+        "retried": 0,
+        "truncated": 0,
+        "latency_median_s": 2.2350000000000003,
+        "latency_p90_s": 2.619,
+        "cost_usd": 0.07534695,
+        "mean_completion_tokens": 108.73333333333333,
+        "quote_valid_exact": 100.0,
+        "quote_valid_loose": 100.0,
+        "list_membership_ok": 100.0,
+        "theme_agreement_run1_run2": 100.0,
+        "product_area_agreement_run1_run2": 100.0,
+        "theme_distribution_run1": {
+          "Product roadmap & planning": 4,
+          "Onboarding & rollout": 2,
+          "Outage & incident response": 7,
+          "Identity & access": 1,
+          "Integrations, backup & data": 1
+        },
+        "escalation_calls_run1": {
+          "URGENT: Cobalt Software": "Outage & incident response | Detect",
+          "URGENT: Blackridge Investments": "Outage & incident response | Detect",
+          "ESCALATION: Northstar Pharma": "Outage & incident response | Detect"
+        }
+      },
+      "stage2": {
+        "calls": 30,
+        "schema_valid_first_attempt": 100.0,
+        "failed": 0,
+        "retried": 0,
+        "truncated": 0,
+        "latency_median_s": 5.4399999999999995,
+        "latency_p90_s": 6.308,
+        "cost_usd": 0.150103275,
+        "mean_completion_tokens": 758.4,
+        "quote_valid_exact": 100.0,
+        "quote_valid_loose": 100.0,
+        "per_turn_complete": 100.0,
+        "customer_null_ok": 100.0,
+        "call_score_mad_run1_run2": 0.0,
+        "call_score_exact_same_run1_run2": 100.0,
+        "customer_score_mad_run1_run2": 0.0,
+        "per_turn_label_agreement_run1_run2": 99.31623931623932,
+        "trajectory_mad_run1_run2": 0.0,
+        "corr_with_provided_score": 0.9578901051489263,
+        "mad_vs_provided_score": 0.23333333333333334,
+        "mean_score_model": 3.0,
+        "mean_score_provided": 2.9,
+        "per_turn_agreement_with_provided_labels": 74.46609473268578,
+        "call_score_by_type_run1": {
+          "support": 2.7,
+          "external": 2.7,
+          "internal": 3.6
+        },
+        "escalation_scores_run1": {
+          "URGENT: Cobalt Software": {
+            "call": 2.0,
+            "customer": 1.5,
+            "provided": 1.8
+          },
+          "URGENT: Blackridge Investments": {
+            "call": 2.0,
+            "customer": 1.5,
+            "provided": 1.6
+          },
+          "ESCALATION: Northstar Pharma": {
+            "call": 2.0,
+            "customer": 2.0,
+            "provided": 2.1
+          }
+        }
+      }
+    }
+  },
+  "determinism": {
+    "stage0/haiku": {
+      "transcripts": [
+        {
+          "meeting": "Aegis / Redwood Clinical - Product Feedb",
+          "n_runs": 3,
+          "identical_json": true,
+          "same_label": true
+        },
+        {
+          "meeting": "Aegis / Harborview Banking - Threat Dete",
+          "n_runs": 3,
+          "identical_json": true,
+          "same_label": true
+        },
+        {
+          "meeting": "URGENT: Cobalt Software - Aegis Detect D",
+          "n_runs": 3,
+          "identical_json": false,
+          "same_label": true
+        }
+      ],
+      "identical_json_count": 2,
+      "of": 3
+    },
+    "stage0/gemini": {
+      "transcripts": [
+        {
+          "meeting": "Aegis / Redwood Clinical - Product Feedb",
+          "n_runs": 3,
+          "identical_json": true,
+          "same_label": true
+        },
+        {
+          "meeting": "Aegis / Harborview Banking - Threat Dete",
+          "n_runs": 3,
+          "identical_json": true,
+          "same_label": true
+        },
+        {
+          "meeting": "URGENT: Cobalt Software - Aegis Detect D",
+          "n_runs": 3,
+          "identical_json": true,
+          "same_label": true
+        }
+      ],
+      "identical_json_count": 3,
+      "of": 3
+    },
+    "stage2/sonnet": {
+      "transcripts": [
+        {
+          "meeting": "Aegis / Redwood Clinical - Product Feedb",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            3.5,
+            3.5,
+            3.5
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 100.0
+        },
+        {
+          "meeting": "Aegis / Harborview Banking - Threat Dete",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 92.3076923076923
+        },
+        {
+          "meeting": "URGENT: Cobalt Software - Aegis Detect D",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            2.0,
+            2.0,
+            1.5
+          ],
+          "same_call_score": false,
+          "per_turn_agreement_min": 97.29729729729729
+        }
+      ],
+      "identical_json_count": 0,
+      "of": 3
+    },
+    "stage2/terra": {
+      "transcripts": [
+        {
+          "meeting": "Aegis / Redwood Clinical - Product Feedb",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            3.0,
+            3.0,
+            3.0
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 92.6829268292683
+        },
+        {
+          "meeting": "Aegis / Harborview Banking - Threat Dete",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 93.58974358974359
+        },
+        {
+          "meeting": "URGENT: Cobalt Software - Aegis Detect D",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            2.0,
+            2.0,
+            2.0
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 97.29729729729729
+        }
+      ],
+      "identical_json_count": 0,
+      "of": 3
+    },
+    "stage2/gemini": {
+      "transcripts": [
+        {
+          "meeting": "Aegis / Redwood Clinical - Product Feedb",
+          "n_runs": 3,
+          "identical_json": true,
+          "call_scores": [
+            3.5,
+            3.5,
+            3.5
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 100.0
+        },
+        {
+          "meeting": "Aegis / Harborview Banking - Threat Dete",
+          "n_runs": 3,
+          "identical_json": false,
+          "call_scores": [
+            4.0,
+            4.0,
+            4.0
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 89.74358974358974
+        },
+        {
+          "meeting": "URGENT: Cobalt Software - Aegis Detect D",
+          "n_runs": 3,
+          "identical_json": true,
+          "call_scores": [
+            2.0,
+            2.0,
+            2.0
+          ],
+          "same_call_score": true,
+          "per_turn_agreement_min": 100.0
+        }
+      ],
+      "identical_json_count": 2,
+      "of": 3
+    }
+  },
+  "rules": {
+    "stage0": {
+      "stats": {
+        "haiku": {
+          "schema": 100.0,
+          "quote": 100.0,
+          "stability": 100.0,
+          "cost": 0.0400588
+        },
+        "gemini": {
+          "schema": 100.0,
+          "quote": 98.57142857142857,
+          "stability": 100.0,
+          "cost": 0.1656435
+        }
+      },
+      "winner": "haiku",
+      "disqualified": {},
+      "quality": {
+        "haiku": 100.0,
+        "gemini": 99.52380952380952
+      },
+      "eligible": [
+        "haiku",
+        "gemini"
+      ]
+    },
+    "stage12": {
+      "stats": {
+        "sonnet": {
+          "schema": 100.0,
+          "quote": 100.0,
+          "stability": 98.62622739962501,
+          "cost": 0.83546,
+          "mad": 0.0
+        },
+        "terra": {
+          "schema": 100.0,
+          "quote": 100.0,
+          "stability": 97.64621154865057,
+          "cost": 0.2701769,
+          "mad": 0.16666666666666666
+        },
+        "gemini": {
+          "schema": 100.0,
+          "quote": 100.0,
+          "stability": 99.65811965811966,
+          "cost": 0.225450225,
+          "mad": 0.0
+        }
+      },
+      "winner": "gemini",
+      "disqualified": {},
+      "quality": {
+        "sonnet": 99.54207579987501,
+        "terra": 99.21540384955019,
+        "gemini": 99.88603988603988
+      },
+      "eligible": [
+        "sonnet",
+        "terra",
+        "gemini"
+      ]
+    }
+  },
+  "cross_model_agreement_run1": {
+    "stage0:haiku-gemini": 97.14285714285714,
+    "stage1:sonnet-terra": 80.0,
+    "stage1:sonnet-gemini": 93.33333333333333,
+    "stage1:terra-gemini": 86.66666666666667
+  },
+  "totals": {
+    "total_cost_usd": 1.63322125,
+    "calls": 475,
+    "failed": 0,
+    "by_model": {
+      "haiku": 0.0408,
+      "sonnet": 0.8962,
+      "terra": 0.2857,
+      "gemini": 0.4105
+    }
+  }
+}

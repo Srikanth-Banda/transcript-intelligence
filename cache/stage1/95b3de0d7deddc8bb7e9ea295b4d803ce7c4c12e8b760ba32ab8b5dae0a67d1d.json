@@ -1,0 +1,66 @@
+{
+  "stage": "stage1",
+  "prompt_version": "stage1_bakeoff_v0",
+  "model_requested": "openai/gpt-6.1-terra",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 4000,
+    "provider_order": [
+      "openai"
+    ],
+    "run": 2,
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You label one recorded call at Aegis Cloud Security, a B2B SaaS company that sells these products: Detect (threat detection and monitoring), Comply (compliance reporting, including Comply v2), Identity (SSO, SAML, SCIM, LDAP, MFA, identity management), Protect (data protection), and backup / CloudPrime (backup and restore). You will receive the full transcript as numbered turns, each with speaker, side (customer or aegis_staff) and sentence.\n\nPick exactly one primary theme from this PROVISIONAL list (the theme the call is mostly about):\n1. Outage & incident response\n2. Compliance & audit\n3. Renewal, pricing & billing\n4. Churn & competitive risk\n5. Onboarding & rollout\n6. Identity & access\n7. Product roadmap & planning\n8. Integrations, backup & data\n9. Other / new theme (use only if none of the eight fits; then say what the call is about in `tags`)\n\nRules:\n1. `primary_theme`: copy one theme name exactly as written above.\n2. `tags`: zero, one or two further themes from the same list that also clearly come up (never repeat the primary theme). For \"Other / new theme\" put a short description in tags[0].\n3. `product_area`: the one Aegis product the call is mostly about: \"Detect\", \"Comply\", \"Identity\", \"Protect\", \"Backup\", or \"Platform/General\" when no single product dominates.\n4. `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn of the transcript that best supports the primary theme. Do not paraphrase and do not join text from different turns.\n5. `confidence`: \"high\" if the call is clearly about the primary theme, \"medium\" if two themes compete, \"low\" if it fits poorly.\n6. `taxonomy_version`: always the string \"provisional-bakeoff\".\n7. Judge only from the transcript. Do not guess from names or invent details.\n\nReturn only JSON:\n{\n  \"primary_theme\": \"<theme>\",\n  \"tags\": [\"<theme>\", \"<theme>\"],\n  \"product_area\": \"<product area>\",\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"taxonomy_version\": \"provisional-bakeoff\"\n}",
+    "user": "transcript:\n[0] Tom Bradley (aegis_staff): Alright, I think we've got everyone — Megan, you're on, right?\n[1] Megan Lawson (aegis_staff): Yeah, yeah I'm here, sorry — just had to drop off another call a little early, but I'm good, I'm ready.\n[2] Tom Bradley (aegis_staff): Okay great, and Brian's on too, so I think we've got the full crew.\n[3] Brian Cho (aegis_staff): Hey everyone!\n[4] Diana Reeves (aegis_staff): Hi Brian!\n[5] Megan Lawson (aegis_staff): Okay so, I wanted to kick this off with just a quick vibe check — like, two weeks in on Comply v2, how are we all feeling? Because from where I sit, the numbers are honestly better than I expected.\n[6] Tom Bradley (aegis_staff): Yeah, I mean, I don't want to jinx it, but I'm feeling pretty good. Like, the launch itself went smooth, which — after everything with the Detect outage in March — was not a given.\n[7] Diana Reeves (aegis_staff): Oh god, don't even bring up March, I still have nightmares.\n[8] Tom Bradley (aegis_staff): Ha, right? But seriously, this was night and day. The redundant processing stuff we put in after that really paid off — the infra held up totally fine on launch day.\n[9] Diana Reeves (aegis_staff): I mean, Jordan, you and the design team deserve a ton of credit here too — the feedback I've been getting from CSMs on the new reporting UI is really positive.\n[10] Jordan Whitfield (aegis_staff): Oh that's — yeah, that's really good to hear. We went back and forth so many times on the report generation flow, like whether to surface the framework selector upfront or kind of tuck it into settings, and I think landing on the upfront approach was the right call.\n[11] Megan Lawson (aegis_staff): Definitely the right call. Customers are finding it — they're actually using it, which is kind of the whole point, right?\n[12] Brian Cho (aegis_staff): So can we get into the actual numbers? Megan, you had some stats you were going to share?\n[13] Megan Lawson (aegis_staff): Yes, okay, let me just — okay so as of yesterday, April 21st, we've had 847 unique tenants generate at least one on-demand report. That's out of, um, roughly 2,200 eligible accounts.\n[14] Tom Bradley (aegis_staff): So like 38, 39 percent adoption in two weeks. That's — that's really solid.\n[15] Megan Lawson (aegis_staff): Right, and our internal benchmark for a feature like this at the two-week mark was like 25 percent, so we're beating that by a fair margin.\n[16] Megan Lawson (aegis_staff): And the framework breakdown is interesting too — SOC 2 is obviously the most popular, like nearly half of all reports generated, but HIPAA is tracking higher than we expected. We thought PCI DSS would be number two and it's actually number three.\n[17] Diana Reeves (aegis_staff): That actually tracks with what my team is hearing — we've got a bunch of healthcare-adjacent customers who have been waiting for a proper HIPAA report they can just hand to their auditors without, you know, having to stitch together a bunch of exports.\n[18] Brian Cho (aegis_staff): Yeah and we're seeing some of those same customers come back multiple times, which is a good sign — like this isn't a one-and-done thing for them.\n[19] Tom Bradley (aegis_staff): How's the support volume looking, Brian? Like are we getting a lot of tickets on Comply v2 specifically?\n[20] Brian Cho (aegis_staff): So, honestly, it's been pretty manageable. We had a spike on April 8th, day after launch, which was expected — a lot of 'where is this feature' type questions from customers who saw the announcement but hadn't found it in the nav yet.\n[21] Megan Lawson (aegis_staff): Yeah that nav discoverability thing — I know we talked about that, Jordan, is that something we want to revisit or—\n[22] Jordan Whitfield (aegis_staff): I mean, I think the April 8th spike was kind of a one-time thing just because people hadn't updated yet or hadn't gone looking. Since then have the 'where is it' tickets dropped off?\n[23] Brian Cho (aegis_staff): Yeah, yeah they've basically gone to zero on that specific issue. The ongoing stuff is more like edge cases — a couple reports around ISO 27001 formatting where the control numbering wasn't matching what customers expected, but nothing critical.\n[24] Megan Lawson (aegis_staff): Oh, the ISO numbering thing — yeah we know about that, there's a ticket open, it's a minor formatting fix, Tom your team's targeting that in the next patch right?\n[25] Tom Bradley (aegis_staff): Yeah it's in the queue, should be out by end of next week, it's not a big lift.\n[26] Megan Lawson (aegis_staff): Great, okay — Diana, I wanted to ask, are you seeing any upsell or expansion conversations being driven by Comply v2? Like is it moving the needle at all on Identity or Protect cross-sells?\n[27] Diana Reeves (aegis_staff): Oh, yes — this is the part that's really exciting to me. We have at least four conversations happening right now where a customer came in for a Comply v2 demo or was shown the new reporting and then started asking about Identity because they saw the IAM controls surfaced in the SOC 2 report and went 'wait, we don't have that configured, can Aegis do that for us?'\n[28] Jordan Whitfield (aegis_staff): That's exactly what we hoped would happen! Like the compliance report essentially becomes a gap analysis for them.\n[29] Diana Reeves (aegis_staff): Yes! And we didn't even have to push it — the report surfaces the gaps and customers are naturally asking 'okay so how do I fix this?' and the answer is often another Aegis module.\n[30] Tom Bradley (aegis_staff): Okay I love this, this is really validating the integrated platform story we've been trying to tell. Megan, do you want to put together anything for the exec review next week around this? Like this feels like a good news story.\n[31] Megan Lawson (aegis_staff): Yeah, absolutely. I'm thinking a one-pager — adoption numbers, the HIPAA finding, the cross-sell signal from Diana's team. Maybe a quote or two if we have any early customer testimonials.\n[32] Diana Reeves (aegis_staff): I can pull a couple from recent QBRs — there's one healthcare company, I won't name them obviously, but their compliance lead basically said this cut their audit prep time in half. That's a really quotable thing.\n[33] Megan Lawson (aegis_staff): Oh that's a great quote. Yeah let's get that in there.\n[34] Jordan Whitfield (aegis_staff): Should we also talk about what's next? Like, I know there's been some internal appetite for adding GDPR to the framework list — are we thinking about sequencing that?\n[35] Megan Lawson (aegis_staff): So GDPR is definitely on the roadmap, and I think this adoption data actually helps us make the case for resourcing it sooner. If we're seeing this kind of traction with four frameworks, adding GDPR — especially for our European customers — could be really meaningful.\n[36] Diana Reeves (aegis_staff): Our European segment has been asking for it since like Q3 of last year, so yeah, the demand is absolutely there.\n[37] Brian Cho (aegis_staff): Okay, I think we've got a lot of good stuff here. Let me just summarize the action items — Megan's putting together the exec one-pager, Tom's team has the ISO formatting fix in the queue, Diana's getting us a testimonial quote, and we'll start the internal conversation about GDPR scoping. Does that feel right?\n[38] Tom Bradley (aegis_staff): Yeah that's a great summary Brian, thank you. This was a good call — honestly it's really nice to be in a meeting where we're talking about what's working for a change.\n[39] Megan Lawson (aegis_staff): Ha! Yes, agreed. Okay everyone, talk soon — great work on this launch, seriously.\n[40] Jordan Whitfield (aegis_staff): Thanks all, bye!"
+  },
+  "response_text": "{\"primary_theme\":\"Onboarding & rollout\",\"tags\":[\"Compliance & audit\",\"Product roadmap & planning\"],\"product_area\":\"Comply\",\"evidence_quote\":\"Okay so, I wanted to kick this off with just a quick vibe check — like, two weeks in on Comply v2, how are we all feeling? Because from where I sit, the numbers are honestly better than I expected.\",\"confidence\":\"high\",\"taxonomy_version\":\"provisional-bakeoff\"}",
+  "parsed": {
+    "primary_theme": "Onboarding & rollout",
+    "tags": [
+      "Compliance & audit",
+      "Product roadmap & planning"
+    ],
+    "product_area": "Comply",
+    "evidence_quote": "Okay so, I wanted to kick this off with just a quick vibe check — like, two weeks in on Comply v2, how are we all feeling? Because from where I sit, the numbers are honestly better than I expected.",
+    "confidence": "high",
+    "taxonomy_version": "provisional-bakeoff"
+  },
+  "usage": {
+    "completion_tokens": 168,
+    "prompt_tokens": 2468,
+    "total_tokens": 2636,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 65,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 2465,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00096625,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00096625,
+      "upstream_inference_prompt_cost": 0.00012625,
+      "upstream_inference_completions_cost": 0.00084
+    }
+  },
+  "latency_s": 4.142,
+  "finish_reason": "stop",
+  "model_returned": "openai/gpt-6.1-terra",
+  "provider_returned": "OpenAI",
+  "timestamp": "2026-10-29T20:39:19.174771+00:00",
+  "key": "95b3de0d7deddc8bb7e9ea295b4d803ce7c4c12e8b760ba32ab8b5dae0a67d1d"
+}

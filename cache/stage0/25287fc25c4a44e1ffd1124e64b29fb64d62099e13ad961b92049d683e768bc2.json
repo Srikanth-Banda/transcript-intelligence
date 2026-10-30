@@ -1,0 +1,71 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 1,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nMaria Santos: Grace, hi, thank you so much for jumping on this call with me today, I know your schedule is absolutely packed right now.\nGrace Yoon: Maria, I'm going to be honest with you, I almost didn't pick up.\nMaria Santos: I — okay, I understand that, and I want you to know I take that seriously.\nGrace Yoon: Do you have any idea what the last thirty-six hours have looked like for my team? We've had zero visibility into our threat monitoring since yesterday morning and I — I don't even know where to start.\nMaria Santos: I know, Grace, and I am so sorry. I've been following the incident updates internally and I wanted to get on a call with you specifically because Northstar is one of our most important customers and I didn't want you to feel like you were just getting a status page update.\nGrace Yoon: A status page update. Yeah, that's... that's exactly what we've been getting. Little green and yellow dots that don't tell me anything useful while my security team is flying blind in a healthcare environment, Maria.\nMaria Santos: You're right, that's not acceptable, and I'm not here to defend the communication, I'm here to — to actually talk through what happened and what we're doing about it.\nGrace Yoon: Okay. So what did happen? Because from where I'm sitting, Aegis Detect just... stopped. Six hours of nothing. No alerts, no event processing, nothing. And we didn't even get a proactive notification from you guys."
+  },
+  "response_text": "{\n  \"label\": \"external\",\n  \"evidence_quote\": \"I've been following the incident updates internally and I wanted to get on a call with you specifically because Northstar is one of our most important customers and I didn't want you to feel like you were just getting a status page update.\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"Maria Santos\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Grace Yoon\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "I've been following the incident updates internally and I wanted to get on a call with you specifically because Northstar is one of our most important customers and I didn't want you to feel like you were just getting a status page update.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Maria Santos",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Grace Yoon",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 137,
+    "prompt_tokens": 875,
+    "total_tokens": 1012,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00117,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00117,
+      "upstream_inference_prompt_cost": 0.00065625,
+      "upstream_inference_completions_cost": 0.00051375
+    }
+  },
+  "latency_s": 2.251,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:36:54.966947+00:00",
+  "key": "25287fc25c4a44e1ffd1124e64b29fb64d62099e13ad961b92049d683e768bc2"
+}

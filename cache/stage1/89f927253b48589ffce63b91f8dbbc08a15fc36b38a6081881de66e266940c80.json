@@ -1,0 +1,66 @@
+{
+  "stage": "stage1",
+  "prompt_version": "stage1_bakeoff_v0",
+  "model_requested": "openai/gpt-6.1-terra",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 4000,
+    "provider_order": [
+      "openai"
+    ],
+    "run": 2,
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You label one recorded call at Aegis Cloud Security, a B2B SaaS company that sells these products: Detect (threat detection and monitoring), Comply (compliance reporting, including Comply v2), Identity (SSO, SAML, SCIM, LDAP, MFA, identity management), Protect (data protection), and backup / CloudPrime (backup and restore). You will receive the full transcript as numbered turns, each with speaker, side (customer or aegis_staff) and sentence.\n\nPick exactly one primary theme from this PROVISIONAL list (the theme the call is mostly about):\n1. Outage & incident response\n2. Compliance & audit\n3. Renewal, pricing & billing\n4. Churn & competitive risk\n5. Onboarding & rollout\n6. Identity & access\n7. Product roadmap & planning\n8. Integrations, backup & data\n9. Other / new theme (use only if none of the eight fits; then say what the call is about in `tags`)\n\nRules:\n1. `primary_theme`: copy one theme name exactly as written above.\n2. `tags`: zero, one or two further themes from the same list that also clearly come up (never repeat the primary theme). For \"Other / new theme\" put a short description in tags[0].\n3. `product_area`: the one Aegis product the call is mostly about: \"Detect\", \"Comply\", \"Identity\", \"Protect\", \"Backup\", or \"Platform/General\" when no single product dominates.\n4. `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn of the transcript that best supports the primary theme. Do not paraphrase and do not join text from different turns.\n5. `confidence`: \"high\" if the call is clearly about the primary theme, \"medium\" if two themes compete, \"low\" if it fits poorly.\n6. `taxonomy_version`: always the string \"provisional-bakeoff\".\n7. Judge only from the transcript. Do not guess from names or invent details.\n\nReturn only JSON:\n{\n  \"primary_theme\": \"<theme>\",\n  \"tags\": [\"<theme>\", \"<theme>\"],\n  \"product_area\": \"<product area>\",\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"taxonomy_version\": \"provisional-bakeoff\"\n}",
+    "user": "transcript:\n[0] Nina Kowalski (aegis_staff): Alright, I think we're all here — let me just pull up the retro board real quick.\n[1] Tyler Washington (aegis_staff): Yeah I'm here, just give me one second, my Slack is going crazy right now.\n[2] Sofia Petrov (aegis_staff): Same, the Detect outage stuff is still causing a lot of noise even two weeks later.\n[3] Mike Romano (aegis_staff): Yeah, let's try to stay focused on Identity sprint stuff today though — we can't let the Detect fallout bleed into every single retro.\n[4] Nina Kowalski (aegis_staff): Agreed, okay so — I have the board up. We finished sprint twenty-two, March fourteenth through the twenty-seventh. Let me walk through what we had in scope.\n[5] Sofia Petrov (aegis_staff): Before you do that, can we just acknowledge that the Detect outage on the tenth actually did affect our sprint? Like two of our tickets got deprioritized because engineers were pulled for the all-hands incident response.\n[6] Mike Romano (aegis_staff): That's fair, yeah. I was pulled in for almost a full day on the fourteenth doing coordination.\n[7] Nina Kowalski (aegis_staff): Okay, let's capture that as a blocker then. I'll add it to the retro notes — external incident impacted sprint capacity. That's a legit call-out.\n[8] Tyler Washington (aegis_staff): Yeah and for the record, the two tickets that slipped were the MFA enforcement policy UI work and the SSO session timeout configuration. Both moved to sprint twenty-three.\n[9] Nina Kowalski (aegis_staff): Right, okay. So let me just go through what we did complete — the SCIM provisioning bug fixes, that was four story points. The SSO metadata refresh refactor, that was eight points. And the initial IAM role hierarchy work, that was three points, partially done.\n[10] Sofia Petrov (aegis_staff): The IAM role hierarchy work is like, technically it's partially done but it's more like sixty percent done. The remaining forty percent is the gnarly part.\n[11] Mike Romano (aegis_staff): Can you say more about that? What's the gnarly part specifically?\n[12] Sofia Petrov (aegis_staff): So the inheritance logic for nested role groups — when you have, like, a role that inherits from two parents that have conflicting permission sets, we don't have a good resolution strategy defined yet. I started prototyping something but it needs design review.\n[13] Mike Romano (aegis_staff): Okay, that's actually a bigger conversation. Can we schedule a separate design session for that? I don't want to try to hash it out in retro.\n[14] Sofia Petrov (aegis_staff): Yeah definitely. I can put something on the calendar for early next week, maybe Tuesday?\n[15] Tyler Washington (aegis_staff): Tuesday works for me.\n[16] Nina Kowalski (aegis_staff): Okay I'll grab time. Back to retro — what went well this sprint? Anyone want to start?\n[17] Sofia Petrov (aegis_staff): Um, I thought the SCIM work went really smoothly. Tyler, you basically owned that end to end and it was clean.\n[18] Tyler Washington (aegis_staff): Thanks, yeah I mean the bugs were pretty well-documented so it was mostly just methodical work. Nothing too heroic.\n[19] Nina Kowalski (aegis_staff): Still, it shipped on time, no regressions in QA, which — honestly that's not always the case with provisioning stuff. I want to call that out as a win.\n[20] Mike Romano (aegis_staff): Agreed. What else went well... I think our standup cadence was better this sprint. People were actually updating tickets before standup instead of during.\n[21] Nina Kowalski (aegis_staff): Yeah that was a thing we flagged last retro so good to see it actually stick.\n[22] Tyler Washington (aegis_staff): Okay what didn't go well, or what do we want to improve. I'll just go first — I think our story point estimates for the SSO refactor were off. We said eight points, it ended up being closer to twelve or thirteen hours of actual work.\n[23] Sofia Petrov (aegis_staff): Yeah the metadata refresh logic had a bunch of edge cases around certificate rotation that we didn't scope properly.\n[24] Mike Romano (aegis_staff): That's an estimation problem or a requirements problem? Like, were the edge cases knowable upfront or did they surface during implementation?\n[25] Sofia Petrov (aegis_staff): Honestly, a little of both. Some of them we probably should have caught in grooming, but a couple were genuinely discovered mid-implementation.\n[26] Mike Romano (aegis_staff): I'd say we should add a checklist item in grooming for cert rotation scenarios specifically. We've been bitten by that in Identity more than once.\n[27] Tyler Washington (aegis_staff): That's a good action item. Nina, can you add that to the grooming template?\n[28] Nina Kowalski (aegis_staff): On it. Anything else for the what-didn't-go-well section? I also want to flag — QA had some delays because I didn't get the test environment credentials refreshed before the sprint started. That's on me, I'll make sure to do that as part of sprint kickoff going forward.\n[29] Tyler Washington (aegis_staff): Appreciate you flagging that. It did cause like a day of delay on my end when I was trying to validate the SCIM fixes.\n[30] Nina Kowalski (aegis_staff): Yeah, sorry about that. Okay — let's talk about sprint twenty-three planning. We've got the two slipped tickets coming in, and then what else is queued?\n[31] Mike Romano (aegis_staff): We have the Comply v2 integration work — they're launching April seventh and they need Identity to support some of the audit log attribution for the new compliance reports. That's going to be a significant lift.\n[32] Sofia Petrov (aegis_staff): How significant are we talking? Like, do we have a ticket sized for that yet?\n[33] Mike Romano (aegis_staff): Not yet, I need to sync with the Comply team on the exact API surface they need from us. I'm meeting with them Monday.\n[34] Nina Kowalski (aegis_staff): So we might be starting sprint twenty-three without a full picture of that work, which is a little uncomfortable.\n[35] Mike Romano (aegis_staff): Yeah, it's not ideal. I'd say we reserve capacity — maybe don't over-commit the sprint and leave buffer for the Comply integration once we know what it is.\n[36] Sofia Petrov (aegis_staff): I can live with that approach. Let's just be explicit about it in the sprint plan so it doesn't look like we're sandbagging.\n[37] Nina Kowalski (aegis_staff): Good call. Alright, I think we've covered the main stuff — I'll send out the retro notes by end of day. Action items are: Nina updates the grooming template, Sofia schedules the role hierarchy design session, Mike follows up post-Monday on the Comply integration scope. Does that sound right?\n[38] Mike Romano (aegis_staff): Yep, that's accurate.\n[39] Tyler Washington (aegis_staff): Works for me. Good retro everyone.\n[40] Sofia Petrov (aegis_staff): Thanks everyone, talk soon."
+  },
+  "response_text": "{\"primary_theme\":\"Product roadmap & planning\",\"tags\":[\"Identity & access\",\"Outage & incident response\"],\"product_area\":\"Identity\",\"evidence_quote\":\"Action items are: Nina updates the grooming template, Sofia schedules the role hierarchy design session, Mike follows up post-Monday on the Comply integration scope.\",\"confidence\":\"high\",\"taxonomy_version\":\"provisional-bakeoff\"}",
+  "parsed": {
+    "primary_theme": "Product roadmap & planning",
+    "tags": [
+      "Identity & access",
+      "Outage & incident response"
+    ],
+    "product_area": "Identity",
+    "evidence_quote": "Action items are: Nina updates the grooming template, Sofia schedules the role hierarchy design session, Mike follows up post-Monday on the Comply integration scope.",
+    "confidence": "high",
+    "taxonomy_version": "provisional-bakeoff"
+  },
+  "usage": {
+    "completion_tokens": 265,
+    "prompt_tokens": 2253,
+    "total_tokens": 2518,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 179,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 2250,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0014405,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0014405,
+      "upstream_inference_prompt_cost": 0.0001155,
+      "upstream_inference_completions_cost": 0.001325
+    }
+  },
+  "latency_s": 4.394,
+  "finish_reason": "stop",
+  "model_returned": "openai/gpt-6.1-terra",
+  "provider_returned": "OpenAI",
+  "timestamp": "2026-10-29T20:39:17.816113+00:00",
+  "key": "89f927253b48589ffce63b91f8dbbc08a15fc36b38a6081881de66e266940c80"
+}

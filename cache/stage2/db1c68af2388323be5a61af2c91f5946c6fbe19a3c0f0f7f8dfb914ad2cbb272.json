@@ -1,0 +1,232 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (41 turns, indices 0 to 40; per_turn needs exactly 41 entries, one per index in order):\n[0] Daniel Okafor (aegis_staff): Alright, I think we're all on now — Thomas, can you hear us okay?\n[1] Thomas Hargrove (customer): Yeah, loud and clear. Good to go.\n[2] Daniel Okafor (aegis_staff): Great, great. So, Thomas, thanks for making time today — I know February is always kind of a weird month for healthcare IT, end of quarter planning and all that.\n[3] Thomas Hargrove (customer): Ha, yeah, you could say that. We've got our annual risk assessment coming up in March so the timing is actually... it's fine, this is relevant for us.\n[4] Daniel Okafor (aegis_staff): Oh good, I'm glad to hear that. And I'll just introduce Lisa here — she's been on your account for a few months now and she's really the one who flagged that we should get this session on the calendar.\n[5] Lisa Park (aegis_staff): Hi Thomas, yeah we've exchanged a few emails but I don't think we've actually spoken live before so it's nice to properly connect.\n[6] Thomas Hargrove (customer): Same, yeah. Good to put a voice to the name.\n[7] Daniel Okafor (aegis_staff): So Thomas, the reason we wanted to set this up — and feel free to just, you know, kind of take it wherever you want — is we've been collecting feature feedback from customers in the healthcare vertical specifically around Aegis Comply, and your name actually came up a couple times when our team was going through support tickets and conversations.\n[8] Thomas Hargrove (customer): Yeah, no, that makes sense. Our team has been using Comply for, I want to say, about eight months now? And we have some thoughts.\n[9] Lisa Park (aegis_staff): That's exactly what we want to hear — good, bad, in between. We're not here to pitch anything, this is genuinely a feedback session.\n[10] Thomas Hargrove (customer): Okay, well — so the main thing, and this has been a recurring pain point for us, is around HIPAA reporting specifically. The current reporting in Comply is... it's okay, but it's pretty static. Like we can pull the report but there's no real way to drill down into specific control areas without basically exporting everything and doing it manually in Excel.\n[11] Lisa Park (aegis_staff): Right, okay. Can you walk me through what that looks like in practice? Like what's the actual workflow that's breaking down?\n[12] Thomas Hargrove (customer): Sure. So, when our compliance officer — her name's Priya — when she needs to prep for an audit, she's going into Comply, pulling the HIPAA report, and it gives her this flat document basically. But if the auditor comes back and says hey, we want to look specifically at, um, access controls or encryption standards, she has to go back through the whole thing and find those sections manually. There's no way to filter or generate a focused view on a specific control family.\n[13] Daniel Okafor (aegis_staff): Got it, yeah. So it's more of a navigation and filtering issue within the report output rather than the data itself being wrong.\n[14] Thomas Hargrove (customer): Correct. The data is — I mean, mostly accurate, we've had a couple discrepancies but nothing major. It's more that the format isn't practical for how audits actually work. Auditors don't look at everything at once, they come in with specific questions.\n[15] Lisa Park (aegis_staff): That's a really useful distinction, thank you. And I want to make sure I'm capturing this right — is this specific to HIPAA or are you seeing the same issue with any other frameworks you're running reports against?\n[16] Thomas Hargrove (customer): Honestly we're primarily on HIPAA and SOC 2. SOC 2 has the same problem but HIPAA is where it hurts more because the audits are more frequent and the stakes are higher, obviously.\n[17] Daniel Okafor (aegis_staff): Makes sense. And I should mention — and I don't want to get too far ahead of myself here — but we do have a Comply update in the pipeline and on-demand reporting with more granular control filtering is something that's been discussed internally. I can't give you a hard date today but it's on the roadmap.\n[18] Thomas Hargrove (customer): Okay. I mean, I've heard 'on the roadmap' before so I'll believe it when I see it, but — that's good to know.\n[19] Daniel Okafor (aegis_staff): Fair enough, totally fair. We'll follow up with something more concrete once we have it.\n[20] Thomas Hargrove (customer): The other thing I wanted to flag — and this is maybe more of a workflow request than a feature request — is around how the reports are shared internally. Right now whoever pulls the report kind of has to manually distribute it. Is there any plan for scheduled report delivery? Like email distribution to specific stakeholders on a cadence?\n[21] Daniel Okafor (aegis_staff): Scheduled delivery, like automated sends — yeah, that's something I've actually heard from a few other customers too. Lisa, do you know if that's been formally submitted to product?\n[22] Lisa Park (aegis_staff): I believe it has been submitted, yeah. I'll double-check after this call and I can send you what I find, Thomas. It may already be tracking somewhere.\n[23] Thomas Hargrove (customer): That'd be helpful. Priya has been asking about that specifically — she wants to be able to set it and forget it basically, have the monthly compliance summary go to our CISO and our legal team without her having to remember to pull and send it.\n[24] Lisa Park (aegis_staff): Yeah, that's a completely reasonable ask. The manual overhead on something like that adds up fast especially when you're already stretched thin.\n[25] Thomas Hargrove (customer): Exactly. And one more thing — and this is kind of related — when we generate a HIPAA report right now, there's no executive summary section. Like, the CISO doesn't want to read thirty pages of controls, she wants a one-page summary of where we stand, what the gaps are, and whether anything has changed since last month. Is that something that's been considered?\n[26] Daniel Okafor (aegis_staff): An executive summary layer, yeah. That's — honestly that's a really specific and useful piece of feedback. Is the gap tracking piece important too, like showing delta from a previous report period?\n[27] Thomas Hargrove (customer): Yes, absolutely. That's actually more important than the summary itself in some ways. Right now we have no way to tell from within the tool whether our posture has improved or degraded month over month. We're tracking that manually in a spreadsheet which is... not ideal.\n[28] Lisa Park (aegis_staff): Yeah, I can imagine. Okay — so to kind of recap what I'm hearing: granular filtering by control family within reports, scheduled automated delivery to stakeholders, an executive summary layer, and period-over-period delta tracking. Did I get that right?\n[29] Thomas Hargrove (customer): Yeah, that's the list. I'd rank them in that order of priority too if that helps.\n[30] Lisa Park (aegis_staff): Super helpful, yes. Priority ranking is actually really useful for our product team when they're scoping things.\n[31] Daniel Okafor (aegis_staff): I do want to ask — are you evaluating any other compliance tools? Just so we have a sense of the landscape from your perspective.\n[32] Thomas Hargrove (customer): We've looked at a couple things. VaultEdge came up in a conversation internally but nothing serious — we're pretty invested in the Aegis platform at this point and we're not looking to rip and replace. But, you know, if the gaps in Comply don't get addressed, it's a conversation we'd have to have eventually.\n[33] Daniel Okafor (aegis_staff): Understood, and I appreciate you being direct about that. That's exactly the kind of context that helps us make the case internally for prioritization.\n[34] Thomas Hargrove (customer): I'll also just say — our experience with the platform overall has been solid. Protect has been reliable for us, Identity is working well. Comply is really the one area where we feel like it's a little behind.\n[35] Lisa Park (aegis_staff): Good to hear on Protect and Identity, and noted on Comply. We'll make sure this feedback gets into the right hands.\n[36] Daniel Okafor (aegis_staff): So in terms of next steps — Lisa, can you send Thomas a summary of what we captured today and also follow up on the scheduled delivery question?\n[37] Lisa Park (aegis_staff): Yep, I'll send that over by end of this week. Thomas, I'll also loop in our product liaison — her name is Ren — who handles the healthcare vertical. She may want to do a brief follow-up call to get a bit more detail on the control filtering use case specifically.\n[38] Thomas Hargrove (customer): That's fine. Happy to talk to her. As long as it doesn't turn into a sales call — I've had enough of those this quarter.\n[39] Daniel Okafor (aegis_staff): Ha — no, I promise, strictly product. Alright Thomas, really appreciate your time today. This was genuinely useful.\n[40] Thomas Hargrove (customer): Yeah, same. Good conversation. Talk soon."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": 3.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"negative\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"positive\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"negative\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"positive\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"positive\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"negative\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"positive\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"positive\"},\n    {\"index\": 40, \"label\": \"positive\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 3.5\n  },\n  \"evidence_quote\": \"VaultEdge came up in a conversation internally but nothing serious — we're pretty invested in the Aegis platform at this point\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "negative"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "negative"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "positive"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "negative"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 3.5
+    },
+    "evidence_quote": "VaultEdge came up in a conversation internally but nothing serious — we're pretty invested in the Aegis platform at this point",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 713,
+    "prompt_tokens": 4683,
+    "total_tokens": 5396,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.006186,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.006186,
+      "upstream_inference_prompt_cost": 0.00351225,
+      "upstream_inference_completions_cost": 0.00267375
+    }
+  },
+  "latency_s": 5.841,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:14.563343+00:00",
+  "key": "db1c68af2388323be5a61af2c91f5946c6fbe19a3c0f0f7f8dfb914ad2cbb272"
+}

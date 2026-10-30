@@ -1,0 +1,211 @@
+{
+  "run1_to_run2_mean_best_jaccard": 0.362,
+  "run2_to_run1_mean_best_jaccard": 0.378,
+  "run1_themes_with_match_ge_threshold": 4,
+  "run2_themes_with_match_ge_threshold": 4,
+  "n_run1": 12,
+  "n_run2": 10,
+  "threshold": 0.5,
+  "run1_to_run2": [
+    {
+      "a_id": "c1",
+      "a_name": "Pipeline Outage Technical Remediation",
+      "a_calls": 15,
+      "b_id": "c1",
+      "b_name": "Detect Ingestion Pipeline Remediation",
+      "b_calls": 32,
+      "jaccard": 0.382
+    },
+    {
+      "a_id": "c2",
+      "a_name": "Post Outage Account Retention",
+      "a_calls": 20,
+      "b_id": "c1",
+      "b_name": "Detect Ingestion Pipeline Remediation",
+      "b_calls": 32,
+      "jaccard": 0.368
+    },
+    {
+      "a_id": "c3",
+      "a_name": "Comply v2 Feature Adoption",
+      "a_calls": 20,
+      "b_id": "c2",
+      "b_name": "Comply v2 Reporting Expansion",
+      "b_calls": 21,
+      "jaccard": 0.577
+    },
+    {
+      "a_id": "c4",
+      "a_name": "Comply Post Launch Defects",
+      "a_calls": 3,
+      "b_id": "c1",
+      "b_name": "Detect Ingestion Pipeline Remediation",
+      "b_calls": 32,
+      "jaccard": 0.029
+    },
+    {
+      "a_id": "c5",
+      "a_name": "Custom Compliance Reporting Requests",
+      "a_calls": 3,
+      "b_id": "c2",
+      "b_name": "Comply v2 Reporting Expansion",
+      "b_calls": 21,
+      "jaccard": 0.143
+    },
+    {
+      "a_id": "c6",
+      "a_name": "Contract Renewal and Expansion",
+      "a_calls": 13,
+      "b_id": "c3",
+      "b_name": "Contract Renewals and Retention",
+      "b_calls": 20,
+      "jaccard": 0.65
+    },
+    {
+      "a_id": "c7",
+      "a_name": "Competitive Strategy and Positioning",
+      "a_calls": 4,
+      "b_id": "c8",
+      "b_name": "SIEM Connector Forwarding Latency",
+      "b_calls": 4,
+      "jaccard": 0.143
+    },
+    {
+      "a_id": "c8",
+      "a_name": "Detect Tuning and Noise Optimization",
+      "a_calls": 2,
+      "b_id": "c7",
+      "b_name": "Threat Detection Rule Tuning",
+      "b_calls": 2,
+      "jaccard": 0.333
+    },
+    {
+      "a_id": "c9",
+      "a_name": "Ingestion Pipeline Latency and Bottlenecks",
+      "a_calls": 3,
+      "b_id": "c8",
+      "b_name": "SIEM Connector Forwarding Latency",
+      "b_calls": 4,
+      "jaccard": 0.167
+    },
+    {
+      "a_id": "c10",
+      "a_name": "Identity Provisioning and Authentication",
+      "a_calls": 9,
+      "b_id": "c4",
+      "b_name": "Identity Authentication and Integration",
+      "b_calls": 10,
+      "jaccard": 0.583
+    },
+    {
+      "a_id": "c11",
+      "a_name": "Protect Scalability and Backup Failures",
+      "a_calls": 6,
+      "b_id": "c5",
+      "b_name": "Protect Backup Performance Bottlenecks",
+      "b_calls": 5,
+      "jaccard": 0.571
+    },
+    {
+      "a_id": "c12",
+      "a_name": "Customer Module Onboarding Architecture",
+      "a_calls": 5,
+      "b_id": "c6",
+      "b_name": "Protect Onboarding and Architecture",
+      "b_calls": 2,
+      "jaccard": 0.4
+    }
+  ],
+  "run2_to_run1": [
+    {
+      "a_id": "c1",
+      "a_name": "Detect Ingestion Pipeline Remediation",
+      "a_calls": 32,
+      "b_id": "c1",
+      "b_name": "Pipeline Outage Technical Remediation",
+      "b_calls": 15,
+      "jaccard": 0.382
+    },
+    {
+      "a_id": "c2",
+      "a_name": "Comply v2 Reporting Expansion",
+      "a_calls": 21,
+      "b_id": "c3",
+      "b_name": "Comply v2 Feature Adoption",
+      "b_calls": 20,
+      "jaccard": 0.577
+    },
+    {
+      "a_id": "c3",
+      "a_name": "Contract Renewals and Retention",
+      "a_calls": 20,
+      "b_id": "c6",
+      "b_name": "Contract Renewal and Expansion",
+      "b_calls": 13,
+      "jaccard": 0.65
+    },
+    {
+      "a_id": "c4",
+      "a_name": "Identity Authentication and Integration",
+      "a_calls": 10,
+      "b_id": "c10",
+      "b_name": "Identity Provisioning and Authentication",
+      "b_calls": 9,
+      "jaccard": 0.583
+    },
+    {
+      "a_id": "c5",
+      "a_name": "Protect Backup Performance Bottlenecks",
+      "a_calls": 5,
+      "b_id": "c11",
+      "b_name": "Protect Scalability and Backup Failures",
+      "b_calls": 6,
+      "jaccard": 0.571
+    },
+    {
+      "a_id": "c6",
+      "a_name": "Protect Onboarding and Architecture",
+      "a_calls": 2,
+      "b_id": "c12",
+      "b_name": "Customer Module Onboarding Architecture",
+      "b_calls": 5,
+      "jaccard": 0.4
+    },
+    {
+      "a_id": "c7",
+      "a_name": "Threat Detection Rule Tuning",
+      "a_calls": 2,
+      "b_id": "c8",
+      "b_name": "Detect Tuning and Noise Optimization",
+      "b_calls": 2,
+      "jaccard": 0.333
+    },
+    {
+      "a_id": "c8",
+      "a_name": "SIEM Connector Forwarding Latency",
+      "a_calls": 4,
+      "b_id": "c9",
+      "b_name": "Ingestion Pipeline Latency and Bottlenecks",
+      "b_calls": 3,
+      "jaccard": 0.167
+    },
+    {
+      "a_id": "c9",
+      "a_name": "Usage Ingestion Overage Disputes",
+      "a_calls": 3,
+      "b_id": "c6",
+      "b_name": "Contract Renewal and Expansion",
+      "b_calls": 13,
+      "jaccard": 0.067
+    },
+    {
+      "a_id": "c10",
+      "a_name": "Internal Enterprise Audit Readiness",
+      "a_calls": 2,
+      "b_id": "c3",
+      "b_name": "Comply v2 Feature Adoption",
+      "b_calls": 20,
+      "jaccard": 0.048
+    }
+  ]
+}

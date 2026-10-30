@@ -1,0 +1,6 @@
+product_area,n,mean_customer_score,incident,handoff
+Comply,5,4.1,0,3
+Detect,11,2.18,9,11
+Identity,7,2.79,0,5
+Platform/General,1,2.5,1,1
+Protect,6,3.08,0,3

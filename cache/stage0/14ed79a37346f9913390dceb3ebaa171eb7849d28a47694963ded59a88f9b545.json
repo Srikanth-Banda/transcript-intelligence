@@ -1,0 +1,69 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nMarcus Williams: Thanks for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?\nHarold Jensen: Yeah, hi Marcus, this is Harold Jensen, IT Director over at Steelpoint Manufacturing. I've got a case open — it's case number 6539 — and honestly I'm pretty frustrated at this point because this has been going on for a few days now.\nMarcus Williams: I completely understand Harold, and I appreciate you calling in. Let me pull up case 6539 right here... okay I'm seeing it, LDAP sync failures with Aegis Identity. Can you walk me through what you're experiencing on your end?\nHarold Jensen: Sure, so — basically our Active Directory sync through Aegis Identity just stopped working. Users aren't getting provisioned, group memberships aren't syncing, and we've got about, uh, I'd say 200 plus employees who can't get into systems they need access to. This is a manufacturing floor environment, Marcus. People can't do their jobs.\nMarcus Williams: Yeah, that's — that's a serious impact and I hear you. When did you first notice the sync failures? Do you have an approximate timestamp?\nHarold Jensen: It started March 19th, around 7 AM our time, Central. And look, I submitted the case that same morning and it took almost 24 hours to get a response, which is not acceptable for something this critical.\nMarcus Williams: You're right and I — I want to apologize for that response delay, that shouldn't have happened on a case with this kind of operational impact. I'm going to personally own this from here on out. Now, the 19th... let me check something real quick on our end.\nHarold Jensen: Okay, and while you're doing that — I also want to mention that we had some issues earlier in the month with Aegis Detect, the outage you guys had, and now this. My leadership is starting to ask questions about whether we made the right call going with Aegis and that's a conversation I really don't want to be having."
+  },
+  "response_text": "{\"label\": \"support\", \"evidence_quote\": \"I've got a case open — it's case number 6539 — and honestly I'm pretty frustrated at this point\", \"confidence\": \"high\", \"speaker_sides\": [{\"speaker\": \"Marcus Williams\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Harold Jensen\", \"side\": \"customer\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "I've got a case open — it's case number 6539 — and honestly I'm pretty frustrated at this point",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Marcus Williams",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Harold Jensen",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 122,
+    "prompt_tokens": 2072,
+    "total_tokens": 2194,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002682,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002682,
+      "upstream_inference_prompt_cost": 0.0002072,
+      "upstream_inference_completions_cost": 6.1e-05
+    }
+  },
+  "latency_s": 1.233,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:23.529052+00:00",
+  "key": "14ed79a37346f9913390dceb3ebaa171eb7849d28a47694963ded59a88f9b545"
+}

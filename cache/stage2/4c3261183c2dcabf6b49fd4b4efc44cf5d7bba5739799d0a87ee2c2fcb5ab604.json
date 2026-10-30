@@ -1,0 +1,379 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_bakeoff_v0",
+  "model_requested": "openai/gpt-6.1-terra",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "provider_order": [
+      "openai"
+    ],
+    "run": 3,
+    "seed": 7
+  },
+  "structured_mode": "json_object",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence.\n\nScore the TONE of the people on the call, not how serious the topic is. A calm, factual discussion of a serious outage is not negative by itself; frustration, worry, tension, dissatisfaction or threats to leave are. Appreciation, agreement, enthusiasm and relief are positive.\n\nAnchors for the 1 to 5 scale (half steps allowed: 1, 1.5, 2, ... 5):\n- 5: clearly positive. Enthusiasm, praise, satisfaction; no unresolved problem.\n- 4: mostly positive or constructive. Small concerns, resolved or minor.\n- 3: neutral or mixed. Businesslike or factual; positives and negatives roughly balance; concerns raised but handled calmly.\n- 2: mostly negative. Visible frustration, an unresolved problem, tension, escalation, or a stated risk of leaving, but still professional.\n- 1: strongly negative. Anger, a firm threat to leave, severe distress, or the conversation breaking down.\n\nOutput fields:\n- `call_score`: tone of the whole call, all speakers, 1 to 5 in half steps.\n- `customer_score`: tone of the customer-side speakers only, same scale; null if no speaker has side \"customer\".\n- `per_turn`: one entry for EVERY turn, in order, using the turn's index: {\"index\": <int>, \"label\": \"negative\" | \"neutral\" | \"positive\"} by the tone of that turn alone (negative = frustration, concern, tension, dissatisfaction; neutral = factual or procedural; positive = appreciation, agreement, enthusiasm, relief).\n- `trajectory`: {\"start\": <score 1 to 5 of the first third of the turns>, \"end\": <score 1 to 5 of the last third of the turns>}.\n- `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn that most influenced `call_score`. Do not paraphrase.\n- `confidence`: \"low\" | \"medium\" | \"high\".\n\nJudge only from the transcript. Return only JSON:\n{\n  \"call_score\": <number>,\n  \"customer_score\": <number or null>,\n  \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, ...],\n  \"trajectory\": {\"start\": <number>, \"end\": <number>},\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript:\n[0] Lisa Park (aegis_staff): Alright, I think we've got everyone on now — Patricia, Michael, can you both hear us okay?\n[1] Patricia Dunn (customer): Yep, coming through fine on my end.\n[2] Michael Russo (customer): Good here as well.\n[3] Lisa Park (aegis_staff): Perfect, great. So, um, welcome everyone — this is our threat detection tuning session for Harborview Banking. I'm Lisa Park, account manager on the Aegis side, and I've got Kevin O'Brien with me today, he's our solutions architect who's going to be doing most of the heavy lifting on the technical side of things.\n[4] Kevin O'Brien (aegis_staff): Hey everyone, Kevin here. Looking forward to getting into the weeds on the Detect configuration with you all today.\n[5] Patricia Dunn (customer): Thanks for having us. I'm Patricia Dunn, VP of Security here at Harborview. And I've got Michael Russo on with me, he's our compliance officer — we brought him in because a lot of what we're trying to tune around has some compliance implications that we want to make sure we're capturing.\n[6] Kevin O'Brien (aegis_staff): That makes a lot of sense, actually. Good thinking bringing Michael in. We find that the compliance angle and the detection angle overlap more than people expect, especially in financial services.\n[7] Michael Russo (customer): Yeah, exactly. That's kind of been our experience too over the years. You get siloed and then you're doing double the work.\n[8] Lisa Park (aegis_staff): Totally. So, um, before we jump in — Kevin, do you want to just set the agenda for today real quick so Patricia and Michael know what to expect?\n[9] Kevin O'Brien (aegis_staff): Sure, yeah. So the plan for today is — we want to walk through your current Aegis Detect configuration, understand what alert thresholds you have set, talk about any false positive pain points you're running into, and then start mapping out what a tuned detection profile looks like for a financial services environment like yours. We'll also touch on your event source integrations, because that's usually where a lot of the noise comes from in the early onboarding phase.\n[10] Patricia Dunn (customer): That sounds right to us. The false positive issue is honestly top of mind right now. Our SOC team is getting fatigued — they're seeing a ton of alerts that aren't actionable and it's starting to affect response times on the stuff that actually matters.\n[11] Kevin O'Brien (aegis_staff): Yeah, that's a really common pattern we see, especially in the first sixty to ninety days of a Detect deployment. The out-of-the-box sensitivity settings are intentionally broad — we'd rather you see too much than miss something — but you're right that it creates alert fatigue if we don't tune it down based on your specific environment.\n[12] Lisa Park (aegis_staff): How long have you been live on Detect at this point, Patricia? I want to make sure I'm thinking about the right baseline.\n[13] Patricia Dunn (customer): We went live, uh, about seven weeks ago. So mid-January, roughly.\n[14] Lisa Park (aegis_staff): Okay, seven weeks, got it. So you're past the initial noise spike but still well within the range where tuning is going to make a big difference. Kevin, does that track with what you're seeing in the tenant config?\n[15] Kevin O'Brien (aegis_staff): Yeah, let me — I'm pulling up the Harborview tenant right now. Give me one second. Okay, so I can see your event sources — looks like you've got your CloudPrime CloudTrail integrated, Azure AD sign-in logs, and your on-prem SIEM feed coming in. Is that the full picture or are there other sources we haven't connected yet?\n[16] Patricia Dunn (customer): That's the primary set, yes. We do have a Irongate firewall log feed that we were hoping to get in there as well, but we haven't prioritized it yet. It's been on the list.\n[17] Kevin O'Brien (aegis_staff): Okay, noted. The firewall logs will actually help a lot with context enrichment, so that's worth getting on the roadmap sooner rather than later. But let's not get sidetracked — we can come back to that.\n[18] Kevin O'Brien (aegis_staff): Agreed. So on the false positives — can you give me some examples of the alert types that are generating the most noise? Like, is it lateral movement rules, authentication anomalies, data exfil detections — what's hitting your team hardest?\n[19] Patricia Dunn (customer): It's predominantly the authentication anomaly rules. We have a large number of staff who work across multiple time zones — we've got teams in New York, Chicago, and then we have some offshore ops in Manila — and Detect keeps flagging logins from different geographic locations as suspicious. Which, you know, it's technically doing its job, but it's not... it's not calibrated to our reality.\n[20] Michael Russo (customer): Right, and from a compliance standpoint, every one of those false positive alerts has to be reviewed and documented. So it's not just a SOC fatigue issue, it's actually creating a paper trail of noise that we have to manage through as well.\n[21] Lisa Park (aegis_staff): Yeah, that's a really good point, Michael. We don't always hear that framing but it makes total sense in a regulated environment. Okay, so on the geo-anomaly detection — Kevin, walk them through how we'd handle that.\n[22] Kevin O'Brien (aegis_staff): Sure. So within Detect, there are a couple of levers here. The first is what we call trusted location profiles — you can define named network zones or geographic regions that are considered baseline for your organization. So if you tag New York, Chicago, and Manila as your standard operating locations, any authentication from those areas will be weighted differently in the risk scoring engine. It won't suppress the alert entirely, but it drops the severity from high to low or informational depending on the context.\n[23] Patricia Dunn (customer): And how granular can you get with that? Like, is it country-level, city-level, IP range?\n[24] Kevin O'Brien (aegis_staff): You can do all three, actually. Country and region is the coarser option, but you can also define IP ranges or CIDR blocks if you want to be more precise. For something like your Manila ops center where you probably have a known IP range, that's usually the cleanest approach.\n[25] Patricia Dunn (customer): That's good to know. We do have static IPs for that office so we can definitely provide those.\n[26] Kevin O'Brien (aegis_staff): Perfect. I'll note that down — we'll want to get those into the configuration as part of the tuning work. Now, the second lever is user behavior baselines. Detect builds a behavioral model for each user over time, and the longer you're on the platform, the smarter those baselines get. At seven weeks you're starting to accumulate meaningful data, but some of your frequent travelers or remote workers might need manual anchoring to suppress the noise while the model matures.\n[27] Patricia Dunn (customer): Manual anchoring — what does that look like operationally? Is that something my team does in the UI or does it require a support ticket?\n[28] Kevin O'Brien (aegis_staff): It's self-service in the UI, which is nice. There's a user profile section in the Detect console where you can flag a user as, essentially, a high-mobility user, and you can also manually mark specific past events as expected behavior. That feeds back into the model and accelerates the learning for that individual.\n[29] Patricia Dunn (customer): Okay, that's manageable. We probably have, I don't know, twenty-five to thirty users that would fit that profile across the organization.\n[30] Kevin O'Brien (aegis_staff): That's a very doable number. We can actually help you with a bulk update approach if you want — rather than going one by one. I can put together a template after this call.\n[31] Patricia Dunn (customer): That would be helpful, yeah.\n[32] Lisa Park (aegis_staff): Kevin, while we're on this topic — can we also talk a little bit about the detection rules themselves? Michael, I know you had some specific rule categories you wanted to make sure we had coverage on.\n[33] Michael Russo (customer): Right, yeah. So from a compliance perspective — we're subject to FFIEC guidelines, we have SOX obligations, and we're working toward a GLBA compliance review later this year. There are specific threat patterns that our auditors want to see monitoring controls for — things like privileged account misuse, unauthorized data access, and after-hours activity on sensitive systems. I want to make sure those aren't getting buried in the noise.\n[34] Lisa Park (aegis_staff): All of those are covered in the Detect rule library, and actually a few of them have pre-built financial services rule packs that are designed specifically for FFIEC and similar frameworks. Kevin, are those enabled in the Harborview tenant?\n[35] Kevin O'Brien (aegis_staff): Let me check. So I'm looking at the active rule sets... it looks like the standard financial services pack is enabled, but the privileged access monitoring rules are set to monitor-only mode, not alert mode. That might be why your SOC hasn't been seeing them as prominently — they're collecting data but not generating actionable alerts.\n[36] Michael Russo (customer): That should probably be flipped, right? For our auditors, we need to demonstrate that there's an active alerting control, not just passive monitoring.\n[37] Kevin O'Brien (aegis_staff): Agreed. Yeah, we can flip that to alert mode today if you want — I can walk you through it or just do it on my end with your sign-off.\n[38] Michael Russo (customer): Let's do it on your end during this call, that's fine with me. Patricia, any objection?\n[39] Patricia Dunn (customer): No, go ahead. Just make sure we document what changed and when for the audit trail.\n[40] Kevin O'Brien (aegis_staff): Already noted. I'll include that in the session summary I send over. So I'm enabling alert mode on the privileged access monitoring ruleset now. You'll start seeing those come through in your alert queue — I'd expect an initial burst over the next twenty-four hours as it catches up, and then it should normalize.\n[41] Patricia Dunn (customer): Okay, good to know. I'll give our SOC team a heads up so they're not blindsided.\n[42] Kevin O'Brien (aegis_staff): Smart. And on the after-hours activity monitoring — do you have a defined business hours window in the system? Because that's what the rule uses to determine what counts as after-hours.\n[43] Patricia Dunn (customer): I actually don't know if we configured that. Is that something that would have been set during the initial onboarding?\n[44] Kevin O'Brien (aegis_staff): It should have been, but it's one of those things that sometimes gets skipped. Let me check. Yeah, I'm seeing the business hours window is currently set to default, which is nine to five Eastern. Is that accurate for you or do you need a wider window?\n[45] Patricia Dunn (customer): It's more complicated than that because of the Manila team. Their working hours are, um, essentially our overnight hours. So if we use a static nine to five window we're going to be generating alerts on all of their normal activity.\n[46] Kevin O'Brien (aegis_staff): Right, okay. So the way to handle that is with what we call work schedule profiles — you can create multiple profiles tied to user groups, so the Manila users have a different expected hours window than your New York and Chicago staff. The rule engine applies the right profile per user when evaluating after-hours activity.\n[47] Patricia Dunn (customer): Oh, that's — yeah, that's actually exactly what we'd need. I assumed it was going to be more of a global setting.\n[48] Kevin O'Brien (aegis_staff): It's a common assumption. The flexibility is there, it's just not always surfaced well during onboarding. That's something we're working on improving.\n[49] Michael Russo (customer): From a compliance standpoint, will those profiles be documented in the configuration export? I need to be able to show auditors what the policy is and how it's applied.\n[50] Kevin O'Brien (aegis_staff): Yes, the configuration export includes work schedule profiles with user group mappings and all effective dates. It's exportable as a PDF or CSV. And that actually ties into Aegis Comply as well, when you get to that module — those configurations feed directly into the compliance reporting layer.\n[51] Michael Russo (customer): We're not on Comply yet — that's something we're evaluating for later in the year. But it's good to know those things are connected.\n[52] Kevin O'Brien (aegis_staff): Yeah, Lisa can speak to that more when the time comes, but the integration is pretty seamless. It's one of the reasons the modules are designed to work together.\n[53] Lisa Park (aegis_staff): We'll definitely circle back on Comply when the time is right. Okay, let's keep moving — Kevin, do you want to touch on the alert routing and escalation configuration? Patricia, I know that was another area you flagged in your pre-call notes.\n[54] Patricia Dunn (customer): Yeah, that's on our list. Right now everything is routing to a single shared SOC inbox and it's becoming unmanageable. We need to be able to tier the alerts — critical things need to go directly to specific individuals, not just the shared queue.\n[55] Kevin O'Brien (aegis_staff): Okay, so alert routing in Detect is handled through notification policies. You can create severity-based routing rules — so critical alerts go to a specific email or PagerDuty integration, high alerts go somewhere else, and medium and low stay in the shared queue. You can also route by alert category — so data exfil alerts might go to one person, authentication alerts to another.\n[56] Patricia Dunn (customer): We do have PagerDuty. Is that integration straightforward to set up?\n[57] Kevin O'Brien (aegis_staff): Very straightforward. It's a native integration — you just drop in your PagerDuty API key and map your Detect severity levels to your PagerDuty service and escalation policy. Takes about fifteen minutes if you have the API key handy.\n[58] Patricia Dunn (customer): I can get that from our team. That would make a big difference — right now our on-call engineer doesn't find out about critical events until someone spots it in the shared inbox, which is... not ideal.\n[59] Lisa Park (aegis_staff): Yeah, that's definitely a gap we want to close quickly. Kevin, can you add that to the action items for this session?\n[60] Kevin O'Brien (aegis_staff): Already on it. So to summarize the action items so far — we're setting up trusted location profiles with the Manila IP range and the US office locations, enabling alert mode on privileged access monitoring which I've already done, setting up work schedule profiles for the Manila team, and getting the PagerDuty integration configured. Is there anything else on your list, Patricia?\n[61] Patricia Dunn (customer): I think there was one more thing — the data retention settings. Our auditors require that we retain security event logs for at least twelve months. I want to make sure Detect is configured for that.\n[62] Lisa Park (aegis_staff): Good catch. What's your current retention setting, Kevin?\n[63] Kevin O'Brien (aegis_staff): Let me look. Current setting is ninety days. So yeah, that needs to be updated. For financial services accounts we typically recommend at least twelve months, and some organizations go to twenty-four. There may be a storage implication depending on your event volume — I can run a quick estimate after the call.\n[64] Patricia Dunn (customer): Twelve months is our minimum requirement. If there's a cost implication I'd want to understand that before we change it, so yes please run that estimate.\n[65] Kevin O'Brien (aegis_staff): Will do. I'll include it in the follow-up email. It might be straightforward depending on your tier — you may already have it covered.\n[66] Michael Russo (customer): Okay. And from a compliance standpoint — same question as before — is that retention setting visible in the configuration export?\n[67] Kevin O'Brien (aegis_staff): Yes, it is. It's in the data management policy section of the export. And there's also an effective date stamp so auditors can see when the policy was set.\n[68] Michael Russo (customer): Good. That's important for us.\n[69] Lisa Park (aegis_staff): Alright, I think we've covered a lot of ground today. I want to make sure we're aligned on next steps before we wrap. Kevin, do you want to walk through what you're going to send over?\n[70] Kevin O'Brien (aegis_staff): Sure. So I'll send a session summary with all the changes made today — which is just the privileged access monitoring ruleset flip — and all the pending action items. I'll include the storage estimate for the twelve-month retention setting, the template for the bulk high-mobility user update, and step-by-step instructions for the PagerDuty integration. For the trusted location profiles and work schedule profiles, we should probably schedule a follow-up working session to get those configured properly — I'd want your Manila IT contact on that call if possible.\n[71] Patricia Dunn (customer): I can coordinate that. We'd probably need about a week to get the right people together. So maybe something the week of March sixteenth?\n[72] Kevin O'Brien (aegis_staff): That works for me. Lisa, can you send a calendar invite once we confirm times with Patricia's team?\n[73] Lisa Park (aegis_staff): Absolutely, I'll reach out to you directly, Patricia, to find a time that works. And in the meantime if anything comes up or your team runs into issues with any of the things we discussed today, please just reach out — you've got my email and Kevin is looped in on the account.\n[74] Patricia Dunn (customer): Will do. This was a productive session — we came in with a list of concerns and I feel like we've got a clear path forward on all of them.\n[75] Michael Russo (customer): Agreed. Thanks for the time, Kevin, Lisa. We'll be in touch.\n[76] Kevin O'Brien (aegis_staff): Thanks both. Talk soon.\n[77] Lisa Park (aegis_staff): Thanks everyone, have a good rest of your day."
+  },
+  "response_text": "{\n  \"call_score\": 4,\n  \"customer_score\": 4,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"positive\"},\n    {\"index\": 4, \"label\": \"positive\"},\n    {\"index\": 5, \"label\": \"positive\"},\n    {\"index\": 6, \"label\": \"positive\"},\n    {\"index\": 7, \"label\": \"positive\"},\n    {\"index\": 8, \"label\": \"positive\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"negative\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"negative\"},\n    {\"index\": 20, \"label\": \"negative\"},\n    {\"index\": 21, \"label\": \"positive\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"positive\"},\n    {\"index\": 26, \"label\": \"positive\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"positive\"},\n    {\"index\": 30, \"label\": \"positive\"},\n    {\"index\": 31, \"label\": \"positive\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"negative\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"positive\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"positive\"},\n    {\"index\": 42, \"label\": \"neutral\"},\n    {\"index\": 43, \"label\": \"neutral\"},\n    {\"index\": 44, \"label\": \"neutral\"},\n    {\"index\": 45, \"label\": \"neutral\"},\n    {\"index\": 46, \"label\": \"neutral\"},\n    {\"index\": 47, \"label\": \"positive\"},\n    {\"index\": 48, \"label\": \"neutral\"},\n    {\"index\": 49, \"label\": \"neutral\"},\n    {\"index\": 50, \"label\": \"neutral\"},\n    {\"index\": 51, \"label\": \"positive\"},\n    {\"index\": 52, \"label\": \"positive\"},\n    {\"index\": 53, \"label\": \"neutral\"},\n    {\"index\": 54, \"label\": \"negative\"},\n    {\"index\": 55, \"label\": \"neutral\"},\n    {\"index\": 56, \"label\": \"neutral\"},\n    {\"index\": 57, \"label\": \"positive\"},\n    {\"index\": 58, \"label\": \"negative\"},\n    {\"index\": 59, \"label\": \"neutral\"},\n    {\"index\": 60, \"label\": \"neutral\"},\n    {\"index\": 61, \"label\": \"neutral\"},\n    {\"index\": 62, \"label\": \"positive\"},\n    {\"index\": 63, \"label\": \"neutral\"},\n    {\"index\": 64, \"label\": \"neutral\"},\n    {\"index\": 65, \"label\": \"neutral\"},\n    {\"index\": 66, \"label\": \"neutral\"},\n    {\"index\": 67, \"label\": \"neutral\"},\n    {\"index\": 68, \"label\": \"positive\"},\n    {\"index\": 69, \"label\": \"neutral\"},\n    {\"index\": 70, \"label\": \"neutral\"},\n    {\"index\": 71, \"label\": \"neutral\"},\n    {\"index\": 72, \"label\": \"positive\"},\n    {\"index\": 73, \"label\": \"positive\"},\n    {\"index\": 74, \"label\": \"positive\"},\n    {\"index\": 75, \"label\": \"positive\"},\n    {\"index\": 76, \"label\": \"positive\"},\n    {\"index\": 77, \"label\": \"positive\"}\n  ],\n  \"trajectory\": {\"start\": 3.5, \"end\": 4},\n  \"evidence_quote\": \"This was a productive session — we came in with a list of concerns and I feel like we've got a clear path forward on all of them.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 4.0,
+    "customer_score": 4.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "positive"
+      },
+      {
+        "index": 7,
+        "label": "positive"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "negative"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "negative"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "positive"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "negative"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      },
+      {
+        "index": 45,
+        "label": "neutral"
+      },
+      {
+        "index": 46,
+        "label": "neutral"
+      },
+      {
+        "index": 47,
+        "label": "positive"
+      },
+      {
+        "index": 48,
+        "label": "neutral"
+      },
+      {
+        "index": 49,
+        "label": "neutral"
+      },
+      {
+        "index": 50,
+        "label": "neutral"
+      },
+      {
+        "index": 51,
+        "label": "positive"
+      },
+      {
+        "index": 52,
+        "label": "positive"
+      },
+      {
+        "index": 53,
+        "label": "neutral"
+      },
+      {
+        "index": 54,
+        "label": "negative"
+      },
+      {
+        "index": 55,
+        "label": "neutral"
+      },
+      {
+        "index": 56,
+        "label": "neutral"
+      },
+      {
+        "index": 57,
+        "label": "positive"
+      },
+      {
+        "index": 58,
+        "label": "negative"
+      },
+      {
+        "index": 59,
+        "label": "neutral"
+      },
+      {
+        "index": 60,
+        "label": "neutral"
+      },
+      {
+        "index": 61,
+        "label": "neutral"
+      },
+      {
+        "index": 62,
+        "label": "positive"
+      },
+      {
+        "index": 63,
+        "label": "neutral"
+      },
+      {
+        "index": 64,
+        "label": "neutral"
+      },
+      {
+        "index": 65,
+        "label": "neutral"
+      },
+      {
+        "index": 66,
+        "label": "neutral"
+      },
+      {
+        "index": 67,
+        "label": "neutral"
+      },
+      {
+        "index": 68,
+        "label": "positive"
+      },
+      {
+        "index": 69,
+        "label": "neutral"
+      },
+      {
+        "index": 70,
+        "label": "neutral"
+      },
+      {
+        "index": 71,
+        "label": "neutral"
+      },
+      {
+        "index": 72,
+        "label": "positive"
+      },
+      {
+        "index": 73,
+        "label": "positive"
+      },
+      {
+        "index": 74,
+        "label": "positive"
+      },
+      {
+        "index": 75,
+        "label": "positive"
+      },
+      {
+        "index": 76,
+        "label": "positive"
+      },
+      {
+        "index": 77,
+        "label": "positive"
+      }
+    ],
+    "trajectory": {
+      "start": 3.5,
+      "end": 4.0
+    },
+    "evidence_quote": "This was a productive session — we came in with a list of concerns and I feel like we've got a clear path forward on all of them.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 1235,
+    "prompt_tokens": 4959,
+    "total_tokens": 6194,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 125,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 4956,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0064258,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0064258,
+      "upstream_inference_prompt_cost": 0.0002508,
+      "upstream_inference_completions_cost": 0.006175
+    }
+  },
+  "latency_s": 16.884,
+  "finish_reason": "stop",
+  "model_returned": "openai/gpt-6.1-terra",
+  "provider_returned": "OpenAI",
+  "timestamp": "2026-10-29T20:42:50.551221+00:00",
+  "key": "4c3261183c2dcabf6b49fd4b4efc44cf5d7bba5739799d0a87ee2c2fcb5ab604"
+}

@@ -1,0 +1,236 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (42 turns, indices 0 to 41; per_turn needs exactly 42 entries, one per index in order):\n[0] Elena Vasquez (aegis_staff): Hi, this is Elena Vasquez from Aegis Cloud Security support, am I speaking with Vanessa?\n[1] Vanessa Cruz (customer): Yes, hi Elena, Vanessa Cruz here, VP of Engineering at Coastal Living Co — thanks for picking this up, I've been waiting on a callback for a bit.\n[2] Elena Vasquez (aegis_staff): Yeah, I apologize for the delay on that, Vanessa, we've had a higher than normal queue today — but I've got your case pulled up here, case number 3677, MFA token failures, is that right?\n[3] Vanessa Cruz (customer): That's correct, yes, and honestly it's been — it's been a pretty rough morning because of this, so I'm really hoping we can get to the bottom of it today.\n[4] Elena Vasquez (aegis_staff): Absolutely, let's dig in — can you walk me through what you're seeing, like when did this start and which users are affected?\n[5] Vanessa Cruz (customer): So it started, um, I'd say around 7 AM this morning, and it's not all users — it seems to be specifically the users who are enrolled in TOTP-based MFA through Aegis Identity, they're getting token validation failures even though the tokens are generating correctly on their authenticator apps.\n[6] Elena Vasquez (aegis_staff): Okay, TOTP failures, and are these users on a specific SSO integration or are they authenticating directly through the Aegis Identity portal?\n[7] Vanessa Cruz (customer): They're going through our Okta SSO integration that we have set up with Aegis Identity, so the flow is Okta, then it hands off to Aegis Identity for the MFA step.\n[8] Elena Vasquez (aegis_staff): Got it, and roughly how many users are hitting this — is it like a handful or is it widespread across your org?\n[9] Vanessa Cruz (customer): It's — I mean it's significant, we're talking probably 40, maybe 45 users who can't get in right now, and these are people on our engineering and ops teams who need access to production systems, so this is not a minor inconvenience, Elena.\n[10] Elena Vasquez (aegis_staff): No, I completely understand, that's a critical situation and I'm treating it as such — let me check a few things on the backend here while we talk.\n[11] Vanessa Cruz (customer): Yeah please do, and I also want to flag that we had users try regenerating their TOTP secrets through the self-service portal and re-enrolling their authenticator apps and it didn't fix anything, same error.\n[12] Elena Vasquez (aegis_staff): Hmm, okay, that's actually a really useful data point — if re-enrollment isn't resolving it that does suggest this might not be a user-side clock drift issue, which was my first instinct.\n[13] Vanessa Cruz (customer): Right, and I mean we checked device times, everything looks synced, I had two of my engineers verify that specifically because I knew that would be the first question.\n[14] Elena Vasquez (aegis_staff): Smart, okay — I'm pulling up your tenant now and I'm looking at the authentication logs... give me just one second here...\n[15] Vanessa Cruz (customer): Sure, and while you're doing that I just want to say — we evaluated Aegis Identity specifically because of the reliability promises, we're a retail company, we have tight operational windows, we can't have engineering staff locked out of systems, especially heading into our spring inventory cycle.\n[16] Elena Vasquez (aegis_staff): That's completely fair and I hear you on that, the timing is terrible — okay, I'm seeing something in your logs, there are a high volume of TOTP validation attempts all returning a 4031 error code, which is... okay, that's interesting.\n[17] Vanessa Cruz (customer): What does 4031 mean, is that something on your end?\n[18] Elena Vasquez (aegis_staff): So a 4031 is a token validation window mismatch, but — and this is the part that's odd — it's usually caused by a time sync issue on either the client or our validation server, but given that you've already ruled out client-side, I want to check if there's something going on with our validation service configuration for your tenant specifically.\n[19] Vanessa Cruz (customer): So you're saying this could be a bug on Aegis's side?\n[20] Elena Vasquez (aegis_staff): I — I don't want to confirm that definitively yet without escalating to our Identity engineering team, but based on what I'm seeing in these logs and the fact that re-enrollment didn't help, it does look like the issue may be on our end, yes.\n[21] Vanessa Cruz (customer): Elena, that's — okay, I appreciate you being honest about that but that is really frustrating to hear, because this is a production impacting issue and my team has been blocked for hours.\n[22] Elena Vasquez (aegis_staff): I know, and I'm not going to sugarcoat it, this is a problem and we need to fix it — what I can do right now is flag this as a P1 escalation to our Identity engineering team, and I also want to offer a temporary workaround while we investigate.\n[23] Vanessa Cruz (customer): What kind of workaround are we talking about?\n[24] Elena Vasquez (aegis_staff): So within Aegis Identity, admins have the ability to temporarily switch affected users to email-based OTP as a fallback method — it's not ideal, I know, but it would unblock your team immediately while the TOTP validation issue is being investigated.\n[25] Vanessa Cruz (customer): Email OTP... I mean that's less secure and my security team is going to push back on that, but I understand you're trying to help — how long would this workaround need to be in place?\n[26] Elena Vasquez (aegis_staff): I honestly can't give you a hard timeline without the engineering team weighing in, but P1 escalations for Identity are supposed to have an initial response within two hours and a resolution path within four — I will personally stay on this case and keep you updated.\n[27] Vanessa Cruz (customer): Two to four hours — Elena, my team has already been down for several hours, that's potentially most of the workday for some of these folks.\n[28] Elena Vasquez (aegis_staff): I know, and I'm sorry — I'm escalating this right now as we speak, I'm marking it as business critical with active user lockout, that should push it to the front of the engineering queue.\n[29] Vanessa Cruz (customer): Okay, fine — and can you also tell me, is this affecting other customers or is it just us?\n[30] Elena Vasquez (aegis_staff): I'm going to be transparent with you — I don't have visibility into other tenant logs, but I'm not seeing any broader incident reported for Aegis Identity on our internal status board, so right now it looks like it may be specific to your tenant configuration, possibly related to the Okta integration setup.\n[31] Vanessa Cruz (customer): So something in our configuration, but we haven't changed anything on our end — nothing was touched, no updates, no config changes since last week.\n[32] Elena Vasquez (aegis_staff): I hear you, and I believe you — there may have been a backend update or configuration push on our side that affected certain tenant setups, that's something the engineering team will need to confirm.\n[33] Vanessa Cruz (customer): Alright, okay — so what do I need to do right now, walk me through the email OTP workaround steps so I can at least get my team unblocked.\n[34] Elena Vasquez (aegis_staff): Sure, so if you go into the Aegis Identity admin console, navigate to Authentication Policies, and then under the MFA methods for your primary user group, you should see an option to enable email OTP as an allowed fallback — I can stay on the line while you do that.\n[35] Vanessa Cruz (customer): Okay, I'm in the admin console now... Authentication Policies... yeah I see it, I see the MFA methods section.\n[36] Elena Vasquez (aegis_staff): Great, and you should see a toggle or checkbox for email OTP — enabling it there should allow affected users to choose it as an alternative at the next login attempt.\n[37] Vanessa Cruz (customer): Okay... I'm enabling it now, and I'll have someone ping the affected users to try logging in again — but Elena, I need a follow-up from you today, not tomorrow, today, with an actual update on what caused this.\n[38] Elena Vasquez (aegis_staff): Absolutely, you have my word — I'll follow up via email with an update by end of business today, and if engineering identifies the root cause before then you'll hear from me immediately.\n[39] Vanessa Cruz (customer): Alright, I'm going to hold you to that — and honestly we're going to need to have a broader conversation about reliability with our account team because this is not the first time we've had hiccups, but that's a separate discussion.\n[40] Elena Vasquez (aegis_staff): Understood, and that's a fair conversation to have — I'll make a note for your account team to follow up on that as well, for now let's get your team back in and I'll be in touch shortly, okay?\n[41] Vanessa Cruz (customer): Okay, thanks Elena — I hope to hear from you soon."
+  },
+  "response_text": "{\n  \"call_score\": 2.5,\n  \"customer_score\": 2.0,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"negative\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"negative\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"negative\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"negative\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"negative\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"negative\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"negative\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"negative\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"negative\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 2.5,\n    \"end\": 2.5\n  },\n  \"evidence_quote\": \"Elena, that's — okay, I appreciate you being honest about that but that is really frustrating to hear, because this is a production impacting issue\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "negative"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "negative"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "negative"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "negative"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "negative"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "negative"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.5,
+      "end": 2.5
+    },
+    "evidence_quote": "Elena, that's — okay, I appreciate you being honest about that but that is really frustrating to hear, because this is a production impacting issue",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 732,
+    "prompt_tokens": 4686,
+    "total_tokens": 5418,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0062595,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0062595,
+      "upstream_inference_prompt_cost": 0.0035145,
+      "upstream_inference_completions_cost": 0.002745
+    }
+  },
+  "latency_s": 5.855,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:18.712986+00:00",
+  "key": "dee6f6cb181ab6b7b32b1dc46710de0b8fedde32c85d23aeba0eba3188fd5eef"
+}

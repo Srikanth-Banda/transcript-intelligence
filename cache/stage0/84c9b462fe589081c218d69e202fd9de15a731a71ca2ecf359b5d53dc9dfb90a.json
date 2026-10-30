@@ -1,0 +1,71 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 2,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nJames Mitchell: Hey Kendra, thanks for making time today — I know your schedule's been packed.\nKendra Wallace: Yeah, it has been, but this is an important one so I made sure to block it off. Good to connect, James.\nJames Mitchell: Absolutely. So the plan for today — I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout. Does that work for you?\nKendra Wallace: Yeah that works. I've got our infrastructure lead, Marcus, looped in on some of the technical details so I may reference some notes he sent over. He couldn't make the call today unfortunately.\nJames Mitchell: No problem at all, happy to follow up directly with Marcus as well after this. So, just to level-set — Brightpath is running primarily on CloudPrime, correct? With some Azure footprint for certain workloads?\nKendra Wallace: That's right. We're about seventy percent CloudPrime, the rest is Azure. We use Azure mainly for some of our analytics pipelines and a couple of internal tools. Core commerce infrastructure — storefront, order management, payments — that's all CloudPrime.\nJames Mitchell: Got it, that's helpful context. Aegis Detect handles both environments natively so that's not a concern, but it does affect how we sequence the deployment. Typically we recommend starting with the primary cloud environment first, getting the agents and event collectors stabilized there, and then extending to the secondary.\nKendra Wallace: That makes sense. So CloudPrime first, then we layer in Azure. What's the typical timeline for something like that, for an environment our size?"
+  },
+  "response_text": "{\n  \"label\": \"external\",\n  \"evidence_quote\": \"I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout.\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"James Mitchell\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Kendra Wallace\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "James Mitchell",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Kendra Wallace",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 130,
+    "prompt_tokens": 899,
+    "total_tokens": 1029,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00116175,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00116175,
+      "upstream_inference_prompt_cost": 0.00067425,
+      "upstream_inference_completions_cost": 0.0004875
+    }
+  },
+  "latency_s": 2.293,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:37:22.838815+00:00",
+  "key": "84c9b462fe589081c218d69e202fd9de15a731a71ca2ecf359b5d53dc9dfb90a"
+}

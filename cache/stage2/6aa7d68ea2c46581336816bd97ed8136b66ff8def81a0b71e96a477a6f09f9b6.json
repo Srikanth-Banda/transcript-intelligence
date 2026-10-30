@@ -1,0 +1,364 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (74 turns, indices 0 to 73; per_turn needs exactly 74 entries, one per index in order):\n[0] Rachel Torres (aegis_staff): Hi Sandra, thanks for making time this afternoon — I know Tuesdays tend to get a little chaotic.\n[1] Sandra Keating (customer): Yeah, no kidding, I had three back-to-backs before this so I appreciate you being flexible on the time.\n[2] Rachel Torres (aegis_staff): Of course, absolutely — okay so, I've got the agenda pulled up, we wanted to walk through some of the Detect roadmap items, and I know you had some specific feature requests you wanted to put on the table today.\n[3] Sandra Keating (customer): Right, yeah, that's the main thing I want to get into.\n[4] Rachel Torres (aegis_staff): Before we jump in — how are things going on your end generally, like from a security posture standpoint, anything major come up since we last spoke?\n[5] Sandra Keating (customer): I mean it's been a pretty busy quarter, we had an internal audit wrap up last week, and honestly the compliance side of things has been eating a lot of our bandwidth, but we can get to that in a sec.\n[6] Rachel Torres (aegis_staff): Sure, sure, yeah we can definitely touch on that — I know the Comply v2 launch just happened last week actually, so there might be some relevant stuff there.\n[7] Sandra Keating (customer): Yeah I saw that announcement, I want to circle back to that, but let's do Detect first because that's kind of the more pressing thing for my team right now.\n[8] Rachel Torres (aegis_staff): Totally, let's do it — so do you want to just kick us off with what you're seeing as the gaps, or would it be helpful if I first walked through what's on the roadmap for the next two quarters?\n[9] Sandra Keating (customer): Let me start with the gaps because I think it'll be useful context for whatever you're about to tell me.\n[10] Rachel Torres (aegis_staff): Perfect, go ahead.\n[11] Sandra Keating (customer): So the primary thing — and I've been saying this for a couple of quarters now — is that we really need more granular alerting thresholds by entity type.\n[12] Rachel Torres (aegis_staff): Right, can you walk me through specifically what you mean by entity type in your context?\n[13] Sandra Keating (customer): Sure, so — in the insurance world we're dealing with a lot of different categories of users and systems, right, so you've got your claims processing systems, your underwriting platforms, your customer-facing portals, and the risk profile for each of those is very different.\n[14] Rachel Torres (aegis_staff): Mm-hmm.\n[15] Sandra Keating (customer): But right now in Detect, when we're setting alert thresholds, it's basically a one-size-fits-all situation, and that creates a ton of noise on the low-risk endpoints and then potentially under-alerts on the high-value systems.\n[16] Rachel Torres (aegis_staff): Yeah that's — that's a fair point and actually that lines up with feedback we've been getting from a few other financial services customers as well, so it's definitely something that's been getting traction internally.\n[17] Sandra Keating (customer): Good, because it should be, honestly — the alert fatigue is real, my SOC team is dealing with a lot of false positives and it affects their ability to respond to the things that actually matter.\n[18] Rachel Torres (aegis_staff): Understood, and I don't want to get too far ahead without checking — are we talking about thresholds on the behavioral side, like anomaly detection thresholds, or also on the signature-based rules?\n[19] Sandra Keating (customer): Both, but honestly the behavioral side is where it's most painful because the baselines are being calculated across everything and they just don't reflect the actual behavior patterns of, say, a claims adjuster versus a network admin.\n[20] Rachel Torres (aegis_staff): Got it, okay — so what you'd really want is the ability to define entity groups and then have separate baseline models trained per group, essentially.\n[21] Sandra Keating (customer): Exactly, yes, that's exactly it — and ideally you'd be able to map those groups to your own org hierarchy, not just some generic taxonomy.\n[22] Rachel Torres (aegis_staff): Okay, I'm noting all of this down — and I do want to be upfront with you, Sandra, that the entity grouping with custom baselines is something our product team has been scoping, it's not GA yet, it was targeted for Q3 in the roadmap I have, but I want to get you connected with our product team directly so they have this context.\n[23] Sandra Keating (customer): Q3, so like July-September timeframe?\n[24] Rachel Torres (aegis_staff): That's the current target, yeah — but I want to be careful not to commit to that because roadmaps shift, as you know.\n[25] Sandra Keating (customer): Yeah, I appreciate the honesty, I'd rather know the real situation than get a date that slips.\n[26] Rachel Torres (aegis_staff): Right, exactly — okay so that's the first item, what else is on your list?\n[27] Sandra Keating (customer): The second thing, um, this is a little more sensitive to bring up but I think it needs to be on the table — the outage in March.\n[28] Rachel Torres (aegis_staff): Yeah, I was going to bring that up too — I know we sent the incident report and the RCA but I wanted to make sure you had a chance to ask questions directly.\n[29] Sandra Keating (customer): So we were dark for, what, six hours — and look, I understand things happen, infrastructure fails, I've been in this industry long enough to know that, but for us specifically, that's six hours where we had no visibility into threats across our environment, and given our regulatory obligations that's not a small thing.\n[30] Rachel Torres (aegis_staff): No, absolutely not, and I want to acknowledge that directly — that outage was a significant failure on our part, it was a cascading failure in the event ingestion pipeline, single point of failure that we should have architected around, and we did not.\n[31] Sandra Keating (customer): Right, that's what the RCA said.\n[32] Rachel Torres (aegis_staff): And the fix — we've implemented redundant processing nodes and a circuit breaker pattern so that if one node in the pipeline degrades, it doesn't take everything down with it, and that's been live since mid-March.\n[33] Sandra Keating (customer): Okay, so my follow-up question on that is — and this goes to the feature request angle — is there any way for customers to have visibility into the health of the Detect pipeline itself, like a status indicator within the product?\n[34] Rachel Torres (aegis_staff): That's actually a really good one and it's something I've heard from a couple of other accounts too — right now the status page is external and it's sort of — it's not surfaced inside the product itself.\n[35] Sandra Keating (customer): Yeah because we only found out about the outage because someone on my team noticed the alert volume had dropped to zero and then went and checked the status page — that's not a great discovery mechanism.\n[36] Rachel Torres (aegis_staff): No, I completely agree, and that's — I'll be honest, that's a gap in the product experience, and I'm going to log that as a formal feature request, in-product pipeline health status with proactive alerting if ingestion drops below a threshold.\n[37] Sandra Keating (customer): Yeah, even just like a banner or an indicator in the UI that says hey, we're experiencing reduced capacity, something — anything — would have saved my team a lot of confusion that morning.\n[38] Rachel Torres (aegis_staff): Understood, and I think that's a very reasonable ask — I'm going to make sure that goes to the right product team with your name on it so they have the customer context.\n[39] Sandra Keating (customer): Appreciate that.\n[40] Rachel Torres (aegis_staff): Okay so let me also share a few things that are on the Detect roadmap that I think are relevant to what you're describing — there are two items I want to highlight specifically.\n[41] Sandra Keating (customer): Sure, go ahead.\n[42] Rachel Torres (aegis_staff): First one is expanded SIEM integration — we're adding native connectors for a couple of the major SIEM platforms in Q2, which I know you're running LogVault, so that should reduce the time from event to alert in your existing workflow.\n[43] Sandra Keating (customer): That would actually be helpful, yeah — right now the LogVault integration is a little manual, we're doing some custom scripting to get the data in there.\n[44] Rachel Torres (aegis_staff): Yeah so that should get a lot cleaner — I'll send you the details on that after this call, it's a Q2 item so should be coming up relatively soon.\n[45] Sandra Keating (customer): Okay, and the second thing?\n[46] Rachel Torres (aegis_staff): Second one is — we're building out a threat intelligence correlation layer, so essentially Detect will be able to cross-reference events against external threat intel feeds in near real-time, which should improve the signal-to-noise ratio on the alerts that are actually meaningful.\n[47] Sandra Keating (customer): That's interesting — what feeds are you pulling from?\n[48] Rachel Torres (aegis_staff): The initial launch is going to include a few of the major ones — I don't want to get into specifics that I haven't confirmed with the product team, so let me get you the accurate list rather than guess.\n[49] Sandra Keating (customer): Fair enough, yeah, please do send that over — the feeds matter a lot, some of them are better for financial services specific threat actors than others.\n[50] Rachel Torres (aegis_staff): Absolutely, I'll include that in the follow-up — and actually, is there a specific feed you're already using or want to see prioritized?\n[51] Sandra Keating (customer): We're subscribed to FS-ISAC feeds and I'd want to see that included, that's probably the most relevant for our threat landscape.\n[52] Rachel Torres (aegis_staff): FS-ISAC, got it, I'm writing that down — that's a very reasonable ask for a financial services customer and I'll flag that specifically to the product team.\n[53] Sandra Keating (customer): Yeah I mean that one feels like a no-brainer for any insurance or banking customer you're working with.\n[54] Rachel Torres (aegis_staff): Agreed — okay, you mentioned the compliance audit earlier, do you want to spend a few minutes on Comply before we wrap up?\n[55] Sandra Keating (customer): Yeah just quickly — we're coming up on a SOC 2 Type II renewal and honestly the reporting process last time was pretty painful, lots of manual exports and spreadsheet work.\n[56] Rachel Torres (aegis_staff): So this is actually really timely because Comply v2 launched last week — April 7 — and one of the headline features is on-demand SOC 2 reporting, so you can generate the report without the manual export process, it pulls directly from the data in the platform.\n[57] Sandra Keating (customer): Okay, that's — yeah that could actually save us a lot of pain, when can we see that in action?\n[58] Rachel Torres (aegis_staff): I can set up a demo for your team, I'm thinking we loop in your compliance lead too — would that be the right person to have in the room?\n[59] Sandra Keating (customer): Yeah, definitely bring in Marcus, he's the one who's actually doing the evidence gathering so he'd want to see the workflow.\n[60] Rachel Torres (aegis_staff): Perfect, I'll reach out to coordinate schedules — okay let me just do a quick recap of the action items before we lose track of everything.\n[61] Sandra Keating (customer): Yeah please.\n[62] Rachel Torres (aegis_staff): So from my side — I'm logging two formal feature requests: entity grouping with custom behavioral baselines, and in-product pipeline health status with proactive degradation alerts.\n[63] Sandra Keating (customer): Correct, yes.\n[64] Rachel Torres (aegis_staff): I'm also going to send you the confirmed list of threat intel feeds for the correlation layer, including whether FS-ISAC is on the roadmap, and the details on the LogVault native connector timeline.\n[65] Sandra Keating (customer): That all sounds right.\n[66] Rachel Torres (aegis_staff): And then I'll set up the Comply v2 demo with you and Marcus — I'm thinking we can probably do that within the next two weeks?\n[67] Sandra Keating (customer): Two weeks works, yeah — try to avoid the last week of April if you can, I think we've got some internal stuff happening.\n[68] Rachel Torres (aegis_staff): No problem, I'll aim for the week of the 20th — I'll send a calendar invite.\n[69] Sandra Keating (customer): Perfect, that works — and Rachel, I do appreciate you actually listening on the feature requests, sometimes these calls feel like they go into a black hole so.\n[70] Rachel Torres (aegis_staff): I hear you, and I want to make sure that doesn't happen here — I'll keep you posted on what traction these get with the product team, even if the answer is not yet, I'll tell you.\n[71] Sandra Keating (customer): That's all I ask — okay I've got a hard stop in about two minutes so let's call it there.\n[72] Rachel Torres (aegis_staff): Sounds good — thanks Sandra, I'll have everything in your inbox by end of week.\n[73] Sandra Keating (customer): Great, talk soon."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": 3.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"negative\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"negative\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"negative\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"positive\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"negative\"},\n    {\"index\": 30, \"label\": \"negative\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"negative\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"neutral\"},\n    {\"index\": 42, \"label\": \"neutral\"},\n    {\"index\": 43, \"label\": \"positive\"},\n    {\"index\": 44, \"label\": \"neutral\"},\n    {\"index\": 45, \"label\": \"neutral\"},\n    {\"index\": 46, \"label\": \"neutral\"},\n    {\"index\": 47, \"label\": \"neutral\"},\n    {\"index\": 48, \"label\": \"neutral\"},\n    {\"index\": 49, \"label\": \"neutral\"},\n    {\"index\": 50, \"label\": \"neutral\"},\n    {\"index\": 51, \"label\": \"neutral\"},\n    {\"index\": 52, \"label\": \"neutral\"},\n    {\"index\": 53, \"label\": \"neutral\"},\n    {\"index\": 54, \"label\": \"neutral\"},\n    {\"index\": 55, \"label\": \"neutral\"},\n    {\"index\": 56, \"label\": \"neutral\"},\n    {\"index\": 57, \"label\": \"positive\"},\n    {\"index\": 58, \"label\": \"neutral\"},\n    {\"index\": 59, \"label\": \"neutral\"},\n    {\"index\": 60, \"label\": \"neutral\"},\n    {\"index\": 61, \"label\": \"neutral\"},\n    {\"index\": 62, \"label\": \"neutral\"},\n    {\"index\": 63, \"label\": \"neutral\"},\n    {\"index\": 64, \"label\": \"neutral\"},\n    {\"index\": 65, \"label\": \"neutral\"},\n    {\"index\": 66, \"label\": \"neutral\"},\n    {\"index\": 67, \"label\": \"neutral\"},\n    {\"index\": 68, \"label\": \"neutral\"},\n    {\"index\": 69, \"label\": \"positive\"},\n    {\"index\": 70, \"label\": \"neutral\"},\n    {\"index\": 71, \"label\": \"neutral\"},\n    {\"index\": 72, \"label\": \"neutral\"},\n    {\"index\": 73, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 4.0\n  },\n  \"evidence_quote\": \"and Rachel, I do appreciate you actually listening on the feature requests, sometimes these calls feel like they go into a black hole so.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "negative"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "negative"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "negative"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "negative"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      },
+      {
+        "index": 45,
+        "label": "neutral"
+      },
+      {
+        "index": 46,
+        "label": "neutral"
+      },
+      {
+        "index": 47,
+        "label": "neutral"
+      },
+      {
+        "index": 48,
+        "label": "neutral"
+      },
+      {
+        "index": 49,
+        "label": "neutral"
+      },
+      {
+        "index": 50,
+        "label": "neutral"
+      },
+      {
+        "index": 51,
+        "label": "neutral"
+      },
+      {
+        "index": 52,
+        "label": "neutral"
+      },
+      {
+        "index": 53,
+        "label": "neutral"
+      },
+      {
+        "index": 54,
+        "label": "neutral"
+      },
+      {
+        "index": 55,
+        "label": "neutral"
+      },
+      {
+        "index": 56,
+        "label": "neutral"
+      },
+      {
+        "index": 57,
+        "label": "positive"
+      },
+      {
+        "index": 58,
+        "label": "neutral"
+      },
+      {
+        "index": 59,
+        "label": "neutral"
+      },
+      {
+        "index": 60,
+        "label": "neutral"
+      },
+      {
+        "index": 61,
+        "label": "neutral"
+      },
+      {
+        "index": 62,
+        "label": "neutral"
+      },
+      {
+        "index": 63,
+        "label": "neutral"
+      },
+      {
+        "index": 64,
+        "label": "neutral"
+      },
+      {
+        "index": 65,
+        "label": "neutral"
+      },
+      {
+        "index": 66,
+        "label": "neutral"
+      },
+      {
+        "index": 67,
+        "label": "neutral"
+      },
+      {
+        "index": 68,
+        "label": "neutral"
+      },
+      {
+        "index": 69,
+        "label": "positive"
+      },
+      {
+        "index": 70,
+        "label": "neutral"
+      },
+      {
+        "index": 71,
+        "label": "neutral"
+      },
+      {
+        "index": 72,
+        "label": "neutral"
+      },
+      {
+        "index": 73,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 4.0
+    },
+    "evidence_quote": "and Rachel, I do appreciate you actually listening on the feature requests, sometimes these calls feel like they go into a black hole so.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 1209,
+    "prompt_tokens": 5732,
+    "total_tokens": 6941,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00883275,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00883275,
+      "upstream_inference_prompt_cost": 0.004299,
+      "upstream_inference_completions_cost": 0.00453375
+    }
+  },
+  "latency_s": 7.016,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:42.893571+00:00",
+  "key": "6aa7d68ea2c46581336816bd97ed8136b66ff8def81a0b71e96a477a6f09f9b6"
+}

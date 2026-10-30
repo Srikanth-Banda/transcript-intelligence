@@ -1,0 +1,96 @@
+{
+ "n": 100,
+ "loo_accuracy": 0.76,
+ "loo_recall": {
+  "Billing and Usage Disputes": 0.75,
+  "Commercial Renewals and Retention": 0.857,
+  "Competitive Strategy and Win/Loss": 0.6,
+  "Incident and Outage Response": 0.944,
+  "Internal Planning and Delivery Cadence": 0.667,
+  "Onboarding and Implementation Scoping": 0.571,
+  "Product Adoption, Feedback and Expansion": 0.875,
+  "Technical Integration and Performance Issues": 0.5
+ },
+ "characteristic_provided_tokens": {
+  "Technical Integration and Performance Issues": [
+   "time",
+   "failure",
+   "issue",
+   "performance",
+   "support",
+   "escalation"
+  ],
+  "Onboarding and Implementation Scoping": [
+   "onboarding",
+   "hybrid",
+   "deployment",
+   "recovery",
+   "data",
+   "backup"
+  ],
+  "Internal Planning and Delivery Cadence": [
+   "planning",
+   "sprint",
+   "retrospective",
+   "roadmap",
+   "improvement",
+   "comply"
+  ],
+  "Billing and Usage Disputes": [
+   "billing",
+   "dispute",
+   "overage",
+   "migration",
+   "management",
+   "reporting"
+  ],
+  "Commercial Renewals and Retention": [
+   "renewal",
+   "competitive",
+   "pricing",
+   "threat",
+   "expansion",
+   "negotiation"
+  ],
+  "Product Adoption, Feedback and Expansion": [
+   "feature",
+   "audit",
+   "reporting",
+   "framework",
+   "request",
+   "multi"
+  ],
+  "Competitive Strategy and Win/Loss": [
+   "competitive",
+   "analysi",
+   "sale",
+   "gaps",
+   "mortem",
+   "launch"
+  ],
+  "Incident and Outage Response": [
+   "communication",
+   "risk",
+   "churn",
+   "monitoring",
+   "outage",
+   "incident"
+  ]
+ },
+ "n_disagree": 24,
+ "figures": [
+  "outputs/analysis/themes/fig1_theme_by_call_type.png",
+  "outputs/analysis/themes/fig2_theme_by_product_area.png",
+  "outputs/analysis/themes/fig3_tone_by_theme.png"
+ ],
+ "incident_calls": 42,
+ "incident_by_theme": {
+  "Incident and Outage Response": 18,
+  "Commercial Renewals and Retention": 11,
+  "Competitive Strategy and Win/Loss": 4,
+  "Technical Integration and Performance Issues": 3,
+  "Product Adoption, Feedback and Expansion": 3,
+  "Internal Planning and Delivery Cadence": 2,
+  "Billing and Usage Disputes": 1
+ }
+}

@@ -1,0 +1,252 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (46 turns, indices 0 to 45; per_turn needs exactly 46 entries, one per index in order):\n[0] Kevin O'Brien (aegis_staff): Hey Vanessa, good morning! Can you hear me okay?\n[1] Vanessa Cruz (customer): Yes! Hi Kevin, I can hear you perfectly. Good morning — thanks for making time for this.\n[2] Kevin O'Brien (aegis_staff): Of course, of course. I've been looking forward to this one actually. So, uh, how's everything going at Coastal Living? You guys just wrapped up your spring collection launch, right?\n[3] Vanessa Cruz (customer): We did, yeah! It went really well actually. Traffic was way up compared to last year, which is great but also... you know, it puts a lot of pressure on the backend systems. So that's kind of part of why we're talking today.\n[4] Kevin O'Brien (aegis_staff): Yeah, absolutely, that makes total sense. More traffic, more data, more things that need to be protected. So let's dig into that. Before I jump into anything, can you just walk me through where you're at right now with your backup and recovery setup? Like what does that look like today?\n[5] Vanessa Cruz (customer): Sure. So right now we have, um, kind of a patchwork honestly. We've got our e-commerce platform on CloudPrime, we've got some on-prem systems still — legacy stuff from before my time — and we've been using a third-party backup tool that... it does the job but it's not really built for what we're doing at scale now.\n[6] Kevin O'Brien (aegis_staff): Got it. And when you say it's not built for scale, is that more of a performance issue, or is it more around visibility — like you can't see across all your environments from one place?\n[7] Vanessa Cruz (customer): Both, honestly. The visibility is probably the bigger pain point for me personally. My team is going into like three different dashboards to figure out whether a backup job actually completed successfully. And during peak season that's... that's just not sustainable.\n[8] Kevin O'Brien (aegis_staff): Yeah, that's a really common thing we hear, especially from retail customers. The seasonality angle is huge. And that's actually one of the areas where Aegis Protect really shines — you get that single pane of glass across your hybrid environment. So whether it's your CloudPrime workloads or your on-prem stuff, it's all in one place.\n[9] Vanessa Cruz (customer): Yeah, that's what drew me in when I was looking at the documentation. That unified view is — I mean, that alone would save my team probably a few hours a week during busy periods.\n[10] Kevin O'Brien (aegis_staff): Exactly. And it adds up, right? A few hours a week times however many engineers you have touching this stuff... that's real time back. So, okay, tell me more about the environment. How many workloads are we roughly talking about that you'd want to bring under Protect?\n[11] Vanessa Cruz (customer): So we've got around... let me think... probably 40 to 50 workloads total. The core e-commerce platform, our inventory management system, we've got a customer data platform that's really critical, and then some internal tools — HR stuff, finance systems. Those are less urgent but we'd want them covered eventually.\n[12] Kevin O'Brien (aegis_staff): Okay, that's a solid scope. And do you have a sense of total data volume? Rough order of magnitude is fine.\n[13] Vanessa Cruz (customer): We're probably looking at, um, somewhere around 80 to 100 terabytes across everything. With the customer data platform that's the big one — that's where most of it lives.\n[14] Kevin O'Brien (aegis_staff): Perfect, yeah that's very much in our sweet spot. And the customer data platform — is that something where you have specific RTO and RPO requirements? Like from a recovery standpoint, if something went wrong, what does the business need?\n[15] Vanessa Cruz (customer): Great question. So for the CDP specifically we'd want an RPO of no more than an hour, and RTO... ideally under four hours. That's kind of the threshold where it starts impacting our customer experience in a meaningful way.\n[16] Kevin O'Brien (aegis_staff): That's very achievable with Protect. We can actually get you to sub-one-hour RPO on that with continuous backup enabled — it's essentially near-real-time snapshotting. And on the recovery side, with our orchestrated recovery workflows, four hours is very conservative, you'd likely be looking at faster than that in practice.\n[17] Vanessa Cruz (customer): Oh that's — yeah, that's really good to hear. Because honestly, one of my nightmares is a data loss event during like Black Friday or peak sale periods. We can't be down for hours.\n[18] Kevin O'Brien (aegis_staff): Totally understandable. Retail is one of those industries where a few hours of downtime has a direct, measurable revenue impact. It's not abstract. And that's actually something we can help you model out as part of the onboarding — we have a business impact analysis template that a lot of customers find really useful for internal stakeholder conversations.\n[19] Vanessa Cruz (customer): Oh interesting, I'd love that. My CFO always wants to see the numbers tied to risk, so that would be — yeah, that would actually be really helpful for getting full buy-in internally.\n[20] Kevin O'Brien (aegis_staff): Yeah, I'll make sure to include that in the onboarding package. Okay so let's talk about the onboarding itself. Typically for a deployment of your scope — hybrid environment, 40 to 50 workloads — we're looking at a phased approach. We don't just try to flip everything on at once.\n[21] Vanessa Cruz (customer): Good, because I was going to ask about that. My team has bandwidth constraints right now. We just came off the spring launch so everyone's a little fried, and I don't want to dump a massive migration on them all at once.\n[22] Kevin O'Brien (aegis_staff): Totally, yeah, we take that into account. So typically what we'd do is — phase one is your tier-one critical workloads, so in your case that's probably the CDP and your e-commerce platform. We'd get those onboarded first, get your team comfortable with the Protect console, and then phase two we roll out the inventory systems and other business-critical stuff. Phase three is everything else.\n[23] Vanessa Cruz (customer): That structure makes a lot of sense. How long does each phase typically take? And, um, how much of my team's time are we realistically looking at per phase?\n[24] Kevin O'Brien (aegis_staff): So phase one usually runs about two to three weeks. Time commitment from your side is honestly pretty light — you'd have one or two engineers working with my implementation team, and it's more coordination and validation than heavy lifting. We do most of the configuration work.\n[25] Vanessa Cruz (customer): Oh that's less than I expected. I think I was bracing for like a months-long project with lots of engineering hours.\n[26] Kevin O'Brien (aegis_staff): Ha, yeah we get that reaction a lot. We've really tried to streamline the implementation process. We've got automation for a lot of the agent deployment, especially on the CloudPrime side — it connects right into your existing infrastructure without a lot of manual configuration.\n[27] Vanessa Cruz (customer): That's huge. Honestly that was one of my concerns — I didn't want my team spending weeks just getting agents installed everywhere.\n[28] Kevin O'Brien (aegis_staff): Right, and with the on-prem piece it's a little more manual but not dramatically so. We've got a connector that works with most legacy environments — what operating systems are your on-prem servers running?\n[29] Vanessa Cruz (customer): It's a mix. Mostly Windows Server 2019, and then a couple of older Linux boxes — I think they're running CentOS 7. I know, I know, that's a legacy concern but we're working on it.\n[30] Kevin O'Brien (aegis_staff): No, that's fine, we support all of that. CentOS 7 is fully supported so no issues there. I'll just make a note so our implementation team is aware going in.\n[31] Vanessa Cruz (customer): Great. And what about training? Is there like a formal training program for my team, or is it more self-serve documentation?\n[32] Kevin O'Brien (aegis_staff): Both, actually. We have a dedicated onboarding specialist who'll run live sessions with your team — usually two or three sessions covering the console, backup policy configuration, and recovery workflows. And then we have a full knowledge base and video library they can reference on their own time. Most teams feel pretty confident after those live sessions.\n[33] Vanessa Cruz (customer): Perfect. My team learns better in live sessions honestly — they like being able to ask questions in real time. So that's great.\n[34] Kevin O'Brien (aegis_staff): Absolutely. And your onboarding specialist will also be your point of contact for the first 90 days, so if questions come up after the sessions they have someone specific to go to rather than just a generic support queue.\n[35] Vanessa Cruz (customer): Oh I love that. Nothing worse than getting routed through a support ticket system when you're trying to just get a quick answer.\n[36] Kevin O'Brien (aegis_staff): Exactly, yeah. Okay so I want to also just flag — you guys are also going to have access to Aegis Comply, right, as part of your package?\n[37] Vanessa Cruz (customer): Oh yeah, we've been hearing about the v2 launch — that just went GA recently, right? We haven't dug into it yet but it's on my radar.\n[38] Kevin O'Brien (aegis_staff): Yeah, just launched April 7th actually. And given that you're dealing with customer data at scale — payment info presumably — the PCI DSS reporting out of Comply v2 might be worth a separate conversation down the line. Just something to keep in mind.\n[39] Vanessa Cruz (customer): Definitely, yes. PCI compliance is always a headache for us. Let's put that on the list for a follow-up after we get Protect up and running. One thing at a time.\n[40] Kevin O'Brien (aegis_staff): Agreed, absolutely. Okay so I think the next step is I'll send over a formal onboarding plan document — it'll outline the three phases, timelines, resource requirements from your team, and I'll include that business impact analysis template I mentioned. Does early next week work for a kickoff call with the implementation team?\n[41] Vanessa Cruz (customer): Yeah, early next week is great. Tuesday or Wednesday would work best for me. I'll get my two senior engineers looped in — they're the ones who'll be hands-on with this.\n[42] Kevin O'Brien (aegis_staff): Perfect. I'll send a calendar invite for Wednesday with the implementation lead copied in. Vanessa, I'm really excited about this one — I think the Protect deployment is going to make a real difference for your team heading into the summer season.\n[43] Vanessa Cruz (customer): Me too, honestly. This has been one of the more energizing vendor conversations I've had in a while — you actually answered my questions without just throwing a slide deck at me, so... I appreciate that.\n[44] Kevin O'Brien (aegis_staff): Ha! I'll take that as a win. Alright, I'll get everything over to you by end of day tomorrow. Thanks so much for the time today, Vanessa.\n[45] Vanessa Cruz (customer): Thank you Kevin. Looking forward to it. Talk soon!"
+  },
+  "response_text": "{\n  \"call_score\": 4.5,\n  \"customer_score\": 4.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"positive\"},\n    {\"index\": 1, \"label\": \"positive\"},\n    {\"index\": 2, \"label\": \"positive\"},\n    {\"index\": 3, \"label\": \"positive\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"negative\"},\n    {\"index\": 8, \"label\": \"positive\"},\n    {\"index\": 9, \"label\": \"positive\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"positive\"},\n    {\"index\": 17, \"label\": \"positive\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"positive\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"positive\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"positive\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"positive\"},\n    {\"index\": 34, \"label\": \"positive\"},\n    {\"index\": 35, \"label\": \"positive\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"neutral\"},\n    {\"index\": 42, \"label\": \"positive\"},\n    {\"index\": 43, \"label\": \"positive\"},\n    {\"index\": 44, \"label\": \"positive\"},\n    {\"index\": 45, \"label\": \"positive\"}\n  ],\n  \"trajectory\": {\n    \"start\": 4.0,\n    \"end\": 4.5\n  },\n  \"evidence_quote\": \"This has been one of the more energizing vendor conversations I've had in a while — you actually answered my questions\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 4.5,
+    "customer_score": 4.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "positive"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "positive"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "positive"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      },
+      {
+        "index": 44,
+        "label": "positive"
+      },
+      {
+        "index": 45,
+        "label": "positive"
+      }
+    ],
+    "trajectory": {
+      "start": 4.0,
+      "end": 4.5
+    },
+    "evidence_quote": "This has been one of the more energizing vendor conversations I've had in a while — you actually answered my questions",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 786,
+    "prompt_tokens": 5215,
+    "total_tokens": 6001,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00685875,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00685875,
+      "upstream_inference_prompt_cost": 0.00391125,
+      "upstream_inference_completions_cost": 0.0029475
+    }
+  },
+  "latency_s": 5.191,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:48.088874+00:00",
+  "key": "ce82f8792202627203a0568dc3e87f3931170d000eb45334b659f2e870050a18"
+}

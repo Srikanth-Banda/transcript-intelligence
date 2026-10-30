@@ -1,0 +1,31 @@
+meeting_id,date,title,agent,staff_turns,empathy_markers,empathy_rate,customer_score,traj_delta
+01KQDD5172176D02DB51360A,2026-02-03,Support Case #3286 - Vanta Health Systems API Integration Error,Priya Patel,20,4,0.2,2.0,1.0
+01KQ0C1280EDA4E70AAD7C35,2026-02-06,Support Case #9279 - Summit Trust Billing Inquiry,Sarah Chen,20,0,0.0,4.0,1.0
+01KQ9A6BE09D73A9BB5798C7,2026-02-10,Support Case #3615 - Nimbus Platform Custom Report Request,David Kim,18,0,0.0,3.5,0.5
+01KQADC32D89E2B76B698E84,2026-02-14,Support Case #6635 - Nova Retail Group SSO Login Failures,Elena Vasquez,19,5,0.263,2.5,0.5
+01KQBB7C4D4789DB2F3DA9C2,2026-02-18,Support Case #1750 - Vanta Health Systems SIEM Connector Issue,Sarah Chen,24,3,0.125,2.5,0.5
+01KQ1A6B7E81B06F4A13B60D,2026-02-21,Support Case #6977 - Brightpath Commerce Slow Backup Performance,David Kim,18,3,0.167,2.0,0.5
+01KQ9772B2348F500FB09D1E,2026-02-24,Support Case #3677 - Coastal Living Co MFA Token Failures,Elena Vasquez,21,4,0.19,2.0,0.0
+01KQ773D68723289E4A98889,2026-02-27,Support Case #7572 - Brightpath Commerce Invoice Discrepancy,Sarah Chen,26,0,0.0,4.0,0.5
+01KQ3C837D7EF689408DCF95,2026-03-04,Support Case #2638 - Pineridge Systems CloudPrime S3 Backup Connector,Sarah Chen,21,0,0.0,4.0,1.0
+01KQ5F364545B542671FF9CE,2026-03-07,Support Case #3546 - Meridian Capital SCIM Provisioning Request,Sarah Chen,19,0,0.0,4.0,0.5
+01KQEDB92E33CF9945A7F71B,2026-03-10,URGENT: Cobalt Software - Aegis Detect Dashboard Down,David Kim,19,6,0.316,1.5,0.5
+01KQ7BF0D56037FF89DC89B6,2026-03-11,Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing,Elena Vasquez,19,5,0.263,1.5,-0.5
+01KQ2D93184912F0147315E7,2026-03-12,URGENT: Blackridge Investments - Complete Loss of Threat Visibility,Marcus Williams,21,4,0.19,2.0,0.5
+01KQ94C2B8B9B4668F3D3491,2026-03-13,Support Case #6573 - Ridgeline Logistics Detect Data Gaps,Elena Vasquez,24,4,0.167,2.0,0.0
+01KQ325BDEDEE927D2970775,2026-03-14,Support Case #5889 - Ridgeline Logistics Detect Latency Issues,Priya Patel,16,3,0.188,2.5,1.0
+01KQ88B8EAEAA819C26CCBE7,2026-03-15,ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance,Elena Vasquez,18,4,0.222,2.0,0.0
+01KQEDE682B4A8D67C657CF1,2026-03-16,Support Case #3103 - Silverline Brands Detect False Positives After Patch,Sarah Chen,20,2,0.1,2.0,0.0
+01KQ5D47170D4828E89EDE37,2026-03-18,Support Case #7537 - Forge Industries Detect Recovery Confirmation,Elena Vasquez,21,2,0.095,3.5,1.0
+01KQ6A5CEAAFFBE3B0099E75,2026-03-22,Support Case #6539 - Steelpoint Manufacturing LDAP Sync Failures,Marcus Williams,22,4,0.182,2.5,1.0
+01KQ25D8AED944B5D2A9FF60,2026-03-26,Support Case #1514 - Meridian Capital Granular Restore Request,Sarah Chen,19,0,0.0,4.0,0.5
+01KQ5EC1665DCFD7A6B62A59,2026-03-29,Support Case #8749 - Coastal Living Co SAML Certificate Rotation Bug,Elena Vasquez,20,4,0.2,2.0,0.5
+01KQ56786DD1E8A1BF174FDD,2026-04-03,Support Case #1993 - Forge Industries Comply v2 Early Access Question,Elena Vasquez,22,0,0.0,4.5,0.5
+01KQ38FE02AEE5AA5157F042,2026-04-08,Support Case #3296 - Pinnacle Insurance Comply v2 Report Formatting Issue,Marcus Williams,19,1,0.053,3.5,0.0
+01KQ56AA6B60801ABC01AB1C,2026-04-10,Support Case #8179 - Clearwater Medical Overage Charges Dispute,Sarah Chen,23,3,0.13,2.5,0.0
+01KQA7DFCE1285F52192B34B,2026-04-12,Support Case #9856 - Silverline Brands Backup Window Exceeded,David Kim,21,4,0.19,2.5,0.5
+01KQBBF753B44DE677670E6D,2026-04-15,Support Case #6147 - Summit Trust Detect Alert Delays,David Kim,19,3,0.158,2.5,1.5
+01KQB632F1ADC378C42F2C03,2026-04-18,Support Case #7570 - Silverline Brands Comply v2 License Upgrade,David Kim,18,1,0.056,4.0,1.0
+01KQ56D878454E5783DC6D94,2026-04-22,Support Case #3536 - Stratos Cloud LogVault Integration Timeout,David Kim,23,3,0.13,2.0,0.0
+01KQ92EA85FE4C537400227D,2026-04-25,Support Case #8811 - Blackridge Investments Custom Compliance Template,Priya Patel,18,0,0.0,5.0,0.5
+01KQC166F678CBA584AAFF8B,2026-04-27,Support Case #7615 - Crestline Wealth Group Policy Sync Delay,Sarah Chen,20,3,0.15,2.5,0.5

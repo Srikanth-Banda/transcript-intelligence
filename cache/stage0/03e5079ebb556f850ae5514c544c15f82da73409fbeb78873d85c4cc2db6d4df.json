@@ -1,0 +1,77 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 1
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 4 total, 2 from Aegis, 2 from outside Aegis\n\nopening:\nDavid Kim: Alright, I think we've got everyone on now — Gerald, Dana, can you hear us okay?\nGerald Hutchins: Yep, loud and clear, David.\nDana Moretti: Same here, good connection today.\nDavid Kim: Great, and I also wanted to introduce Elena Vasquez, she's a senior support engineer here, she's been really deep in the Comply module so I pulled her in for this one.\nElena Vasquez: Hi everyone, really happy to be on this call — Forge Industries is actually one of the accounts I've been keeping an eye on, so this is a great chance to connect directly.\nGerald Hutchins: Oh great, well we appreciate that, Elena. So yeah, I'm Gerald Hutchins, VP of IT here at Forge, and Dana is our Security Manager, she's really the one in the weeds on this.\nDana Moretti: Yeah, hi — and honestly thank you guys for making time on short notice, I know we submitted the case just yesterday.\nDavid Kim: Of course, that's what we're here for. So let me just pull up case 1993 real quick — okay, so it looks like the question is around Comply v2 and specifically early access. Dana, do you want to just walk us through what you're looking to do?"
+  },
+  "response_text": "{\"label\":\"support\",\"evidence_quote\":\"I know we submitted the case just yesterday.\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"David Kim\",\"side\":\"aegis_staff\"},{\"speaker\":\"Gerald Hutchins\",\"side\":\"customer\"},{\"speaker\":\"Dana Moretti\",\"side\":\"customer\"},{\"speaker\":\"Elena Vasquez\",\"side\":\"aegis_staff\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "I know we submitted the case just yesterday.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "David Kim",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Gerald Hutchins",
+        "side": "customer"
+      },
+      {
+        "speaker": "Dana Moretti",
+        "side": "customer"
+      },
+      {
+        "speaker": "Elena Vasquez",
+        "side": "aegis_staff"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 317,
+    "prompt_tokens": 1831,
+    "total_tokens": 2148,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 172,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0003416,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0003416,
+      "upstream_inference_prompt_cost": 0.0001831,
+      "upstream_inference_completions_cost": 0.0001585
+    }
+  },
+  "latency_s": 1.987,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:35:57.270246+00:00",
+  "key": "03e5079ebb556f850ae5514c544c15f82da73409fbeb78873d85c4cc2db6d4df"
+}

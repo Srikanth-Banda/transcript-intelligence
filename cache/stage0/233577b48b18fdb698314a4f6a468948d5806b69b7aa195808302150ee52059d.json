@@ -1,0 +1,75 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 2,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 2 from Aegis, 1 from outside Aegis\n\nopening:\nRachel Torres: Hey Victor, thanks for making time today — I know your calendar's been pretty packed lately.\nVictor Zheng: Yeah, no worries, it's been a busy quarter but this is — this is on my list, so happy to make it happen.\nRachel Torres: Good, good. So I've also got Sofia Petrov on with me today, she's one of our senior engineers on the Identity side, and I figured having her here would be more useful than me trying to take notes and relay everything back.\nSofia Petrov: Hey Victor, thanks for having us. Really looking forward to hearing what you've been running into.\nVictor Zheng: Hey Sofia, yeah, appreciate you jumping on. Okay so — where do I start. So we've been on Aegis Identity now for, I want to say, about seven months? Maybe closer to eight.\nRachel Torres: Yeah, that tracks, I think you all went live around mid-September last year.\nVictor Zheng: Right, yeah. So overall — look, it's been fine. The SSO integration was pretty smooth once we got through the initial SAML configuration, and the MFA rollout went better than I expected honestly.\nSofia Petrov: That's good to hear. That SAML piece can be... yeah, it can be a little finicky depending on the IdP."
+  },
+  "response_text": "{\n  \"label\": \"external\",\n  \"evidence_quote\": \"So I've also got Sofia Petrov on with me today, she's one of our senior engineers on the Identity side, and I figured having her here would be more useful than me trying to take notes and relay everything back.\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"Rachel Torres\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Victor Zheng\",\n      \"side\": \"customer\"\n    },\n    {\n      \"speaker\": \"Sofia Petrov\",\n      \"side\": \"aegis_staff\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "So I've also got Sofia Petrov on with me today, she's one of our senior engineers on the Identity side, and I figured having her here would be more useful than me trying to take notes and relay everything back.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Rachel Torres",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Victor Zheng",
+        "side": "customer"
+      },
+      {
+        "speaker": "Sofia Petrov",
+        "side": "aegis_staff"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 162,
+    "prompt_tokens": 816,
+    "total_tokens": 978,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0012195,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0012195,
+      "upstream_inference_prompt_cost": 0.000612,
+      "upstream_inference_completions_cost": 0.0006075
+    }
+  },
+  "latency_s": 3.092,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:37:58.751830+00:00",
+  "key": "233577b48b18fdb698314a4f6a468948d5806b69b7aa195808302150ee52059d"
+}

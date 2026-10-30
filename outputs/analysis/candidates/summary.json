@@ -1,0 +1,827 @@
+{
+ "a": {
+  "outage_start": "2026-03-10",
+  "incident_flagged_calls": 42,
+  "flagged_by_type": {
+   "external": 18,
+   "internal": 14,
+   "support": 10
+  },
+  "accounts_with_incident_call": 22,
+  "accounts_total": 32,
+  "accounts_with_calls_before_and_after": 14,
+  "mean_customer_score_before": 3.88,
+  "mean_customer_score_after": 3.4,
+  "accounts_dropped_0_5_or_more": 8,
+  "accounts_improved_0_5_or_more": 3,
+  "touched_n": 9,
+  "touched_mean_delta": -0.89,
+  "untouched_n": 5,
+  "untouched_mean_delta": 0.25,
+  "calls_dated_before_outage": 34,
+  "early_calls_discussing_outage": 6,
+  "early_calls_titles": [
+   "Support Case #3286 - Vanta Health Systems API Integration Error",
+   "Aegis / Coastal Living Co - Onboarding Kickoff",
+   "Aegis / Blackridge Investments - Renewal Discussion",
+   "Aegis / Brightpath Commerce - Detect Module Deployment",
+   "Support Case #6635 - Nova Retail Group SSO Login Failures",
+   "Aegis / Keystone Health - Renewal Planning"
+  ],
+  "weekly": [
+   {
+    "week": "2026-W06",
+    "n": 5,
+    "mean_call_score": 4.0,
+    "incident_share": 0.0
+   },
+   {
+    "week": "2026-W07",
+    "n": 6,
+    "mean_call_score": 3.75,
+    "incident_share": 0.0
+   },
+   {
+    "week": "2026-W08",
+    "n": 7,
+    "mean_call_score": 3.43,
+    "incident_share": 0.0
+   },
+   {
+    "week": "2026-W09",
+    "n": 8,
+    "mean_call_score": 3.75,
+    "incident_share": 0.0
+   },
+   {
+    "week": "2026-W10",
+    "n": 7,
+    "mean_call_score": 4.07,
+    "incident_share": 0.0
+   },
+   {
+    "week": "2026-W11",
+    "n": 13,
+    "mean_call_score": 2.35,
+    "incident_share": 1.0
+   },
+   {
+    "week": "2026-W12",
+    "n": 9,
+    "mean_call_score": 2.83,
+    "incident_share": 0.78
+   },
+   {
+    "week": "2026-W13",
+    "n": 7,
+    "mean_call_score": 3.07,
+    "incident_share": 0.43
+   },
+   {
+    "week": "2026-W14",
+    "n": 6,
+    "mean_call_score": 4.75,
+    "incident_share": 0.17
+   },
+   {
+    "week": "2026-W15",
+    "n": 8,
+    "mean_call_score": 3.56,
+    "incident_share": 0.62
+   },
+   {
+    "week": "2026-W16",
+    "n": 9,
+    "mean_call_score": 3.56,
+    "incident_share": 0.56
+   },
+   {
+    "week": "2026-W17",
+    "n": 12,
+    "mean_call_score": 3.96,
+    "incident_share": 0.5
+   },
+   {
+    "week": "2026-W18",
+    "n": 3,
+    "mean_call_score": 4.0,
+    "incident_share": 0.67
+   }
+  ],
+  "flag_check": {
+   "flagged_with_le1_keyword_hit": 2,
+   "unflagged_with_ge5_keyword_hits": 1,
+   "flagged_weak_titles": [
+    "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+    "Detect Team - Reliability Sprint Retro"
+   ],
+   "unflagged_strong_titles": [
+    "Aegis / Brightpath Commerce - Detect Module Deployment"
+   ]
+  },
+  "type_incident": [
+   {
+    "type": "external",
+    "incident_flag": false,
+    "n": 22,
+    "call": 4.43,
+    "cust": 4.43
+   },
+   {
+    "type": "external",
+    "incident_flag": true,
+    "n": 18,
+    "call": 3.36,
+    "cust": 3.14
+   },
+   {
+    "type": "internal",
+    "incident_flag": false,
+    "n": 16,
+    "call": 3.81,
+    "cust": NaN
+   },
+   {
+    "type": "internal",
+    "incident_flag": true,
+    "n": 14,
+    "call": 3.14,
+    "cust": NaN
+   },
+   {
+    "type": "support",
+    "incident_flag": false,
+    "n": 20,
+    "call": 3.28,
+    "cust": 3.15
+   },
+   {
+    "type": "support",
+    "incident_flag": true,
+    "n": 10,
+    "call": 2.25,
+    "cust": 2.2
+   }
+  ]
+ },
+ "b": {
+  "external_calls": 40,
+  "flagged_ge3": 11,
+  "flagged_ge3_with_provided_churn_signal": 11,
+  "provided_churn_signal_calls": 18,
+  "corr_our_points_vs_provided_churn_moments": 0.66,
+  "corr_customer_score_vs_provided_churn_moments": -0.77,
+  "top_accounts": [
+   {
+    "org": "northstarpharma",
+    "date": "2026-03-12",
+    "title": "Aegis / Northstar Pharma - Urgent: Detect Outage Impact",
+    "our_points": 4,
+    "customer_score": 2.0,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "meridiancapital",
+    "date": "2026-03-14",
+    "title": "Aegis / Meridian Capital - Service Reliability Discussion",
+    "our_points": 4,
+    "customer_score": 2.0,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "helixdata",
+    "date": "2026-03-17",
+    "title": "Aegis / Helix Data - Post-Incident Review",
+    "our_points": 4,
+    "customer_score": 2.0,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "quantumedge",
+    "date": "2026-03-19",
+    "title": "Aegis / Quantum Edge - Renewal Concerns",
+    "our_points": 4,
+    "customer_score": 2.0,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "summittrust",
+    "date": "2026-03-26",
+    "title": "Aegis / Summit Trust - Platform Concerns Discussion",
+    "our_points": 4,
+    "customer_score": 2.0,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "ironworkscorp",
+    "date": "2026-04-14",
+    "title": "Aegis / Ironworks Corp - Vendor Comparison Discussion",
+    "our_points": 4,
+    "customer_score": 2.0,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "novaretail",
+    "date": "2026-03-21",
+    "title": "Aegis / Nova Retail Group - Renewal Discussion",
+    "our_points": 4,
+    "customer_score": 2.5,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   },
+   {
+    "org": "ironcladfinancial",
+    "date": "2026-03-28",
+    "title": "Aegis / Ironclad Financial - Account Recovery Check-in",
+    "our_points": 4,
+    "customer_score": 2.5,
+    "why": "customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage"
+   }
+  ],
+  "renewal_calls_incident_flag": 11,
+  "renewal_calls": 14
+ },
+ "c": {
+  "support_calls": 30,
+  "accounts_with_support": 20,
+  "accounts_with_2plus_support": 9,
+  "calls_from_repeat_accounts": 19,
+  "repeats": [
+   {
+    "org": "silverlinebrands",
+    "support_calls": 3,
+    "titles": [
+     "Support Case #3103 - Silverline Brands Detect False Positives After Patch",
+     "Support Case #9856 - Silverline Brands Backup Window Exceeded",
+     "Support Case #7570 - Silverline Brands Comply v2 License Upgrade"
+    ],
+    "dates": [
+     "2026-03-16",
+     "2026-04-12",
+     "2026-04-18"
+    ],
+    "gaps_days": [
+     27,
+     6
+    ],
+    "areas": [
+     "Detect",
+     "Protect",
+     "Comply"
+    ]
+   },
+   {
+    "org": "vantahealth",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #3286 - Vanta Health Systems API Integration Error",
+     "Support Case #1750 - Vanta Health Systems SIEM Connector Issue"
+    ],
+    "dates": [
+     "2026-02-03",
+     "2026-02-18"
+    ],
+    "gaps_days": [
+     15
+    ],
+    "areas": [
+     "Protect",
+     "Detect"
+    ]
+   },
+   {
+    "org": "summittrust",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #9279 - Summit Trust Billing Inquiry",
+     "Support Case #6147 - Summit Trust Detect Alert Delays"
+    ],
+    "dates": [
+     "2026-02-06",
+     "2026-04-15"
+    ],
+    "gaps_days": [
+     68
+    ],
+    "areas": [
+     "Identity",
+     "Detect"
+    ]
+   },
+   {
+    "org": "brightpathcommerce",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #6977 - Brightpath Commerce Slow Backup Performance",
+     "Support Case #7572 - Brightpath Commerce Invoice Discrepancy"
+    ],
+    "dates": [
+     "2026-02-21",
+     "2026-02-27"
+    ],
+    "gaps_days": [
+     6
+    ],
+    "areas": [
+     "Protect",
+     "Protect"
+    ]
+   },
+   {
+    "org": "coastalliving",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #3677 - Coastal Living Co MFA Token Failures",
+     "Support Case #8749 - Coastal Living Co SAML Certificate Rotation Bug"
+    ],
+    "dates": [
+     "2026-02-24",
+     "2026-03-29"
+    ],
+    "gaps_days": [
+     33
+    ],
+    "areas": [
+     "Identity",
+     "Identity"
+    ]
+   },
+   {
+    "org": "meridiancapital",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #3546 - Meridian Capital SCIM Provisioning Request",
+     "Support Case #1514 - Meridian Capital Granular Restore Request"
+    ],
+    "dates": [
+     "2026-03-07",
+     "2026-03-26"
+    ],
+    "gaps_days": [
+     19
+    ],
+    "areas": [
+     "Identity",
+     "Protect"
+    ]
+   },
+   {
+    "org": "blackridgeinvest",
+    "support_calls": 2,
+    "titles": [
+     "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+     "Support Case #8811 - Blackridge Investments Custom Compliance Template"
+    ],
+    "dates": [
+     "2026-03-12",
+     "2026-04-25"
+    ],
+    "gaps_days": [
+     44
+    ],
+    "areas": [
+     "Detect",
+     "Comply"
+    ]
+   },
+   {
+    "org": "ridgelinelogistics",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #6573 - Ridgeline Logistics Detect Data Gaps",
+     "Support Case #5889 - Ridgeline Logistics Detect Latency Issues"
+    ],
+    "dates": [
+     "2026-03-13",
+     "2026-03-14"
+    ],
+    "gaps_days": [
+     1
+    ],
+    "areas": [
+     "Detect",
+     "Detect"
+    ]
+   },
+   {
+    "org": "forgeindustries",
+    "support_calls": 2,
+    "titles": [
+     "Support Case #7537 - Forge Industries Detect Recovery Confirmation",
+     "Support Case #1993 - Forge Industries Comply v2 Early Access Question"
+    ],
+    "dates": [
+     "2026-03-18",
+     "2026-04-03"
+    ],
+    "gaps_days": [
+     16
+    ],
+    "areas": [
+     "Detect",
+     "Comply"
+    ]
+   }
+  ],
+  "by_area": [
+   {
+    "product_area": "Comply",
+    "n": 5,
+    "mean_customer_score": 4.1,
+    "incident": 0,
+    "handoff": 3
+   },
+   {
+    "product_area": "Detect",
+    "n": 11,
+    "mean_customer_score": 2.18,
+    "incident": 9,
+    "handoff": 11
+   },
+   {
+    "product_area": "Identity",
+    "n": 7,
+    "mean_customer_score": 2.79,
+    "incident": 0,
+    "handoff": 5
+   },
+   {
+    "product_area": "Platform/General",
+    "n": 1,
+    "mean_customer_score": 2.5,
+    "incident": 1,
+    "handoff": 1
+   },
+   {
+    "product_area": "Protect",
+    "n": 6,
+    "mean_customer_score": 3.08,
+    "incident": 0,
+    "handoff": 3
+   }
+  ],
+  "support_calls_with_engineering_handoff_in_provided_actions": 23,
+  "support_calls_incident_flag": 10,
+  "accounts_with_support_and_external": 20,
+  "lowest_customer_score_support": [
+   {
+    "date": "2026-03-10",
+    "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+    "customer_score": 1.5,
+    "product_area": "Detect",
+    "incident_flag": true
+   },
+   {
+    "date": "2026-03-11",
+    "title": "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+    "customer_score": 1.5,
+    "product_area": "Detect",
+    "incident_flag": true
+   },
+   {
+    "date": "2026-02-03",
+    "title": "Support Case #3286 - Vanta Health Systems API Integration Error",
+    "customer_score": 2.0,
+    "product_area": "Protect",
+    "incident_flag": false
+   },
+   {
+    "date": "2026-04-22",
+    "title": "Support Case #3536 - Stratos Cloud LogVault Integration Timeout",
+    "customer_score": 2.0,
+    "product_area": "Detect",
+    "incident_flag": true
+   },
+   {
+    "date": "2026-02-21",
+    "title": "Support Case #6977 - Brightpath Commerce Slow Backup Performance",
+    "customer_score": 2.0,
+    "product_area": "Protect",
+    "incident_flag": false
+   }
+  ]
+ },
+ "d": {
+  "commitment_sentences": 112,
+  "calls_with_commitment": 66,
+  "customer_facing_commitments": 72,
+  "with_a_later_call_same_account": 42,
+  "later_call_within_14_days": 24,
+  "later_call_mentions_followup_language": 25,
+  "provided_action_items_total": 397,
+  "provided_action_items_with_time_phrase": 95,
+  "promise_chain": {
+   "calls_mentioning_remediation_terms": 49,
+   "first_date": "2026-02-05",
+   "after_first": [
+    [
+     "2026-02-07",
+     "Aegis / Blackridge Investments - Renewal Discussion"
+    ],
+    [
+     "2026-02-11",
+     "Aegis / Brightpath Commerce - Detect Module Deployment"
+    ],
+    [
+     "2026-02-16",
+     "Weekly Engineering Standup"
+    ],
+    [
+     "2026-02-26",
+     "SOC 2 Audit Preparation - Internal"
+    ],
+    [
+     "2026-03-02",
+     "Detect Team - Sprint Planning"
+    ],
+    [
+     "2026-03-10",
+     "INCIDENT: Detect Pipeline Failure - War Room"
+    ],
+    [
+     "2026-03-11",
+     "Detect Outage - Escalation Bridge"
+    ]
+   ]
+  },
+  "examples": [
+   {
+    "date": "2026-02-03",
+    "org": "vantahealth",
+    "speaker": "Priya Patel",
+    "sentence": "Okay, good \u2014 that actually helps narrow down the scope. Alright, so to recap what we're doing: I'm escalating to Protect infrastructure right now, we'll initiate manual backup snapshots for your environment within the hour, I'll send you a written incident summary by end of day, and I'll follow up with a root cause and fix timeline within four hours. Does that all sound right?"
+   },
+   {
+    "date": "2026-02-04",
+    "org": "coastalliving",
+    "speaker": "Maria Santos",
+    "sentence": "Love it. So I'm going to send over a formal onboarding project plan document by end of this week \u2014 it'll have the phase timeline, resource requirements, and the kick-off checklist. From your side, I'll need read-only CloudPrime access provisioned for our implementation engineer, and the contact info for whoever on your infra team will be the main technical point of contact."
+   },
+   {
+    "date": "2026-02-04",
+    "org": "coastalliving",
+    "speaker": "Maria Santos",
+    "sentence": "Perfect, Raj, got it. And then we'll schedule that technical discovery call for sometime next week \u2014 does that work with your team's calendar?"
+   },
+   {
+    "date": "2026-02-05",
+    "org": "",
+    "speaker": "Chris Lee",
+    "sentence": "Noted. Anyone else? Okay, I think we're good then. I'll update the board and send a summary to the channel. Standup as usual tomorrow at ten."
+   },
+   {
+    "date": "2026-02-07",
+    "org": "blackridgeinvest",
+    "speaker": "Aisha Johnson",
+    "sentence": "Absolutely, that will be in the proposal. I'm going to have it over to you by end of next week \u2014 is that timeline okay? I want to make sure we have enough time for you to review before your contract expires."
+   },
+   {
+    "date": "2026-02-07",
+    "org": "blackridgeinvest",
+    "speaker": "Aisha Johnson",
+    "sentence": "That means a lot, seriously. Okay, so to recap \u2014 I'll send over the post-mortem documentation today, get you the renewal proposal with the all-four-module bundle pricing and Comply v2 early access included by end of next week, and I'll loop in our solutions team on the Identity deployment scope document. Does that cover everything on your list?"
+   }
+  ]
+ },
+ "e": {
+  "any_competitor_calls": 31,
+  "any_competitor_by_type": {
+   "external": 17,
+   "internal": 10,
+   "support": 4
+  },
+  "any_competitor_incident_share": 0.74,
+  "base_incident_share": 0.42,
+  "any_competitor_by_month": {
+   "2026-02": 6,
+   "2026-03": 16,
+   "2026-04": 9
+  },
+  "calls_by_month": {
+   "2026-02": 26,
+   "2026-03": 36,
+   "2026-04": 38
+  },
+  "competitors": [
+   {
+    "competitor": "SentinelShield",
+    "calls": 22,
+    "by_type": {
+     "external": 10,
+     "internal": 8,
+     "support": 4
+    },
+    "by_month": {
+     "2026-02": 2,
+     "2026-03": 13,
+     "2026-04": 7
+    },
+    "incident_flag_share": 0.82,
+    "customer_raised_mentions": 18,
+    "contexts": {
+     "detection / threat": 21,
+     "reliability / outage": 15,
+     "pricing": 14,
+     "identity / IAM": 11
+    },
+    "mean_call_score": 2.95,
+    "quotes": [
+     {
+      "title": "Competitive Landscape Review",
+      "date": "2026-02-19",
+      "speaker": "Tom Bradley",
+      "quote": "Yeah no, agreed. I got the deck you sent over this morning. Hadn't had a chance to fully go through it but I did skim the section on SentinelShield. That one stood out to me."
+     },
+     {
+      "title": "Competitive Landscape Review",
+      "date": "2026-02-19",
+      "speaker": "Tom Bradley",
+      "quote": "Mm. What's the \u2014 what's the pitch they're running? Like what's SentinelShield leading with?"
+     }
+    ],
+    "orgs": [
+     "atlasprecision",
+     "axiomlabs",
+     "blackridgeinvest",
+     "brightpathcommerce",
+     "cobaltsoftware",
+     "ironcladfinancial",
+     "meridiancapital",
+     "northstarpharma",
+     "novaretail",
+     "pineridge",
+     "quantumedge",
+     "trailheadmkt"
+    ]
+   },
+   {
+    "competitor": "VaultEdge",
+    "calls": 12,
+    "by_type": {
+     "external": 6,
+     "internal": 6
+    },
+    "by_month": {
+     "2026-02": 5,
+     "2026-03": 3,
+     "2026-04": 4
+    },
+    "incident_flag_share": 0.58,
+    "customer_raised_mentions": 7,
+    "contexts": {
+     "detection / threat": 12,
+     "pricing": 10,
+     "backup / restore": 9,
+     "identity / IAM": 6
+    },
+    "mean_call_score": 3.42,
+    "quotes": [
+     {
+      "title": "Aegis / Coastal Living Co - Onboarding Kickoff",
+      "date": "2026-02-04",
+      "speaker": "Vanessa Cruz",
+      "quote": "Yeah, so we looked at a few options \u2014 VaultEdge was on our shortlist for a while, and we did a pretty deep evaluation of CyberNova too, but honestly their backup restore times were just... not great for our use case."
+     },
+     {
+      "title": "Aegis / Bridgeport Health - Compliance Review",
+      "date": "2026-02-13",
+      "speaker": "Evelyn Park",
+      "quote": "Totally. And honestly, one of the things I really appreciate about Aegis Comply versus what we looked at with some other vendors \u2014 I think VaultEdge was one \u2014 is that your framework actually integrates with our cloud environment natively. We're not just uploading PDFs and checking boxes."
+     }
+    ],
+    "orgs": [
+     "axiomlabs",
+     "bridgeporthealth",
+     "coastalliving",
+     "helixdata",
+     "redwoodclinical",
+     "summittrust"
+    ]
+   },
+   {
+    "competitor": "CyberNova",
+    "calls": 8,
+    "by_type": {
+     "internal": 5,
+     "external": 2,
+     "support": 1
+    },
+    "by_month": {
+     "2026-02": 3,
+     "2026-03": 3,
+     "2026-04": 2
+    },
+    "incident_flag_share": 0.62,
+    "customer_raised_mentions": 3,
+    "contexts": {
+     "identity / IAM": 6,
+     "detection / threat": 5,
+     "backup / restore": 4,
+     "reliability / outage": 4
+    },
+    "mean_call_score": 3.25,
+    "quotes": [
+     {
+      "title": "Aegis / Coastal Living Co - Onboarding Kickoff",
+      "date": "2026-02-04",
+      "speaker": "Vanessa Cruz",
+      "quote": "Yeah, so we looked at a few options \u2014 VaultEdge was on our shortlist for a while, and we did a pretty deep evaluation of CyberNova too, but honestly their backup restore times were just... not great for our use case."
+     },
+     {
+      "title": "Aegis / Coastal Living Co - Onboarding Kickoff",
+      "date": "2026-02-04",
+      "speaker": "Maria Santos",
+      "quote": "That's a really common pain point we hear with CyberNova, yeah. Recovery time objectives are huge, especially in retail where downtime during like a peak sales window is just catastrophic."
+     }
+    ],
+    "orgs": [
+     "coastalliving",
+     "northstarpharma",
+     "steelpointmfg"
+    ]
+   },
+   {
+    "competitor": "Fortiguard",
+    "calls": 3,
+    "by_type": {
+     "internal": 2,
+     "external": 1
+    },
+    "by_month": {
+     "2026-02": 1,
+     "2026-04": 2
+    },
+    "incident_flag_share": 0.33,
+    "customer_raised_mentions": 1,
+    "contexts": {
+     "identity / IAM": 4,
+     "pricing": 3,
+     "platform breadth": 3,
+     "detection / threat": 3
+    },
+    "mean_call_score": 3.5,
+    "quotes": [
+     {
+      "title": "Competitive Landscape Review",
+      "date": "2026-02-19",
+      "speaker": "Tom Bradley",
+      "quote": "Okay. And then Fortiguard Pro \u2014 I mean, they're a different category of competitor really, aren't they? Like they're so broad."
+     },
+     {
+      "title": "Competitive Landscape Review",
+      "date": "2026-02-19",
+      "speaker": "Tom Bradley",
+      "quote": "Right, the platform story. Yeah. Okay so if I'm summarizing \u2014 SentinelShield is the most immediate threat in Detect, VaultEdge is one to watch in Protect and potentially Comply, CyberNova is a pricing threat in Identity for mid-market, and Fortiguard is the big incumbent we're differentiating against on simplicity."
+     }
+    ],
+    "orgs": [
+     "ironworkscorp"
+    ]
+   }
+  ]
+ },
+ "f": {
+  "support_calls": 30,
+  "spearman_empathy_rate_vs_traj_delta": -0.19,
+  "spearman_empathy_rate_vs_customer_score": -0.84,
+  "mean_traj_delta": 0.5,
+  "share_calls_customer_tone_improved": 0.73,
+  "by_agent": [
+   {
+    "agent": "David Kim",
+    "calls": 7,
+    "empathy_rate": 0.15,
+    "customer_score": 2.57,
+    "traj_delta": 0.64
+   },
+   {
+    "agent": "Elena Vasquez",
+    "calls": 8,
+    "empathy_rate": 0.18,
+    "customer_score": 2.5,
+    "traj_delta": 0.25
+   },
+   {
+    "agent": "Marcus Williams",
+    "calls": 3,
+    "empathy_rate": 0.14,
+    "customer_score": 2.67,
+    "traj_delta": 0.5
+   },
+   {
+    "agent": "Priya Patel",
+    "calls": 3,
+    "empathy_rate": 0.13,
+    "customer_score": 3.17,
+    "traj_delta": 0.83
+   },
+   {
+    "agent": "Sarah Chen",
+    "calls": 9,
+    "empathy_rate": 0.06,
+    "customer_score": 3.28,
+    "traj_delta": 0.5
+   }
+  ],
+  "calls_with_zero_empathy_markers": 8
+ }
+}

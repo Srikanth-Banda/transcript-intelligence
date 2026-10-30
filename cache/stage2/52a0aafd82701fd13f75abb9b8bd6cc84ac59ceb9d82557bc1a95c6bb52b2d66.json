@@ -1,0 +1,231 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_bakeoff_v0",
+  "model_requested": "anthropic/claude-sonnet-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2,
+    "reasoning_effort": "low"
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence.\n\nScore the TONE of the people on the call, not how serious the topic is. A calm, factual discussion of a serious outage is not negative by itself; frustration, worry, tension, dissatisfaction or threats to leave are. Appreciation, agreement, enthusiasm and relief are positive.\n\nAnchors for the 1 to 5 scale (half steps allowed: 1, 1.5, 2, ... 5):\n- 5: clearly positive. Enthusiasm, praise, satisfaction; no unresolved problem.\n- 4: mostly positive or constructive. Small concerns, resolved or minor.\n- 3: neutral or mixed. Businesslike or factual; positives and negatives roughly balance; concerns raised but handled calmly.\n- 2: mostly negative. Visible frustration, an unresolved problem, tension, escalation, or a stated risk of leaving, but still professional.\n- 1: strongly negative. Anger, a firm threat to leave, severe distress, or the conversation breaking down.\n\nOutput fields:\n- `call_score`: tone of the whole call, all speakers, 1 to 5 in half steps.\n- `customer_score`: tone of the customer-side speakers only, same scale; null if no speaker has side \"customer\".\n- `per_turn`: one entry for EVERY turn, in order, using the turn's index: {\"index\": <int>, \"label\": \"negative\" | \"neutral\" | \"positive\"} by the tone of that turn alone (negative = frustration, concern, tension, dissatisfaction; neutral = factual or procedural; positive = appreciation, agreement, enthusiasm, relief).\n- `trajectory`: {\"start\": <score 1 to 5 of the first third of the turns>, \"end\": <score 1 to 5 of the last third of the turns>}.\n- `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn that most influenced `call_score`. Do not paraphrase.\n- `confidence`: \"low\" | \"medium\" | \"high\".\n\nJudge only from the transcript. Return only JSON:\n{\n  \"call_score\": <number>,\n  \"customer_score\": <number or null>,\n  \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, ...],\n  \"trajectory\": {\"start\": <number>, \"end\": <number>},\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript:\n[0] Sarah Chen (aegis_staff): Hi, this is Sarah Chen calling from Aegis Cloud Security support — am I speaking with Dominic Flores?\n[1] Dominic Flores (customer): Yeah, that's me. Hi Sarah. I've got Michelle Tan on the line too, she's our Security Manager — she's been dealing with this more directly than I have.\n[2] Michelle Tan (customer): Hi Sarah, yeah, I've been the one actually in the platform trying to figure out what's going on.\n[3] Sarah Chen (aegis_staff): Great, hi Michelle, thanks for jumping on. So I pulled up Support Case 3103 before this call — you're seeing a spike in false positives from Aegis Detect after a patch was applied, is that right?\n[4] Dominic Flores (customer): That's correct. And look, I want to be upfront — we're already pretty frustrated. This is the second issue we've had with Detect in, like, the past couple weeks.\n[5] Sarah Chen (aegis_staff): I completely understand, Dominic, and I appreciate you flagging that. Can you walk me through what you're seeing specifically? Like when did it start and what kind of alerts are triggering?\n[6] Michelle Tan (customer): So, um, we applied the agent patch — I think it was version 4.2.1 — on Friday night. Saturday morning I come in and my dashboard is just... lit up. Hundreds of critical alerts.\n[7] Sarah Chen (aegis_staff): Hundreds? Like, what's your normal alert volume on a Saturday?\n[8] Michelle Tan (customer): Maybe fifteen, twenty alerts on a slow day. We're a retail company, we have a lot of endpoints, but our baseline is pretty well established at this point. So going from twenty to, I don't know, I counted over three hundred by 9 AM — that's not normal.\n[9] Dominic Flores (customer): And our on-call person spent the entire morning triaging and every single one of them was a false positive. Every. Single. One. That's hours of wasted time right there.\n[10] Sarah Chen (aegis_staff): Yeah, that's — okay, I hear you, that's a significant operational impact. Michelle, do you know what categories of alerts were triggering? Like was it lateral movement, unusual login patterns, data exfiltration flags, or...?\n[11] Michelle Tan (customer): It was mostly the behavioral anomaly ones. Uh, specifically around process execution — we were getting flagged for what looked like, I think the alert type was something like 'suspicious child process spawning' or something along those lines.\n[12] Sarah Chen (aegis_staff): Okay. And those endpoints — are those your POS systems, back-office servers, or a mix?\n[13] Michelle Tan (customer): Mix, but predominantly back-office. Our inventory management system runs a lot of scheduled jobs on Saturday mornings — restocking workflows, that kind of thing. We've never had issues with those being flagged before.\n[14] Sarah Chen (aegis_staff): Right, right. So the patch may have reset or recalibrated the behavioral baseline thresholds. That's... yeah, that's a known issue we've been tracking with 4.2.1 actually. The patch included updates to the behavioral detection engine and in some environments it's basically starting the learning period over from scratch.\n[15] Dominic Flores (customer): I'm sorry — it's a known issue? Why weren't we notified before we applied it?\n[16] Sarah Chen (aegis_staff): That's a fair point, Dominic, and I'm not going to make excuses for that. The advisory did go out but I think it was posted to the release notes portal and honestly that's not sufficient for an issue of this scope. I'll be flagging that internally.\n[17] Dominic Flores (customer): We shouldn't have to check a portal every time we apply a patch to find out if it's going to break our alerting. We have an account manager, we have a support contract — this should be proactive communication.\n[18] Sarah Chen (aegis_staff): You're absolutely right. And I will make sure that feedback gets escalated after this call. Right now though I want to focus on getting you fixed up — can we do that?\n[19] Michelle Tan (customer): Yeah, okay. Yes. What do we do?\n[20] Sarah Chen (aegis_staff): So there are two things we can do. First, I can push a configuration update to manually restore your previous baseline snapshot — we keep a 30-day history of your tuning profiles, so we can roll back to where you were before the patch. That should stop the flood of false positives within a couple hours of applying it.\n[21] Michelle Tan (customer): Okay, that sounds good. And what's the second thing?\n[22] Sarah Chen (aegis_staff): The second thing is we need to get you on a supervised re-learning period so the engine actually learns your environment properly after the patch — rather than just resetting blind. I'd want to work with you to set some suppression rules for those Saturday batch jobs specifically, so they don't trigger during the relearning window.\n[23] Dominic Flores (customer): How long does the relearning period take? Because we can't have our team babysitting alerts for weeks.\n[24] Sarah Chen (aegis_staff): Typically seven to fourteen days for a retail environment with your endpoint count. But with the suppression rules in place and the baseline restore, you should be back to normal alert volumes pretty much immediately — the relearning just happens in the background.\n[25] Michelle Tan (customer): Okay. And this won't affect our actual threat detection coverage during that window? Because — I mean, we can't just be blind to real threats either.\n[26] Sarah Chen (aegis_staff): No, the signature-based detection stays fully active throughout. The behavioral engine is supplementary — it catches things signatures might miss, but you're not losing your core detection capability. The suppression rules will be scoped really narrowly to those specific process patterns.\n[27] Dominic Flores (customer): Okay. That's — yeah, that's somewhat reassuring. Though I want to say, this is all happening, what, a week after we already had issues with Detect? The outage earlier this month?\n[28] Sarah Chen (aegis_staff): I know. I know, and I won't pretend that's not a rough stretch. We take that seriously.\n[29] Dominic Flores (customer): We're evaluating other vendors at renewal time, Sarah. I want to be transparent about that. This isn't a threat, it's just — we need to be confident in this platform and right now our confidence is shaken.\n[30] Sarah Chen (aegis_staff): I appreciate you being direct with me, Dominic. All I can do right now is make sure we get this fixed correctly today and make sure your account team follows up with you on the bigger picture. That conversation deserves more than a support call.\n[31] Michelle Tan (customer): Agreed. For now, how do we start the baseline restore? Do you need access to something on our end?\n[32] Sarah Chen (aegis_staff): I'll initiate it from our side — I just need you to confirm the tenant ID and which agent group you want me to target first. Do you want to start with the back-office servers since that's where most of the noise is coming from?\n[33] Michelle Tan (customer): Yes, start there. The tenant ID is SLB-0047. And I can stay on the line while you do it if that helps.\n[34] Sarah Chen (aegis_staff): That would be great actually, yeah. Give me just a moment to pull that up... okay, I've got your tenant, I can see the baseline history. Your last stable profile is from March 13th — does that sound right, before the patch?\n[35] Michelle Tan (customer): Yeah, we applied the patch on the 14th. So March 13th would be clean.\n[36] Sarah Chen (aegis_staff): Perfect. Initiating the restore now to the back-office agent group. You should start seeing alert volumes normalize within the next hour or two. I'll send you a follow-up email with the suppression rule recommendations and a write-up of what happened — something you can share with your team.\n[37] Dominic Flores (customer): Okay. And the account manager follow-up you mentioned — can you put that in writing too? I want to make sure it actually happens.\n[38] Sarah Chen (aegis_staff): Absolutely. I'll copy your account manager directly on the case notes so it's documented. Is there anything else pressing before I let you both go?\n[39] Michelle Tan (customer): No, I think that's it for now. We'll keep an eye on the alert volumes. Thanks Sarah — I don't want it to sound like we're not appreciating the help today, we just... we need things to be more stable.\n[40] Sarah Chen (aegis_staff): I hear you, Michelle. Thanks for your patience. I'll get that email over to you within the hour."
+  },
+  "response_text": "{\"call_score\":2.5,\"customer_score\":2.5,\"per_turn\":[{\"index\":0,\"label\":\"neutral\"},{\"index\":1,\"label\":\"neutral\"},{\"index\":2,\"label\":\"neutral\"},{\"index\":3,\"label\":\"neutral\"},{\"index\":4,\"label\":\"negative\"},{\"index\":5,\"label\":\"neutral\"},{\"index\":6,\"label\":\"negative\"},{\"index\":7,\"label\":\"neutral\"},{\"index\":8,\"label\":\"negative\"},{\"index\":9,\"label\":\"negative\"},{\"index\":10,\"label\":\"neutral\"},{\"index\":11,\"label\":\"neutral\"},{\"index\":12,\"label\":\"neutral\"},{\"index\":13,\"label\":\"neutral\"},{\"index\":14,\"label\":\"neutral\"},{\"index\":15,\"label\":\"negative\"},{\"index\":16,\"label\":\"neutral\"},{\"index\":17,\"label\":\"negative\"},{\"index\":18,\"label\":\"neutral\"},{\"index\":19,\"label\":\"neutral\"},{\"index\":20,\"label\":\"neutral\"},{\"index\":21,\"label\":\"positive\"},{\"index\":22,\"label\":\"neutral\"},{\"index\":23,\"label\":\"negative\"},{\"index\":24,\"label\":\"neutral\"},{\"index\":25,\"label\":\"negative\"},{\"index\":26,\"label\":\"neutral\"},{\"index\":27,\"label\":\"negative\"},{\"index\":28,\"label\":\"neutral\"},{\"index\":29,\"label\":\"negative\"},{\"index\":30,\"label\":\"neutral\"},{\"index\":31,\"label\":\"neutral\"},{\"index\":32,\"label\":\"neutral\"},{\"index\":33,\"label\":\"neutral\"},{\"index\":34,\"label\":\"neutral\"},{\"index\":35,\"label\":\"neutral\"},{\"index\":36,\"label\":\"neutral\"},{\"index\":37,\"label\":\"neutral\"},{\"index\":38,\"label\":\"neutral\"},{\"index\":39,\"label\":\"neutral\"},{\"index\":40,\"label\":\"neutral\"}],\"trajectory\":{\"start\":2.5,\"end\":3},\"evidence_quote\":\"We're evaluating other vendors at renewal time, Sarah.\",\"confidence\":\"high\"}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "negative"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "negative"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "negative"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "negative"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "negative"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.5,
+      "end": 3.0
+    },
+    "evidence_quote": "We're evaluating other vendors at renewal time, Sarah.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 692,
+    "prompt_tokens": 4747,
+    "total_tokens": 5439,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.016414,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.016414,
+      "upstream_inference_prompt_cost": 0.009494,
+      "upstream_inference_completions_cost": 0.00692
+    }
+  },
+  "latency_s": 4.129,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-sonnet-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:40:04.819287+00:00",
+  "key": "52a0aafd82701fd13f75abb9b8bd6cc84ac59ceb9d82557bc1a95c6bb52b2d66"
+}

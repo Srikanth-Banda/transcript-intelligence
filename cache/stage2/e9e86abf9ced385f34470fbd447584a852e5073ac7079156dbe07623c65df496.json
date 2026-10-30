@@ -1,0 +1,212 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (36 turns, indices 0 to 35; per_turn needs exactly 36 entries, one per index in order):\n[0] David Kim (aegis_staff): Hi, this is David Kim calling from Aegis Cloud Security support. Am I speaking with Keith Donovan?\n[1] Keith Donovan (customer): Yeah, that's me. Hi David, thanks for calling back.\n[2] David Kim (aegis_staff): Of course, absolutely. So I'm calling in reference to support case number 3615. Looks like you submitted a request around custom reporting in Aegis Comply — is that right?\n[3] Keith Donovan (customer): Yeah, exactly. So we've been using Comply for a few months now and overall it's been fine, but we've run into a pretty specific need that I don't think the platform currently supports, and I wanted to get some clarity on where things stand.\n[4] David Kim (aegis_staff): Sure, yeah, let's dig into it. Can you walk me through what you're trying to accomplish? Like what does the ideal output look like for you?\n[5] Keith Donovan (customer): So right now the reports we're pulling out of Comply are pretty much the standard framework reports, right — you get your SOC 2 summary, your control status, all that. Which is fine. But what we need is the ability to kind of cross-reference controls across multiple frameworks in a single report. So for example, I want to see a control that maps to both SOC 2 and ISO 27001 in the same view, side by side.\n[6] David Kim (aegis_staff): Okay, so a unified cross-framework control mapping report essentially.\n[7] Keith Donovan (customer): Exactly. And ideally exportable, you know, to PDF or CSV or something we can hand off to our auditors without them having to reconcile two separate documents.\n[8] David Kim (aegis_staff): Got it, that makes sense. So currently in Comply you can run reports per framework, but you're right that there's no native cross-framework report builder in the current version. That's — yeah, that's a known gap.\n[9] Keith Donovan (customer): Right, yeah, I kind of figured that was the case. So I guess my question is, is this something that's on the roadmap? And if not, is there a workaround we can use in the meantime?\n[10] David Kim (aegis_staff): Yeah, good question. So let me address the workaround first because that's something I can actually speak to concretely right now. Have you looked at the report export functionality at all? Like the CSV export in particular?\n[11] Keith Donovan (customer): I've used it a little bit, yeah. I mean we've exported the individual framework reports.\n[12] David Kim (aegis_staff): Okay so, um, when you export the control data as CSV, each row does include a control ID field and the framework it belongs to. So technically if you export your SOC 2 data and your ISO 27001 data separately and then join them on the control ID in Excel or whatever tool you're using, you can build a cross-reference that way. It's not elegant, I'll be honest, but it does give you the data.\n[13] Keith Donovan (customer): Yeah, I mean, we've actually been doing something like that already. It's just... it's manual, it's error-prone, and frankly for the volume of controls we're managing it takes one of my team members a few hours every quarter. That's the part I'm trying to get rid of.\n[14] David Kim (aegis_staff): Totally understandable, yeah. That's not a scalable process. So on the roadmap question — I want to be careful not to overpromise here because I'm not on the product side — but I can tell you that custom report building and cross-framework mapping is something that's been flagged as a feature request by multiple customers. I don't have a timeline I can give you officially.\n[15] Keith Donovan (customer): Okay. Do you have any sense of like, is this something that's being actively worked on, or is it more in the backlog category?\n[16] David Kim (aegis_staff): Honestly I don't have visibility into the specific prioritization, and I wouldn't want to guess on that. What I can do is make sure this case gets properly escalated to our product team with the specific use case you've described — the cross-framework mapping, the export requirement, the auditor workflow. That kind of detailed context actually does help when they're doing prioritization.\n[17] Keith Donovan (customer): Sure, yeah, that'd be helpful. I'd also say, I mean, if there's a beta program or any kind of early access thing for new Comply features, we'd be interested in participating. We have a pretty well-defined compliance program here so we can give solid feedback.\n[18] David Kim (aegis_staff): Yeah, that's worth noting. I'll include that in the escalation as well — that Nimbus Platform is interested in early access for Comply feature development. We do have beta programs from time to time so it's definitely worth having that on file.\n[19] Keith Donovan (customer): Great. And just so I understand the process — when you escalate this, what happens from there? Like will I hear back from someone on the product team directly, or does it just go into a queue somewhere?\n[20] David Kim (aegis_staff): So the way it typically works is I'll document the feature request in our internal system and it gets routed to the product management team. They don't usually reach out directly to customers unless they're doing discovery interviews or beta testing, but your account manager — I think that's Sarah Chen on your account — she should be able to give you periodic updates on where things land.\n[21] Keith Donovan (customer): Okay, yeah, I know Sarah. I'll follow up with her too.\n[22] David Kim (aegis_staff): Good, yeah, that's probably the best channel for that kind of visibility. Um, let me also just confirm — are there other frameworks besides SOC 2 and ISO 27001 that you'd want included in this cross-framework report? Just want to make sure I'm capturing the full scope of the request.\n[23] Keith Donovan (customer): Yeah, good question. We're also doing PCI DSS assessments, so ideally PCI would be in there too. Those three — SOC 2, ISO 27001, PCI DSS — those are the ones we're actively reporting against right now.\n[24] David Kim (aegis_staff): Got it. SOC 2, ISO 27001, PCI DSS, cross-framework mapping in a single exportable report. I'll make sure all of that is in the feature request documentation.\n[25] Keith Donovan (customer): Yeah, and I guess the other thing I'd add is just — the format matters a lot. Like if it's just a flat list of controls, that's okay, but what we really want is something that shows the relationship. Like here's a control, here's how it maps in SOC 2, here's the equivalent in ISO, here's the PCI control it relates to. A matrix format basically.\n[26] David Kim (aegis_staff): A control mapping matrix, yeah. That's a useful distinction, I'll note that specifically.\n[27] Keith Donovan (customer): Right. Because I've seen some tools that do cross-framework exports but it's just... three separate lists concatenated, which doesn't really solve the problem.\n[28] David Kim (aegis_staff): Yeah, fair point. Okay so I think I have a pretty complete picture of what you're looking for. Let me just recap to make sure I've got it right — you need a custom report in Aegis Comply that provides a cross-framework control mapping matrix across SOC 2, ISO 27001, and PCI DSS, showing the relationships between equivalent controls, and exportable in PDF or CSV format for use in auditor handoffs. Does that capture it?\n[29] Keith Donovan (customer): Yeah, that's it exactly. You got it.\n[30] David Kim (aegis_staff): Perfect. So here's what I'll do — I'll update the case notes with all of this, escalate it as a formal feature request to the product team with the business context and the specific formatting requirements you described, and I'll flag Nimbus Platform as a candidate for early access. Is there anything else related to this case or anything else in Comply that I can help with while I have you?\n[31] Keith Donovan (customer): Um, not on this particular issue, no. I think that covers it. I guess just... is there a case number I should reference if I want to follow up on this?\n[32] David Kim (aegis_staff): Yeah, it's the same case number — 3615. That'll be the reference for this entire request. And you'll get an email confirmation with the updated case notes once I close out the call documentation today.\n[33] Keith Donovan (customer): Perfect. Alright, appreciate the help David.\n[34] David Kim (aegis_staff): Of course, happy to help. Good luck with the audit cycles, and hopefully we'll have something more concrete for you on the product side before too long. Have a good one.\n[35] Keith Donovan (customer): You too, thanks. Bye."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": 3.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"negative\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"positive\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"positive\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"positive\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 3.5\n  },\n  \"evidence_quote\": \"It's just... it's manual, it's error-prone, and frankly for the volume of controls we're managing it takes one of my team members a few hours\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 3.5
+    },
+    "evidence_quote": "It's just... it's manual, it's error-prone, and frankly for the volume of controls we're managing it takes one of my team members a few hours",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 651,
+    "prompt_tokens": 4618,
+    "total_tokens": 5269,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00590475,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00590475,
+      "upstream_inference_prompt_cost": 0.0034635,
+      "upstream_inference_completions_cost": 0.00244125
+    }
+  },
+  "latency_s": 4.639,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:22:56.029737+00:00",
+  "key": "e9e86abf9ced385f34470fbd447584a852e5073ac7079156dbe07623c65df496"
+}

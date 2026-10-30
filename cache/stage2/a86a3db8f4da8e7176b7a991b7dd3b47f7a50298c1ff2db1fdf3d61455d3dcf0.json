@@ -1,0 +1,228 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (40 turns, indices 0 to 39; per_turn needs exactly 40 entries, one per index in order):\n[0] Chris Lee (aegis_staff): Alright, I think we've got everyone on now — Tom, you there?\n[1] Tom Bradley (aegis_staff): Yeah, I'm here, sorry — had to jump off another call, go ahead.\n[2] Chris Lee (aegis_staff): No worries. Okay, so usual format — let's do a quick status round, then I want to spend some time on the Detect pipeline work and the Comply v2 timeline. Mike, you want to kick us off?\n[3] Mike Romano (aegis_staff): Sure. So on my end, I've been heads down on the event ingestion refactor. We're about sixty percent through the work — the new queue partitioning is done, and I've got a draft PR up for the retry logic. Still need to wire up the dead letter queue handling and then we can start integration testing.\n[4] Chris Lee (aegis_staff): And that's all under the Detect reliability track, right?\n[5] Mike Romano (aegis_staff): Yeah, exactly. It's all scoped to the pipeline work.\n[6] Chris Lee (aegis_staff): Good. Tyler, how about you?\n[7] Tyler Washington (aegis_staff): Um, so I finished up the alert deduplication changes last week — those are merged. Right now I'm picking up the monitoring dashboard tickets that got bumped from last sprint. There's like three or four of them, they're not huge but they've been sitting there for a while.\n[8] Chris Lee (aegis_staff): Yeah those have been in the backlog forever, good to finally get to them. Any blockers?\n[9] Tyler Washington (aegis_staff): Not right now. I might need some time with Mike later this week to ask a few questions about how the ingestion layer works because some of the dashboard stuff pulls from there, but nothing blocking me today.\n[10] Mike Romano (aegis_staff): Yeah that's fine, just ping me, we can do a quick thirty minutes.\n[11] Tyler Washington (aegis_staff): Cool, thanks.\n[12] Chris Lee (aegis_staff): Okay, Tom, anything from your side before we get into the weeds on the pipeline stuff?\n[13] Tom Bradley (aegis_staff): Yeah, a couple things. One — I had a conversation with product Friday and they're asking again about the timeline for the Detect reliability work. They want to know if we're still comfortable with end of March. And two — the Comply v2 launch is tracking for early April, so I want to make sure we haven't over-allocated anyone against Detect to where we can't support any last-minute Comply stuff.\n[14] Chris Lee (aegis_staff): Right, yeah — on the end of March question, I think we're okay but it's tight. Mike, do you want to give your honest read on that?\n[15] Mike Romano (aegis_staff): Honestly? End of March for the core pipeline changes is doable, but that's assuming we don't hit anything weird in integration testing. If the testing surfaces issues — which it might — we're looking at a week or two of buffer that we don't really have. So I'd call it like... sixty-forty we hit the date.\n[16] Tom Bradley (aegis_staff): Okay so not super confident. That's useful to know now rather than in three weeks.\n[17] Mike Romano (aegis_staff): Yeah, I'd rather flag it now. I don't want to sandbag the estimate but I also don't want to commit to something and then miss it.\n[18] Tom Bradley (aegis_staff): I get it. What would it take to move the odds more in our favor? Like is this a resourcing thing or just inherent uncertainty in the work?\n[19] Mike Romano (aegis_staff): Bit of both, honestly. The dead letter queue piece and the circuit breaker pattern — those are well-understood, I'm not worried about them. The part I'm less sure about is how the redundant node setup interacts with our current Kafka config. We haven't fully mapped that out yet.\n[20] Chris Lee (aegis_staff): Could Tyler help spike on the Kafka piece? Is that something he could pick up, or is it too deep in your area?\n[21] Tyler Washington (aegis_staff): I mean, I could take a look at it. I'm not as familiar with our Kafka setup as Mike is, but I've worked with Kafka before. It might take me a bit to get context but I'm not opposed to it.\n[22] Mike Romano (aegis_staff): The risk there is the ramp-up time kind of eats into whatever time savings you'd get. But — if Tyler can do some of the investigation work and document what he finds, that could at least give me clearer inputs so I'm not going in blind. That might actually help.\n[23] Chris Lee (aegis_staff): Okay let's do that. Tyler, can you carve out time this week to start pulling on that thread? Just document what you find, even if it's rough notes — Mike, you can work off that.\n[24] Tyler Washington (aegis_staff): Yeah, works for me.\n[25] Chris Lee (aegis_staff): Good. Tom, does that give you enough to go back to product with, or do they need a harder commitment?\n[26] Tom Bradley (aegis_staff): I'll tell them end of March is still the target but flag that there's some technical uncertainty we're actively working down. I'd rather do that than give them a false sense of confidence. They won't love it but they'll deal with it.\n[27] Chris Lee (aegis_staff): Yeah, that's the right call. Okay — on the Comply v2 resource question, I don't think we have a huge exposure there. The team that's been carrying that work is mostly on the platform side. The main thing I'd watch is if QA needs help in late March, early April — that's where it could bleed over.\n[28] Tom Bradley (aegis_staff): Who's the primary contact on that side, is it still Priya's team?\n[29] Chris Lee (aegis_staff): Yeah, Priya owns it. I've been syncing with her weekly. She hasn't raised any red flags yet — the on-demand reporting piece is apparently in pretty good shape, and the multi-framework stuff for SOC 2, PCI, HIPAA is mostly done. The ISO 27001 mapping was the last thing to come in.\n[30] Tom Bradley (aegis_staff): Okay good. Keep that sync going, and just make sure she knows to flag us early if she needs anything from this team.\n[31] Chris Lee (aegis_staff): Will do. Alright, anything else on Comply before we move on? ... No? Okay. Let me just do a quick check on the sprint board — we've got eight tickets in progress, two in review. The two in review are Tyler's dedup changes — wait, those are merged already.\n[32] Tyler Washington (aegis_staff): Yeah they should show as done, I closed them out Friday.\n[33] Chris Lee (aegis_staff): Board probably just hasn't updated. I'll fix it after this call. Okay so eight in progress, nothing blocking at the moment. Mike, when do you think the PR will be ready for review — the retry logic one?\n[34] Mike Romano (aegis_staff): Probably Wednesday. It's in draft right now, I want to clean it up a bit before I move it to ready. There's some stuff in there I'm not fully happy with yet.\n[35] Chris Lee (aegis_staff): That's fine. I'll plan to take a look Thursday then. Alright, I think that covers everything — Tom, anything before we close out?\n[36] Tom Bradley (aegis_staff): No, I'm good. Good check-in, appreciate the transparency on the timeline stuff. Keep me posted if anything changes.\n[37] Chris Lee (aegis_staff): Will do. Alright everyone, have a good week.\n[38] Mike Romano (aegis_staff): Thanks, you too.\n[39] Tyler Washington (aegis_staff): Yeah, take it easy."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": null,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"positive\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"positive\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 3.5\n  },\n  \"evidence_quote\": \"Good check-in, appreciate the transparency on the timeline stuff. Keep me posted if anything changes.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": null,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 3.5
+    },
+    "evidence_quote": "Good check-in, appreciate the transparency on the timeline stuff. Keep me posted if anything changes.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 688,
+    "prompt_tokens": 4414,
+    "total_tokens": 5102,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0058905,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0058905,
+      "upstream_inference_prompt_cost": 0.0033105,
+      "upstream_inference_completions_cost": 0.00258
+    }
+  },
+  "latency_s": 5.617,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:07.278213+00:00",
+  "key": "a86a3db8f4da8e7176b7a991b7dd3b47f7a50298c1ff2db1fdf3d61455d3dcf0"
+}

@@ -1,0 +1,71 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 2,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nPriya Patel: Hi Paula, thanks for jumping on the call, this is Priya Patel from Aegis support — I'm the team lead on your case, case number 5889.\nPaula Schneider: Yeah, hi Priya. Thanks for getting back to me. I've been waiting on this for — honestly it's been a couple of days now and we're not in a great spot.\nPriya Patel: I completely understand, and I apologize for the delay on our end. I've been reviewing the case notes and I want to make sure I fully understand what you're seeing. Can you walk me through the issue from your perspective?\nPaula Schneider: Sure. So, we're in manufacturing, right, we've got a lot of OT systems, warehouse management, fleet tracking — a pretty broad attack surface. And we rely heavily on Aegis Detect to give us real-time visibility into what's happening across those environments.\nPriya Patel: Right, right.\nPaula Schneider: And starting — I want to say Monday, maybe Sunday night — we started noticing that alerts are coming in with a significant lag. Like we're talking 45 minutes, an hour behind real-time. For threat monitoring that's... that's not acceptable. That's basically useless.\nPriya Patel: Yeah, I hear you, an hour of latency on threat alerts is — that's a serious problem. I'm not going to sugarcoat that.\nPaula Schneider: And what's frustrating is we didn't get any notification from Aegis about a known issue or anything. I had my team spending two days thinking it was something on our side, misconfiguration, network issue — we went through all of it."
+  },
+  "response_text": "{\n  \"label\": \"support\",\n  \"evidence_quote\": \"this is Priya Patel from Aegis support — I'm the team lead on your case, case number 5889.\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"Priya Patel\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Paula Schneider\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "this is Priya Patel from Aegis support — I'm the team lead on your case, case number 5889.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Priya Patel",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Paula Schneider",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 116,
+    "prompt_tokens": 899,
+    "total_tokens": 1015,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00110925,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00110925,
+      "upstream_inference_prompt_cost": 0.00067425,
+      "upstream_inference_completions_cost": 0.000435
+    }
+  },
+  "latency_s": 2.216,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:37:37.762335+00:00",
+  "key": "2ed3eafb99bbdf20e404907e779d2f91c86b3bab26681070ecfc2d31ae636474"
+}

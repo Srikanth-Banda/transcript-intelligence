@@ -1,0 +1,64 @@
+{
+  "stage": "stage1",
+  "prompt_version": "stage1_bakeoff_v0",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 4000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 1,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You label one recorded call at Aegis Cloud Security, a B2B SaaS company that sells these products: Detect (threat detection and monitoring), Comply (compliance reporting, including Comply v2), Identity (SSO, SAML, SCIM, LDAP, MFA, identity management), Protect (data protection), and backup / CloudPrime (backup and restore). You will receive the full transcript as numbered turns, each with speaker, side (customer or aegis_staff) and sentence.\n\nPick exactly one primary theme from this PROVISIONAL list (the theme the call is mostly about):\n1. Outage & incident response\n2. Compliance & audit\n3. Renewal, pricing & billing\n4. Churn & competitive risk\n5. Onboarding & rollout\n6. Identity & access\n7. Product roadmap & planning\n8. Integrations, backup & data\n9. Other / new theme (use only if none of the eight fits; then say what the call is about in `tags`)\n\nRules:\n1. `primary_theme`: copy one theme name exactly as written above.\n2. `tags`: zero, one or two further themes from the same list that also clearly come up (never repeat the primary theme). For \"Other / new theme\" put a short description in tags[0].\n3. `product_area`: the one Aegis product the call is mostly about: \"Detect\", \"Comply\", \"Identity\", \"Protect\", \"Backup\", or \"Platform/General\" when no single product dominates.\n4. `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn of the transcript that best supports the primary theme. Do not paraphrase and do not join text from different turns.\n5. `confidence`: \"high\" if the call is clearly about the primary theme, \"medium\" if two themes compete, \"low\" if it fits poorly.\n6. `taxonomy_version`: always the string \"provisional-bakeoff\".\n7. Judge only from the transcript. Do not guess from names or invent details.\n\nReturn only JSON:\n{\n  \"primary_theme\": \"<theme>\",\n  \"tags\": [\"<theme>\", \"<theme>\"],\n  \"product_area\": \"<product area>\",\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"taxonomy_version\": \"provisional-bakeoff\"\n}",
+    "user": "transcript:\n[0] Chris Lee (aegis_staff): Alright, I think we've got everyone. Let me just pull up the board real quick.\n[1] Ananya Sharma (aegis_staff): Yeah I'm here, just give me one sec, I'm closing out some tabs.\n[2] Chris Lee (aegis_staff): Mike, you on?\n[3] Mike Romano (aegis_staff): Yep, I'm here. Good to go.\n[4] Chris Lee (aegis_staff): Nina, looks like you just joined too, cool. Okay so let's get started, we've got a lot to get through today for sprint twelve.\n[5] Nina Kowalski (aegis_staff): Yeah sorry, my previous call ran over a bit.\n[6] Chris Lee (aegis_staff): No worries, we just started. So, um, first thing — I want to do a quick retro on sprint eleven before we get into planning. Just high level, shouldn't take more than five minutes. Anyone want to kick that off?\n[7] Mike Romano (aegis_staff): I can. So sprint eleven, I think we got through about, what, seven of the nine tickets we committed to? The two that slipped were the alert deduplication work and the pipeline latency investigation. The dedup one slipped because the spec changed midway through, and the pipeline thing just... it's bigger than we scoped it.\n[8] Ananya Sharma (aegis_staff): Yeah the pipeline latency investigation has been sitting in my queue and honestly the more I dig into it the more I think we have a deeper architectural issue with the event ingestion layer. Like it's not just latency, there are some single point of failure concerns I want to flag.\n[9] Chris Lee (aegis_staff): Okay yeah, let's put a pin on that, that's actually on the agenda for today. We'll get to it. What about from a QA perspective, Nina, anything notable from eleven?\n[10] Nina Kowalski (aegis_staff): Uh, a couple things. The test coverage on the new correlation rules was thin, we flagged that but it didn't get addressed before the sprint ended. And there was a regression in the alert severity scoring that we caught late — like day nine of the sprint, which is not great.\n[11] Mike Romano (aegis_staff): Yeah that regression was on me, I merged a config change without running the full suite. That won't happen again.\n[12] Nina Kowalski (aegis_staff): I mean, it happens, but we should probably look at whether we can gate that in CI. Like that shouldn't be a manual discipline thing.\n[13] Ananya Sharma (aegis_staff): Agreed, let's add that as a chore ticket for this sprint. Okay, moving on — let's talk about sprint twelve priorities. Chris, what's coming down from product?\n[14] Chris Lee (aegis_staff): So the big ones from product this sprint are: finishing the alert deduplication feature, continuing the pipeline latency work, and there's a new ask around improving detection rule versioning so customers can roll back rule changes. That last one is, uh, medium priority but product wants it in the next two sprints.\n[15] Mike Romano (aegis_staff): The rule versioning thing, do we have a spec for that yet or are we starting from scratch?\n[16] Chris Lee (aegis_staff): There's a rough doc, I'll share it after this call. It's not fully baked but enough to start scoping.\n[17] Ananya Sharma (aegis_staff): Okay. So my concern is capacity. If we're carrying over two tickets from eleven and adding rule versioning on top of the pipeline work, that's... I don't think we can realistically commit to all of that in one sprint.\n[18] Mike Romano (aegis_staff): Yeah I was going to say the same thing. The pipeline work alone, if we're actually doing it right, is probably a twelve to fifteen point story. And that's if we don't find more stuff buried in there.\n[19] Chris Lee (aegis_staff): What's your current estimate on the deduplication carry-over?\n[20] Mike Romano (aegis_staff): I'd say five points. The spec is stable now, it's just implementation and tests.\n[21] Chris Lee (aegis_staff): Okay so if we're looking at roughly five for dedup, twelve to fifteen for pipeline, and then whatever rule versioning scopes out to — Nina, what does QA bandwidth look like this sprint?\n[22] Nina Kowalski (aegis_staff): So I have the full two weeks but I'm also trying to finalize the regression suite improvements, which I'd really like to not push again. So I can support testing on the dedup work and probably the pipeline work, but if rule versioning lands mid-sprint I'm going to need a heads up.\n[23] Chris Lee (aegis_staff): That's fair. I think the honest thing to do is scope rule versioning as a stretch goal this sprint and make it a primary commitment for sprint thirteen. Product might push back a little but I'd rather set realistic expectations.\n[24] Mike Romano (aegis_staff): I agree with that. And honestly the pipeline work is more important right now. Like if the ingestion layer has the issues Ananya's describing, that's not something we want to defer.\n[25] Chris Lee (aegis_staff): Can you walk us through what you're seeing there, Ananya? Like at least a summary so we can make sure we're scoping it right.\n[26] Ananya Sharma (aegis_staff): Yeah, so basically the event ingestion pipeline right now has... it's all running through a single processing node with no fallback. If that node goes down or gets overwhelmed, we lose event visibility entirely. There's no circuit breaker, no redundancy. I think we need to add redundant processing nodes and probably implement a circuit breaker pattern to prevent cascading failures.\n[27] Chris Lee (aegis_staff): Okay so that's significant. How long has this been the case?\n[28] Ananya Sharma (aegis_staff): Honestly? Probably since the original implementation. It just wasn't a problem when we had lower event volumes but we're growing and it's becoming a real risk.\n[29] Chris Lee (aegis_staff): Alright, yeah that needs to be a primary workstream this sprint. No question. Let's make sure we break that into sub-tasks so it doesn't become one giant blob of work.\n[30] Ananya Sharma (aegis_staff): I was going to suggest that — I can draft the sub-tasks today and share them in the team channel so everyone can review before we finalize the board.\n[31] Chris Lee (aegis_staff): That'd be great. Okay, so to recap: primary commitments are dedup carry-over, pipeline architecture work, and the CI gate improvement Nina flagged. Stretch goal is starting rule versioning. Does that feel right to everyone?\n[32] Mike Romano (aegis_staff): Works for me.\n[33] Nina Kowalski (aegis_staff): Yeah, that's a reasonable scope.\n[34] Ananya Sharma (aegis_staff): Fine by me. I'll get those sub-tasks written up.\n[35] Chris Lee (aegis_staff): Perfect. Okay, anything else before we wrap? We've got about five minutes left.\n[36] Mike Romano (aegis_staff): Just a quick heads up — I'm out Thursday afternoon for a dentist appointment, so if there's anything blocking me I'd want to know by Wednesday.\n[37] Chris Lee (aegis_staff): Noted. Anyone else? Okay, I think we're good then. I'll update the board and send a summary to the channel. Standup as usual tomorrow at ten.\n[38] Nina Kowalski (aegis_staff): Sounds good, thanks everyone.\n[39] Ananya Sharma (aegis_staff): Thanks.\n[40] Mike Romano (aegis_staff): Yep, talk tomorrow."
+  },
+  "response_text": "{\n  \"primary_theme\": \"Product roadmap & planning\",\n  \"tags\": [],\n  \"product_area\": \"Detect\",\n  \"evidence_quote\": \"So the big ones from product this sprint are: finishing the alert deduplication feature, continuing the pipeline latency work, and there's a new ask around improving detection rule versioning so customers can roll back rule changes.\",\n  \"confidence\": \"high\",\n  \"taxonomy_version\": \"provisional-bakeoff\"\n}",
+  "parsed": {
+    "primary_theme": "Product roadmap & planning",
+    "tags": [],
+    "product_area": "Detect",
+    "evidence_quote": "So the big ones from product this sprint are: finishing the alert deduplication feature, continuing the pipeline latency work, and there's a new ask around improving detection rule versioning so customers can roll back rule changes.",
+    "confidence": "high",
+    "taxonomy_version": "provisional-bakeoff"
+  },
+  "usage": {
+    "completion_tokens": 105,
+    "prompt_tokens": 2425,
+    "total_tokens": 2530,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0022125,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0022125,
+      "upstream_inference_prompt_cost": 0.00181875,
+      "upstream_inference_completions_cost": 0.00039375
+    }
+  },
+  "latency_s": 2.238,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:38:18.562942+00:00",
+  "key": "81cc6b9d47b61ed3f2a69df798e4713ad6a6acc4b8445d0d6d138ef452dbd08e"
+}

@@ -1,0 +1,77 @@
+{
+ "calls_with_tag": 79,
+ "calls_with_two_tags": 32,
+ "tag_counts": {
+  "Commercial Renewals and Retention": 27,
+  "Competitive Strategy and Win/Loss": 20,
+  "Product Adoption, Feedback and Expansion": 20,
+  "Incident and Outage Response": 20,
+  "Technical Integration and Performance Issues": 9,
+  "Internal Planning and Delivery Cadence": 9,
+  "Onboarding and Implementation Scoping": 4,
+  "Billing and Usage Disputes": 2
+ },
+ "primary_to_tag": [
+  {
+   "primary": "Incident and Outage Response",
+   "tag": "Commercial Renewals and Retention",
+   "n": 12
+  },
+  {
+   "primary": "Commercial Renewals and Retention",
+   "tag": "Incident and Outage Response",
+   "n": 9
+  },
+  {
+   "primary": "Commercial Renewals and Retention",
+   "tag": "Product Adoption, Feedback and Expansion",
+   "n": 8
+  },
+  {
+   "primary": "Technical Integration and Performance Issues",
+   "tag": "Commercial Renewals and Retention",
+   "n": 7
+  },
+  {
+   "primary": "Incident and Outage Response",
+   "tag": "Competitive Strategy and Win/Loss",
+   "n": 7
+  },
+  {
+   "primary": "Commercial Renewals and Retention",
+   "tag": "Competitive Strategy and Win/Loss",
+   "n": 7
+  },
+  {
+   "primary": "Product Adoption, Feedback and Expansion",
+   "tag": "Internal Planning and Delivery Cadence",
+   "n": 5
+  },
+  {
+   "primary": "Product Adoption, Feedback and Expansion",
+   "tag": "Technical Integration and Performance Issues",
+   "n": 4
+  },
+  {
+   "primary": "Product Adoption, Feedback and Expansion",
+   "tag": "Onboarding and Implementation Scoping",
+   "n": 4
+  },
+  {
+   "primary": "Competitive Strategy and Win/Loss",
+   "tag": "Incident and Outage Response",
+   "n": 4
+  },
+  {
+   "primary": "Internal Planning and Delivery Cadence",
+   "tag": "Product Adoption, Feedback and Expansion",
+   "n": 3
+  },
+  {
+   "primary": "Product Adoption, Feedback and Expansion",
+   "tag": "Commercial Renewals and Retention",
+   "n": 3
+  }
+ ],
+ "tag_equals_primary": 0
+}

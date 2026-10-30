@@ -1,0 +1,232 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (41 turns, indices 0 to 40; per_turn needs exactly 41 entries, one per index in order):\n[0] Tyler Washington (aegis_staff): Okay, I think everyone's on — Diana, Marcus, you both there?\n[1] Diana Reeves (aegis_staff): Yeah I'm here, I've been here for like five minutes actually, I was waiting on the bridge code to work.\n[2] Tyler Washington (aegis_staff): Sorry, yeah the — the conferencing system was being weird, I don't know. Marcus?\n[3] Marcus Williams (aegis_staff): Present. I've got the incident channel pulled up and I'm looking at the logs right now.\n[4] Tyler Washington (aegis_staff): Okay good. So — Diana, before you say anything, I want to give you a status update first so we're all working from the same picture, okay?\n[5] Diana Reeves (aegis_staff): Tyler I have eight customers blowing up my phone right now, so please, go ahead, talk fast.\n[6] Tyler Washington (aegis_staff): Right. So — so the event processing pipeline went down at approximately 2:47 AM this morning. We're seeing a cascading failure that started in the ingestion layer and basically knocked out the entire threat monitoring feed for Detect. Nobody is getting alerts right now.\n[7] Diana Reeves (aegis_staff): Nobody is — okay so you're telling me that every single Detect customer is flying blind right now? Like zero visibility?\n[8] Tyler Washington (aegis_staff): That is correct, yes. Zero event processing, zero alerts going out.\n[9] Diana Reeves (aegis_staff): Tyler, this is — this is really bad. Do you understand how bad this is? We have enterprise customers who have contractual SLA commitments around monitoring uptime.\n[10] Tyler Washington (aegis_staff): I know, Diana, I know. We're — we are working it.\n[11] Marcus Williams (aegis_staff): Can I jump in here? So from a support standpoint, I've already had, uh, eleven tickets come in since about 6 AM when people started getting to work and noticed their dashboards were blank. Hartwell Financial, Crestwood Health, um, Meridian Logistics — all of them are asking for ETAs and I have nothing to give them.\n[12] Diana Reeves (aegis_staff): Okay so Marcus what are you telling them right now? What's the messaging?\n[13] Marcus Williams (aegis_staff): I'm telling them we're aware of a service disruption affecting Detect and that our engineering team is actively investigating. That's... that's basically all I have.\n[14] Diana Reeves (aegis_staff): That is not good enough, that is not — Tyler, can you give me something more concrete? What is the root cause, do we actually know?\n[15] Tyler Washington (aegis_staff): We think — and I want to be careful here because we're still digging — but we think it's a single point of failure in the ingestion layer. Basically one node failed and instead of the load distributing properly it just, uh, it cascaded. Took everything downstream with it.\n[16] Diana Reeves (aegis_staff): A single point of failure? We have a single point of failure in production in a threat monitoring pipeline? How is that even — how did that get through architecture review?\n[17] Tyler Washington (aegis_staff): Diana, I — look, I hear you and honestly I'm asking myself the same question right now but that is a conversation for after we fix it, okay? Can we focus?\n[18] Diana Reeves (aegis_staff): No, I'm sorry, I'm not letting that go because I need to understand this for when I talk to customers. Hartwell's CISO is going to ask me that exact question.\n[19] Tyler Washington (aegis_staff): Then tell him we identified an architectural gap in our event ingestion redundancy and we are remediating it. That's the honest answer and it's all we have right now.\n[20] Diana Reeves (aegis_staff): I need an ETA Tyler. What is your best estimate for restoration?\n[21] Tyler Washington (aegis_staff): Uh — okay so honestly, we're looking at somewhere between four and eight hours to get the pipeline stable again. We need to stand up redundant nodes and we don't want to rush it because if we botch the recovery we could lose event data on top of everything else.\n[22] Diana Reeves (aegis_staff): Four to eight hours. Tyler, it's already been — what, almost four hours since 2:47? So we could be looking at twelve hours total of zero threat monitoring visibility.\n[23] Tyler Washington (aegis_staff): In a worst case scenario, yes. I'm not going to sugarcoat it.\n[24] Marcus Williams (aegis_staff): I've got — okay, I just got another ticket while we've been talking. Crestwood Health is saying they're, quote, evaluating alternative vendors. They're asking about SentinelShield.\n[25] Diana Reeves (aegis_staff): Of course they are. Of course. Marcus, flag that one to me directly, I'm going to call Crestwood's account lead personally.\n[26] Marcus Williams (aegis_staff): Yeah, flagging it now.\n[27] Tyler Washington (aegis_staff): Diana I want to — I want to propose something. Can we do thirty-minute status update emails going out to all affected customers? Marcus coordinates, engineering feeds me the latest, and we keep a consistent message. No more vacuum.\n[28] Diana Reeves (aegis_staff): Yes. Yes, that is the bare minimum we should be doing, why is that not already happening?\n[29] Tyler Washington (aegis_staff): Because we've been triaging the actual technical failure, Diana, we don't have unlimited people here.\n[30] Diana Reeves (aegis_staff): Marcus, can you own the customer comms cadence? I'll draft the first email template right now and get it to you in the next fifteen minutes.\n[31] Marcus Williams (aegis_staff): Yeah, I can do that. Should I loop in the CSMs for their specific accounts or keep it centralized?\n[32] Diana Reeves (aegis_staff): Loop them in but all comms go through you so we don't have five different people saying five different things. One voice.\n[33] Marcus Williams (aegis_staff): Got it.\n[34] Diana Reeves (aegis_staff): Tyler — and I'm asking this seriously, not to be combative — do we need to escalate this to the executive team? Like does Raj need to know about this right now?\n[35] Tyler Washington (aegis_staff): I already pinged Raj at 4 AM. He's aware. He's not on this bridge because we told him we'd update him at noon with status.\n[36] Diana Reeves (aegis_staff): Okay. Okay good. Alright — so Tyler, your team is on remediation, you will feed Marcus updates every thirty minutes, Marcus coordinates customer comms, I'm going to personally call Crestwood and Hartwell in the next hour. Does that — does that cover the immediate next steps?\n[37] Tyler Washington (aegis_staff): That covers it. And Diana — for what it's worth, I'm sorry. This should not have happened and I know that doesn't fix anything but... we are going to get it fixed.\n[38] Diana Reeves (aegis_staff): I know you are. I know. But Tyler, when this is over we are having a very long conversation about redundancy architecture because I cannot — I cannot go back to customers with something like this again. I just can't.\n[39] Tyler Washington (aegis_staff): Agreed. That conversation is going to happen, I promise. Okay — I need to get back to the incident. Marcus, I'll send you the first update by 10:30.\n[40] Marcus Williams (aegis_staff): I'll be watching for it. Alright, let's go."
+  },
+  "response_text": "{\n  \"call_score\": 2.0,\n  \"customer_score\": null,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"negative\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"negative\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"negative\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"negative\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"negative\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"negative\"},\n    {\"index\": 14, \"label\": \"negative\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"negative\"},\n    {\"index\": 17, \"label\": \"negative\"},\n    {\"index\": 18, \"label\": \"negative\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"negative\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"negative\"},\n    {\"index\": 25, \"label\": \"negative\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"negative\"},\n    {\"index\": 29, \"label\": \"negative\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"negative\"},\n    {\"index\": 38, \"label\": \"negative\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 2.0,\n    \"end\": 2.5\n  },\n  \"evidence_quote\": \"A single point of failure? We have a single point of failure in production in a threat monitoring pipeline? How is that even\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.0,
+    "customer_score": null,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "negative"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "negative"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "negative"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "negative"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "negative"
+      },
+      {
+        "index": 17,
+        "label": "negative"
+      },
+      {
+        "index": 18,
+        "label": "negative"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "negative"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "negative"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "negative"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "negative"
+      },
+      {
+        "index": 38,
+        "label": "negative"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.0,
+      "end": 2.5
+    },
+    "evidence_quote": "A single point of failure? We have a single point of failure in production in a threat monitoring pipeline? How is that even",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 710,
+    "prompt_tokens": 4327,
+    "total_tokens": 5037,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00590775,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00590775,
+      "upstream_inference_prompt_cost": 0.00324525,
+      "upstream_inference_completions_cost": 0.0026625
+    }
+  },
+  "latency_s": 4.332,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:39.939410+00:00",
+  "key": "4d49707b291607fdc1e16256b6f94b2235c599d84e20c175fd52dfdddc215942"
+}

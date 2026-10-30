@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.pytest_cache/
+
+.DS_Store
+previous-session.jsonl
+
+# Not for reviewers: presenter prep and the raw dataset (kept locally)
+private/
+dataset/

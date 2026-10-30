@@ -1,0 +1,238 @@
+{
+ "stage": 0,
+ "reviewer": "candidate",
+ "model": "google/gemini-3.8-flash",
+ "prompt": "stage0_v1",
+ "review_tool": "Stage 0 Review Console (blind review default)",
+ "reviewed_at": "2026-10-29T21:04:50.041Z",
+ "n": 15,
+ "agree_with_model": 15,
+ "agree_with_title_rule": 12,
+ "items": [
+  {
+   "itemId": "s0-01KQ1DCC80852AE384C898C9",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ1DCC80852AE384C898C9",
+   "modelAnswer": "external",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "models"
+   ],
+   "reviewedAt": "2026-10-29T21:04:12.635Z",
+   "ruleAnswer": "external",
+   "title": "Aegis / Quantum Edge - Renewal Concerns",
+   "verdict": "external"
+  },
+  {
+   "itemId": "s0-01KQ25D8AED944B5D2A9FF60",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ25D8AED944B5D2A9FF60",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:32.968Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #1514 - Meridian Capital Granular Restore Request",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQ2D93184912F0147315E7",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ2D93184912F0147315E7",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "disagreement"
+   ],
+   "reviewedAt": "2026-10-29T21:02:12.407Z",
+   "ruleAnswer": "external",
+   "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQ351E141926AB7CAB668D",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ351E141926AB7CAB668D",
+   "modelAnswer": "external",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "models"
+   ],
+   "reviewedAt": "2026-10-29T21:04:01.169Z",
+   "ruleAnswer": "external",
+   "title": "Aegis / Northstar Pharma - Urgent: Detect Outage Impact",
+   "verdict": "external"
+  },
+  {
+   "itemId": "s0-01KQ3C837D7EF689408DCF95",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ3C837D7EF689408DCF95",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:37.468Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #2638 - Pineridge Systems CloudPrime S3 Backup Connector",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQ54917E3931712516916D",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ54917E3931712516916D",
+   "modelAnswer": "external",
+   "note": "",
+   "otherAnswer": "external",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:25.474Z",
+   "ruleAnswer": "external",
+   "title": "Aegis / Nimbus Platform - Comply v2 Preview",
+   "verdict": "external"
+  },
+  {
+   "itemId": "s0-01KQ5F364545B542671FF9CE",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ5F364545B542671FF9CE",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:41.071Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #3546 - Meridian Capital SCIM Provisioning Request",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQ7FA71CF70FAFEE4B6251",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ7FA71CF70FAFEE4B6251",
+   "modelAnswer": "external",
+   "note": "",
+   "otherAnswer": "external",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:28.249Z",
+   "ruleAnswer": "external",
+   "title": "Aegis / Nova Retail Group - Renewal Discussion",
+   "verdict": "external"
+  },
+  {
+   "itemId": "s0-01KQ85D10E82A26A8F754FB8",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ85D10E82A26A8F754FB8",
+   "modelAnswer": "external",
+   "note": "",
+   "otherAnswer": "external",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:19.691Z",
+   "ruleAnswer": "external",
+   "title": "Aegis / Bridgeport Health - Compliance Review",
+   "verdict": "external"
+  },
+  {
+   "itemId": "s0-01KQ88B8EAEAA819C26CCBE7",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ88B8EAEAA819C26CCBE7",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "disagreement"
+   ],
+   "reviewedAt": "2026-10-29T20:59:25.760Z",
+   "ruleAnswer": "external",
+   "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQ92EA85FE4C537400227D",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ92EA85FE4C537400227D",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:48.301Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #8811 - Blackridge Investments Custom Compliance Template",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQ9A6BE09D73A9BB5798C7",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQ9A6BE09D73A9BB5798C7",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:44.697Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #3615 - Nimbus Platform Custom Report Request",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQA7DFCE1285F52192B34B",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQA7DFCE1285F52192B34B",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:50.041Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #9856 - Silverline Brands Backup Window Exceeded",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQBBF753B44DE677670E6D",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQBBF753B44DE677670E6D",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "sample"
+   ],
+   "reviewedAt": "2026-10-29T21:04:46.524Z",
+   "ruleAnswer": "support",
+   "title": "Support Case #6147 - Summit Trust Detect Alert Delays",
+   "verdict": "support"
+  },
+  {
+   "itemId": "s0-01KQEDB92E33CF9945A7F71B",
+   "kind": "stage0_calltype",
+   "meetingId": "01KQEDB92E33CF9945A7F71B",
+   "modelAnswer": "support",
+   "note": "",
+   "otherAnswer": "support",
+   "reasons": [
+    "disagreement"
+   ],
+   "reviewedAt": "2026-10-29T21:02:25.075Z",
+   "ruleAnswer": "external",
+   "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+   "verdict": "support"
+  }
+ ]
+}

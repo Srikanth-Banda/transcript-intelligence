@@ -1,0 +1,73 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 2 from Aegis, 1 from outside Aegis\n\nopening:\nRachel Torres: Hey Isaac, can you hear us okay? We just hopped on.\nIsaac Brennan: Yeah, loud and clear. Hey Rachel, hey — is Chris on too?\nChris Lee: I'm here, yeah. Hey Isaac, good to finally catch up again.\nIsaac Brennan: Good to hear from you both. It's been, what, like two months since we've had a proper call?\nRachel Torres: Something like that, yeah. Q1 flew by honestly. But hey, big day — we're officially talking renewal, which is exciting.\nIsaac Brennan: It really is. And honestly I'll say upfront — we're in a good place. Like, I don't think this is going to be a contentious conversation at all.\nRachel Torres: That's always great to hear. I mean, we do try to earn that, so — appreciate you saying it.\nChris Lee: Before we get into the numbers and the terms, Isaac, do you mind if we just do a quick — like, a quick check-in on how things have been running on your end? Just so we're all on the same page."
+  },
+  "response_text": "{\"label\": \"external\", \"evidence_quote\": \"we're officially talking renewal, which is exciting\", \"confidence\": \"high\", \"speaker_sides\": [{\"speaker\": \"Rachel Torres\", \"side\": \"customer\"}, {\"speaker\": \"Isaac Brennan\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Chris Lee\", \"side\": \"customer\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "we're officially talking renewal, which is exciting",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Rachel Torres",
+        "side": "customer"
+      },
+      {
+        "speaker": "Isaac Brennan",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Chris Lee",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 128,
+    "prompt_tokens": 1772,
+    "total_tokens": 1900,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002412,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002412,
+      "upstream_inference_prompt_cost": 0.0001772,
+      "upstream_inference_completions_cost": 6.4e-05
+    }
+  },
+  "latency_s": 1.176,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:27.867666+00:00",
+  "key": "ff126adf3b1095adf11f03a40237f7546ff7439c0f3149a3a51e49caa7903e62"
+}

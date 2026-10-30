@@ -1,0 +1,367 @@
+{
+ "stage": 1,
+ "reviewer": "candidate",
+ "n": 20,
+ "items": [
+  {
+   "area": "Platform/General",
+   "callType": "internal",
+   "incident": false,
+   "itemId": "s1-01KQ1267C6AA7D9B3125FEC8",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ1267C6AA7D9B3125FEC8",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Internal Planning and Delivery Cadence",
+   "title": "SOC 2 Audit Preparation - Internal",
+   "model": {
+    "theme": "Internal Planning and Delivery Cadence",
+    "area": "Platform/General",
+    "incident": false
+   }
+  },
+  {
+   "area": "Identity",
+   "callType": "internal",
+   "incident": false,
+   "itemId": "s1-01KQ31ED026F745FE2A55CCD",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ31ED026F745FE2A55CCD",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Internal Planning and Delivery Cadence",
+   "title": "Identity Team - Q2 Roadmap",
+   "model": {
+    "theme": "Internal Planning and Delivery Cadence",
+    "area": "Identity",
+    "incident": false
+   }
+  },
+  {
+   "area": "Detect",
+   "callType": "internal",
+   "incident": true,
+   "itemId": "s1-01KQ445B1B5B890316C9E300",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ445B1B5B890316C9E300",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Incident and Outage Response",
+   "title": "Weekly Engineering Standup",
+   "model": {
+    "theme": "Incident and Outage Response",
+    "area": "Detect",
+    "incident": false
+   }
+  },
+  {
+   "area": "Platform/General",
+   "callType": "internal",
+   "incident": false,
+   "itemId": "s1-01KQ4529010F423FD9DB40BD",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ4529010F423FD9DB40BD",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Competitive Strategy and Win/Loss",
+   "title": "Win/Loss Analysis - Q1",
+   "model": {
+    "theme": "Competitive Strategy and Win/Loss",
+    "area": "Platform/General",
+    "incident": false
+   }
+  },
+  {
+   "area": "Detect",
+   "callType": "internal",
+   "incident": false,
+   "itemId": "s1-01KQ4EE836687F95080D92AB",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ4EE836687F95080D92AB",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Internal Planning and Delivery Cadence",
+   "title": "Detect Team - Sprint Planning",
+   "model": {
+    "theme": "Internal Planning and Delivery Cadence",
+    "area": "Detect",
+    "incident": false
+   }
+  },
+  {
+   "area": "Comply",
+   "callType": "external",
+   "incident": false,
+   "itemId": "s1-01KQ54917E3931712516916D",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ54917E3931712516916D",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Product Adoption, Feedback and Expansion",
+   "title": "Aegis / Nimbus Platform - Comply v2 Preview",
+   "model": {
+    "theme": "Product Adoption, Feedback and Expansion",
+    "area": "Comply",
+    "incident": false
+   }
+  },
+  {
+   "area": "Identity",
+   "callType": "external",
+   "incident": false,
+   "itemId": "s1-01KQ5AFAE8264DDC0ED2AE7F",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ5AFAE8264DDC0ED2AE7F",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Onboarding and Implementation Scoping",
+   "title": "Aegis / Crestline Wealth - Identity Module Deployment",
+   "model": {
+    "theme": "Onboarding and Implementation Scoping",
+    "area": "Identity",
+    "incident": false
+   }
+  },
+  {
+   "area": "Identity",
+   "callType": "support",
+   "incident": false,
+   "itemId": "s1-01KQ5EC1665DCFD7A6B62A59",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ5EC1665DCFD7A6B62A59",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Technical Integration and Performance Issues",
+   "title": "Support Case #8749 - Coastal Living Co SAML Certificate Rotation Bug",
+   "model": {
+    "theme": "Technical Integration and Performance Issues",
+    "area": "Identity",
+    "incident": false
+   }
+  },
+  {
+   "area": "Protect",
+   "callType": "support",
+   "incident": false,
+   "itemId": "s1-01KQ773D68723289E4A98889",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ773D68723289E4A98889",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Billing and Usage Disputes",
+   "title": "Support Case #7572 - Brightpath Commerce Invoice Discrepancy",
+   "model": {
+    "theme": "Billing and Usage Disputes",
+    "area": "Protect",
+    "incident": false
+   }
+  },
+  {
+   "area": "Detect",
+   "callType": "support",
+   "incident": true,
+   "itemId": "s1-01KQ7BF0D56037FF89DC89B6",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ7BF0D56037FF89DC89B6",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Incident and Outage Response",
+   "title": "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+   "model": {
+    "theme": "Incident and Outage Response",
+    "area": "Detect",
+    "incident": false
+   }
+  },
+  {
+   "area": "Platform/General",
+   "callType": "internal",
+   "incident": false,
+   "itemId": "s1-01KQ7F58A2E07B857C24624D",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ7F58A2E07B857C24624D",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Competitive Strategy and Win/Loss",
+   "title": "Competitive Landscape Review",
+   "model": {
+    "theme": "Competitive Strategy and Win/Loss",
+    "area": "Platform/General",
+    "incident": false
+   }
+  },
+  {
+   "area": "Detect",
+   "callType": "external",
+   "incident": true,
+   "itemId": "s1-01KQ7FA71CF70FAFEE4B6251",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ7FA71CF70FAFEE4B6251",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Commercial Renewals and Retention",
+   "title": "Aegis / Nova Retail Group - Renewal Discussion",
+   "model": {
+    "theme": "Commercial Renewals and Retention",
+    "area": "Platform/General",
+    "incident": false
+   }
+  },
+  {
+   "area": "Comply",
+   "callType": "external",
+   "incident": false,
+   "itemId": "s1-01KQ85D10E82A26A8F754FB8",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ85D10E82A26A8F754FB8",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Product Adoption, Feedback and Expansion",
+   "title": "Aegis / Bridgeport Health - Compliance Review",
+   "model": {
+    "theme": "Product Adoption, Feedback and Expansion",
+    "area": "Comply",
+    "incident": false
+   }
+  },
+  {
+   "area": "Protect",
+   "callType": "external",
+   "incident": false,
+   "itemId": "s1-01KQ9BB82FD97C9607D57E90",
+   "kind": "stage1_theme",
+   "meetingId": "01KQ9BB82FD97C9607D57E90",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Onboarding and Implementation Scoping",
+   "title": "Aegis / Coastal Living Co - Onboarding Kickoff",
+   "model": {
+    "theme": "Onboarding and Implementation Scoping",
+    "area": "Protect",
+    "incident": false
+   }
+  },
+  {
+   "area": "Protect",
+   "callType": "support",
+   "incident": false,
+   "itemId": "s1-01KQA7DFCE1285F52192B34B",
+   "kind": "stage1_theme",
+   "meetingId": "01KQA7DFCE1285F52192B34B",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Technical Integration and Performance Issues",
+   "title": "Support Case #9856 - Silverline Brands Backup Window Exceeded",
+   "model": {
+    "theme": "Technical Integration and Performance Issues",
+    "area": "Protect",
+    "incident": false
+   }
+  },
+  {
+   "area": "Identity",
+   "callType": "support",
+   "incident": false,
+   "itemId": "s1-01KQADC32D89E2B76B698E84",
+   "kind": "stage1_theme",
+   "meetingId": "01KQADC32D89E2B76B698E84",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Technical Integration and Performance Issues",
+   "title": "Support Case #6635 - Nova Retail Group SSO Login Failures",
+   "model": {
+    "theme": "Technical Integration and Performance Issues",
+    "area": "Identity",
+    "incident": false
+   }
+  },
+  {
+   "area": "Platform/General",
+   "callType": "external",
+   "incident": false,
+   "itemId": "s1-01KQAEA50436D047BC39CFC7",
+   "kind": "stage1_theme",
+   "meetingId": "01KQAEA50436D047BC39CFC7",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Commercial Renewals and Retention",
+   "title": "Aegis / Crestline Wealth - Account Review",
+   "model": {
+    "theme": "Commercial Renewals and Retention",
+    "area": "Platform/General",
+    "incident": false
+   }
+  },
+  {
+   "area": "Comply",
+   "callType": "support",
+   "incident": false,
+   "itemId": "s1-01KQB632F1ADC378C42F2C03",
+   "kind": "stage1_theme",
+   "meetingId": "01KQB632F1ADC378C42F2C03",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Billing and Usage Disputes",
+   "title": "Support Case #7570 - Silverline Brands Comply v2 License Upgrade",
+   "model": {
+    "theme": "Billing and Usage Disputes",
+    "area": "Comply",
+    "incident": false
+   }
+  },
+  {
+   "area": "Identity",
+   "callType": "external",
+   "incident": false,
+   "itemId": "s1-01KQC3A2EBC501837E973B16",
+   "kind": "stage1_theme",
+   "meetingId": "01KQC3A2EBC501837E973B16",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Onboarding and Implementation Scoping",
+   "title": "Aegis / Frostbyte AI - Identity Module Setup",
+   "model": {
+    "theme": "Onboarding and Implementation Scoping",
+    "area": "Identity",
+    "incident": false
+   }
+  },
+  {
+   "area": "Detect",
+   "callType": "support",
+   "incident": false,
+   "itemId": "s1-01KQEDE682B4A8D67C657CF1",
+   "kind": "stage1_theme",
+   "meetingId": "01KQEDE682B4A8D67C657CF1",
+   "note": "",
+   "reviewedAt": "2026-10-30T07:30:00.000Z",
+   "submitted": true,
+   "theme": "Technical Integration and Performance Issues",
+   "title": "Support Case #3103 - Silverline Brands Detect False Positives After Patch",
+   "model": {
+    "theme": "Technical Integration and Performance Issues",
+    "area": "Detect",
+    "incident": false
+   }
+  }
+ ]
+}

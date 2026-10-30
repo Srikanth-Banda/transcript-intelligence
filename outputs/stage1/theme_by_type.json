@@ -1,0 +1,50 @@
+{
+  "Other / new theme": {
+    "support": 7,
+    "external": 0,
+    "internal": 12,
+    "total": 19
+  },
+  "Compliance Product Adoption and Expansion": {
+    "support": 3,
+    "external": 9,
+    "internal": 5,
+    "total": 17
+  },
+  "Commercial Renewals and Retention": {
+    "support": 0,
+    "external": 20,
+    "internal": 1,
+    "total": 21
+  },
+  "Customer Implementation and Architecture Scoping": {
+    "support": 0,
+    "external": 7,
+    "internal": 0,
+    "total": 7
+  },
+  "Detection Alert Tuning and Optimization": {
+    "support": 1,
+    "external": 2,
+    "internal": 0,
+    "total": 3
+  },
+  "Pipeline Outage Technical Remediation": {
+    "support": 8,
+    "external": 0,
+    "internal": 8,
+    "total": 16
+  },
+  "Backup Performance and Scalability": {
+    "support": 5,
+    "external": 0,
+    "internal": 2,
+    "total": 7
+  },
+  "Identity Authentication and Directory Provisioning": {
+    "support": 6,
+    "external": 2,
+    "internal": 2,
+    "total": 10
+  }
+}

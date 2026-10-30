@@ -1,0 +1,288 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (55 turns, indices 0 to 54; per_turn needs exactly 55 entries, one per index in order):\n[0] Lisa Park (aegis_staff): Good morning Raymond, thanks so much for making time for us today — I know your calendar's been absolutely packed lately.\n[1] Raymond Burke (customer): Ha, yeah no kidding, it has been a wild couple of weeks but honestly this is one of the calls I was actually looking forward to, so here we are.\n[2] Lisa Park (aegis_staff): That's great to hear! And Raymond, I don't think you've met Aisha yet — she's going to be your dedicated Customer Success Manager throughout the onboarding process, so I wanted to bring her in today.\n[3] Aisha Johnson (aegis_staff): Hi Raymond, really excited to be working with you and the Vanta Health team — I've done a bit of reading up on your organization and I think we have a lot of good stuff to dig into today.\n[4] Raymond Burke (customer): Aisha, great to meet you, and yeah I'm glad to have a dedicated point of contact because honestly that was one of the things that sold us — knowing we'd have someone in our corner rather than just, you know, opening a ticket and hoping for the best.\n[5] Aisha Johnson (aegis_staff): Absolutely, that's exactly the experience we want to build here, and we'll make sure you always have a direct line to me for anything that comes up.\n[6] Lisa Park (aegis_staff): So Raymond, just to set the stage for today — the goal of this workshop is really to dig into your backup strategy, understand your current environment at Vanta Health, and start mapping out how Aegis Protect can fit into what you're already doing, does that sound right to you?\n[7] Raymond Burke (customer): Yeah that's exactly right, and I'll be honest, backup and recovery has been kind of a sore subject for us internally for a while now, so I'm really hoping we can come out of this with a clearer picture of where we're headed.\n[8] Aisha Johnson (aegis_staff): Tell me more about that — what's been the pain point on the backup side specifically?\n[9] Raymond Burke (customer): So, um, a big part of it is that we're running a pretty hybrid environment right now — we've got on-prem systems that are still housing a lot of our legacy EHR data, and then we've been migrating chunks of workloads to CloudPrime over the past eighteen months or so, and the backup story across those two worlds has just been... fragmented, I guess is the word.\n[10] Aisha Johnson (aegis_staff): Yeah that's actually one of the most common things we hear from healthcare organizations specifically, because you've got all this legacy clinical data that you can't just lift and shift overnight, and then you're also trying to modernize at the same time.\n[11] Raymond Burke (customer): Exactly, and on top of that we've got HIPAA requirements hanging over everything, so every backup decision also has to go through a compliance lens which slows things down even more.\n[12] Lisa Park (aegis_staff): Right, and that's something Aegis Protect is built to handle — the encryption at rest and in transit is all HIPAA-aligned out of the box, and we can talk through how that maps to your specific data classification policies if you want to get into that.\n[13] Raymond Burke (customer): Yes, that is something I definitely want to get into, but maybe let me give you a bit more context first on what our environment actually looks like.\n[14] Aisha Johnson (aegis_staff): Please, yes, go ahead.\n[15] Raymond Burke (customer): So we've got roughly four hundred and fifty virtual machines across our on-prem data centers — two locations, one in Chicago, one in Denver — and then we've got a growing CloudPrime footprint, probably around eighty EC2 instances right now with RDS databases, and we're also using some S3 for unstructured data, imaging files mostly, which in healthcare as you can imagine is enormous.\n[16] Aisha Johnson (aegis_staff): Yeah, medical imaging data is no joke in terms of volume, are we talking DICOM files primarily?\n[17] Raymond Burke (customer): DICOM, yeah, and we've got somewhere in the range of two hundred terabytes of imaging data sitting in S3 right now and it's growing, uh, I want to say we're adding maybe fifteen to twenty terabytes a month at this point.\n[18] Aisha Johnson (aegis_staff): Okay, that's really helpful context — so when you think about recovery objectives, what does your current RTO and RPO look like for your most critical systems, like your EHR for example?\n[19] Raymond Burke (customer): So this is actually where it gets a little embarrassing — our documented RTO for the EHR is four hours, RPO is one hour, but I will tell you candidly that we have never actually tested a full restore at that scale and I have very low confidence that we'd hit those numbers with our current tooling.\n[20] Lisa Park (aegis_staff): I really appreciate you being upfront about that Raymond because that is honestly more common than people admit, and the good news is that's exactly the kind of thing we can help you get to a place of actual confidence on.\n[21] Raymond Burke (customer): Yeah and that's, that's really what I want — I want to be able to walk into my CISO's office and say look, we have tested this, we know it works, here's the evidence, rather than just hoping we never have to find out.\n[22] Aisha Johnson (aegis_staff): So Aegis Protect has an automated recovery testing feature — essentially it can spin up isolated sandbox environments and run restore validation on a scheduled basis, and you get reports that show you actual recovery time metrics against your defined objectives, which is something your CISO is going to love.\n[23] Raymond Burke (customer): Wait, it actually runs the test automatically? Like I don't have to schedule a maintenance window and have my team babysit it?\n[24] Aisha Johnson (aegis_staff): That's right — you configure the schedule, define the recovery objectives, and the platform handles the orchestration, and then you get a report in your dashboard with pass/fail status and the actual measured RTOs.\n[25] Raymond Burke (customer): Okay that is genuinely exciting because our current process for even attempting a restore test is like a whole weekend project that nobody wants to volunteer for.\n[26] Lisa Park (aegis_staff): Ha, yeah I have heard that from so many customers, the restore test that never happens because it's too painful to run.\n[27] Raymond Burke (customer): Exactly, so let's talk about the hybrid piece because that's maybe my biggest concern — can Aegis Protect actually manage backups across the on-prem VMware environment and CloudPrime from a single pane of glass?\n[28] Aisha Johnson (aegis_staff): Yes, that's a core capability — there's a lightweight agent that deploys to your on-prem hosts and it feeds into the same Aegis Protect console where you're managing your CloudPrime workloads, so you get unified visibility, unified policy management, and unified reporting all in one place.\n[29] Raymond Burke (customer): And for the VMware side specifically, does it do image-level backups or are we talking agent-based on each VM?\n[30] Aisha Johnson (aegis_staff): Image-level via the vSphere APIs, so it's agentless on the individual VMs — the host agent handles the snapshots and change block tracking, which also means your backup windows are significantly shorter because you're only capturing deltas after the initial full.\n[31] Raymond Burke (customer): Okay that's good, our current solution requires agents on every VM and it is — it is a mess, especially when VMs get spun up and someone forgets to install the agent and suddenly that workload has no backup coverage and we don't find out until there's a problem.\n[32] Lisa Park (aegis_staff): Yeah, the coverage gap problem is real and it's actually something Aegis Protect has built-in alerting for — if a new VM comes online and isn't associated with a backup policy within a configurable time window, you get an alert, so nothing falls through the cracks.\n[33] Raymond Burke (customer): That alone is worth a lot to me, honestly, because I've had conversations with my team where we realized post-incident that something critical wasn't being backed up and it's just... not a fun conversation.\n[34] Aisha Johnson (aegis_staff): Completely understandable, and I think as we get into the implementation planning you're going to find a lot of these workflow gaps just kind of close naturally as part of how the platform is designed.\n[35] Raymond Burke (customer): I want to also ask about the retention side — we have some regulatory requirements around how long certain patient data backups need to be retained, and it varies by data type, so I need something that can handle tiered retention policies.\n[36] Aisha Johnson (aegis_staff): Yes, Aegis Protect supports granular retention policies at the workload level, so you can have different retention schedules for different backup sets — you might have your EHR on a seven year retention for compliance while something like a dev environment is on thirty days, and all of that is managed centrally.\n[37] Raymond Burke (customer): Seven years is actually exactly what we need for our clinical records under state regulations, so that's great to hear.\n[38] Lisa Park (aegis_staff): And all of that archived data is encrypted with keys that you control — we support bring your own key if your compliance posture requires that level of control.\n[39] Raymond Burke (customer): BYOK support is something our security team is going to ask about for sure, so good to have that in my back pocket.\n[40] Aisha Johnson (aegis_staff): Okay so let me just kind of summarize where I think we are and then we can talk about next steps — Raymond, it sounds like your primary priorities are getting unified backup coverage across hybrid, getting to tested and documented RTOs you can actually stand behind, handling tiered retention for compliance, and making sure the HIPAA encryption requirements are covered, does that feel right?\n[41] Raymond Burke (customer): Yeah that's a really good summary, and I'd add one more which is just overall visibility — I want to know at any given moment what is backed up, when was the last successful backup, what's the status, without having to dig through multiple tools.\n[42] Lisa Park (aegis_staff): Love that addition, and the Aegis Protect dashboard is very much built around that operational visibility use case, we can actually do a deeper demo of the dashboard UI in our next session if that would be helpful.\n[43] Raymond Burke (customer): Yes, absolutely, and can we also get into the implementation timeline? I want to understand what the rollout looks like and what we need from our side to make it go smoothly.\n[44] Aisha Johnson (aegis_staff): Definitely — what I'll do is put together a proposed implementation plan based on everything we've discussed today, I'm thinking a phased approach where we start with your CloudPrime workloads since those are newer and probably faster to onboard, and then tackle the on-prem VMware environment in phase two, does that logic make sense?\n[45] Raymond Burke (customer): Yeah that makes a lot of sense, get some wins under our belt on the cloud side and then work through the more complex on-prem piece.\n[46] Aisha Johnson (aegis_staff): Exactly, and I'll also include some pre-work items for your team — things like network access requirements, vSphere API credentials, IAM roles on the CloudPrime side — so you're not surprised by any dependencies when we kick off.\n[47] Raymond Burke (customer): That is really appreciated, the checklist approach is helpful because I can distribute that to my team and we can start getting stuff lined up in parallel.\n[48] Lisa Park (aegis_staff): Raymond this has been such a great conversation, I feel like we've got a really solid foundation to build from — is there anything else you want to make sure we covered before we wrap up?\n[49] Raymond Burke (customer): I think we got what I needed for today, honestly more than I expected — I'm going to loop in my infrastructure lead for the next session so she can dig into the technical details on the VMware integration side.\n[50] Aisha Johnson (aegis_staff): Perfect, yes please bring her in, the more technical context we have the better the implementation plan will be.\n[51] Lisa Park (aegis_staff): Alright, I'll get a follow-up invite on the calendar for next week, I'll send over the implementation plan draft and the dashboard demo agenda before then so you and your team can review ahead of time.\n[52] Raymond Burke (customer): Sounds great, I'm really looking forward to it — thanks Lisa, thanks Aisha, this was a really productive session.\n[53] Aisha Johnson (aegis_staff): Thank you Raymond, we're really excited to be working with Vanta Health on this, talk soon!\n[54] Lisa Park (aegis_staff): Take care Raymond, we'll be in touch!"
+  },
+  "response_text": "{\n  \"call_score\": 4.5,\n  \"customer_score\": 4.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"positive\"},\n    {\"index\": 1, \"label\": \"positive\"},\n    {\"index\": 2, \"label\": \"positive\"},\n    {\"index\": 3, \"label\": \"positive\"},\n    {\"index\": 4, \"label\": \"positive\"},\n    {\"index\": 5, \"label\": \"positive\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"positive\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"positive\"},\n    {\"index\": 23, \"label\": \"positive\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"positive\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"positive\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"positive\"},\n    {\"index\": 31, \"label\": \"positive\"},\n    {\"index\": 32, \"label\": \"positive\"},\n    {\"index\": 33, \"label\": \"positive\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"positive\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"positive\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"neutral\"},\n    {\"index\": 42, \"label\": \"positive\"},\n    {\"index\": 43, \"label\": \"neutral\"},\n    {\"index\": 44, \"label\": \"neutral\"},\n    {\"index\": 45, \"label\": \"positive\"},\n    {\"index\": 46, \"label\": \"neutral\"},\n    {\"index\": 47, \"label\": \"positive\"},\n    {\"index\": 48, \"label\": \"positive\"},\n    {\"index\": 49, \"label\": \"positive\"},\n    {\"index\": 50, \"label\": \"positive\"},\n    {\"index\": 51, \"label\": \"neutral\"},\n    {\"index\": 52, \"label\": \"positive\"},\n    {\"index\": 53, \"label\": \"positive\"},\n    {\"index\": 54, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 4.0,\n    \"end\": 4.5\n  },\n  \"evidence_quote\": \"Okay that is genuinely exciting because our current process for even attempting a restore test is like a whole weekend project that nobody wants to volunteer for.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 4.5,
+    "customer_score": 4.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "positive"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      },
+      {
+        "index": 45,
+        "label": "positive"
+      },
+      {
+        "index": 46,
+        "label": "neutral"
+      },
+      {
+        "index": 47,
+        "label": "positive"
+      },
+      {
+        "index": 48,
+        "label": "positive"
+      },
+      {
+        "index": 49,
+        "label": "positive"
+      },
+      {
+        "index": 50,
+        "label": "positive"
+      },
+      {
+        "index": 51,
+        "label": "neutral"
+      },
+      {
+        "index": 52,
+        "label": "positive"
+      },
+      {
+        "index": 53,
+        "label": "positive"
+      },
+      {
+        "index": 54,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 4.0,
+      "end": 4.5
+    },
+    "evidence_quote": "Okay that is genuinely exciting because our current process for even attempting a restore test is like a whole weekend project that nobody wants to volunteer for.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 925,
+    "prompt_tokens": 5458,
+    "total_tokens": 6383,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00756225,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00756225,
+      "upstream_inference_prompt_cost": 0.0040935,
+      "upstream_inference_completions_cost": 0.00346875
+    }
+  },
+  "latency_s": 6.987,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:27.345926+00:00",
+  "key": "f01ce162164ea1e1636b49bdc3040bcc6828a0ee270abbae601e14149424c3fb"
+}

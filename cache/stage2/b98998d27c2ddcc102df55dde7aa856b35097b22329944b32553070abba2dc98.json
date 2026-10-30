@@ -1,0 +1,228 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (40 turns, indices 0 to 39; per_turn needs exactly 40 entries, one per index in order):\n[0] David Kim (aegis_staff): Hi, thanks for calling Aegis Cloud Security support, this is David Kim. Can I get the name of the account holder I'm speaking with today?\n[1] Michelle Tan (customer): Hi David, yeah, this is Michelle Tan, I'm the Security Manager over at Silverline Brands. I've got our IT Director Dominic Flores on with me as well.\n[2] Dominic Flores (customer): Hey David, Dominic here.\n[3] David Kim (aegis_staff): Great, hey Michelle, hey Dominic. So I'm pulling up the account now — this is in reference to support case number 7570, is that right? The Comply v2 license upgrade question?\n[4] Michelle Tan (customer): Yeah, that's the one. So we submitted the case on, uh, I think Wednesday? And basically the issue is we upgraded to Comply v2 when it launched on the seventh and we're seeing a billing discrepancy that we can't quite figure out.\n[5] David Kim (aegis_staff): Okay, got it. And just to make sure I have the full picture — you're saying the charge you're seeing doesn't match what you expected from the v2 upgrade pricing?\n[6] Michelle Tan (customer): Exactly. So, we were on the standard Comply tier, and when the v2 upgrade was announced, the pricing documentation we received said the upgrade would be prorated for the remainder of the billing cycle. But what hit our invoice on, I think it was April 14th, looks like a full month charge.\n[7] Dominic Flores (customer): Yeah, and I'll just add — this isn't, like, a massive dollar amount difference, but from an accounting standpoint we need the invoices to match what was agreed, so it's kind of a compliance thing internally for us. No pun intended.\n[8] David Kim (aegis_staff): Ha, right, no pun intended. No, that makes total sense, I understand. Okay so let me pull up the billing records here. Give me just a second.\n[9] Michelle Tan (customer): Sure, take your time.\n[10] David Kim (aegis_staff): Alright so I'm looking at your account. Silverline Brands, you're on an annual contract, billing cycle runs the first of each month. And I can see the Comply v2 upgrade was activated on April 7th. And then there's an invoice generated on April 14th... okay yeah, I see what you're describing.\n[11] Michelle Tan (customer): So it does look like a full month was charged?\n[12] David Kim (aegis_staff): It does appear that way on the invoice, yeah. So what I'm seeing is the system generated the differential charge — so the difference between your standard Comply tier and the v2 tier — but it looks like it didn't apply the proration correctly. It calculated from April 1st instead of April 7th.\n[13] Dominic Flores (customer): Right, so we're being charged for six days we hadn't even activated v2 yet.\n[14] David Kim (aegis_staff): That's correct, yeah. So the proration should have started on the 7th, which would be... 24 days out of 30, so the charge should be 80 percent of the monthly differential, not the full amount.\n[15] Michelle Tan (customer): Yeah, that's what we calculated too. The difference comes out to — I have it written down here — it's about $340 that was overbilled.\n[16] David Kim (aegis_staff): Okay, let me verify that against what I'm seeing on my end. So the monthly differential for Comply v2 versus the standard tier on your contract is... $1,275 per month. 80 percent of that would be $1,020, and it looks like you were charged $1,275. So yeah, the overbilled amount would be $255.\n[17] Michelle Tan (customer): Hmm, we had $340. Let me — Dominic, do you have the spreadsheet handy?\n[18] Dominic Flores (customer): Yeah, give me a sec. I'm looking at it... okay so we were calculating 6 days out of 28 days because April has 30 days, so we did... wait, no. Yeah we might have used the wrong number of days. We put 28.\n[19] David Kim (aegis_staff): Yeah that'll do it. Our billing system uses 30 days as the standard month for proration purposes regardless of the actual calendar month, so the correct figure should be $255. I can show you the calculation breakdown if that helps for your records.\n[20] Michelle Tan (customer): Yeah that would actually be great, if you can send that over via the case that would be helpful for us when we go back to our finance team.\n[21] David Kim (aegis_staff): Absolutely, I'll attach that to case 7570. So the next step here — I'm going to flag this for our billing team to issue a credit of $255 to your account. That would be applied to your next invoice, which I believe would go out May 1st.\n[22] Dominic Flores (customer): Okay. And is there any kind of confirmation we'll get on the credit, like a separate notification or will it just show up on the May invoice?\n[23] David Kim (aegis_staff): So typically what happens is you'll get an email confirmation from our billing team within one to two business days acknowledging the credit, and then yes it'll also appear as a line item on your May invoice as a credit applied. You should be able to see both.\n[24] Michelle Tan (customer): Okay good, that works for us. And just out of curiosity, is this a known issue with the v2 upgrade billing? Like should we expect this to self-correct going forward or...?\n[25] David Kim (aegis_staff): That's a fair question. I'm actually going to make a note in the case to escalate to our billing systems team because if this proration miscalculation happened on your account, it's possible other customers who upgraded on April 7th may have the same issue. So it's worth them taking a look.\n[26] Dominic Flores (customer): Yeah, that makes sense. We're definitely not the only ones who upgraded on launch day.\n[27] David Kim (aegis_staff): Right, exactly. So I'll flag that internally. And for your account specifically, from May 1st onward you should be on the correct recurring rate for v2, so this should be a one-time correction.\n[28] Michelle Tan (customer): Okay. And while I have you — this is a little separate from the billing thing — but we've been using Comply v2 for a couple of weeks now and the on-demand SOC 2 reporting is working well for us. We ran our first report last week.\n[29] David Kim (aegis_staff): Oh good, glad to hear that. That's one of the bigger additions in v2, so it's good to know it's working well for you.\n[30] Michelle Tan (customer): Yeah we're a retail company so PCI DSS is obviously important for us and we're going to be running that report soon too. Just wanted to make sure the license covers all four frameworks — SOC 2, PCI DSS, HIPAA, and ISO 27001.\n[31] David Kim (aegis_staff): Yes, correct — all four are included under the Comply v2 license. There's no additional charge per framework. So your PCI DSS reports, HIPAA, and ISO 27001 are all available to you at no extra cost.\n[32] Michelle Tan (customer): Perfect, that's what we thought but good to confirm. Dominic, you wanted to ask something else?\n[33] Dominic Flores (customer): Yeah, just — is there a limit on how many reports we can run per month? Or is it truly unlimited on-demand?\n[34] David Kim (aegis_staff): It is unlimited on-demand reporting under the v2 license. There's no cap on report generation. The only thing to be aware of is that very large report exports — like if you're pulling a full year of audit data — those can take a few minutes to process, but there's no hard limit on frequency.\n[35] Dominic Flores (customer): Good to know, thanks. That's all I had.\n[36] David Kim (aegis_staff): Alright, so just to summarize what we're doing — I'm logging the billing discrepancy, issuing a credit of $255 to your account to be applied on the May 1st invoice, sending a breakdown of the proration calculation to the case for your finance team, and flagging this to the billing systems team for a broader review. Does that cover everything?\n[37] Michelle Tan (customer): Yes, that covers it. Thanks David, appreciate you walking through it with us.\n[38] David Kim (aegis_staff): Of course, happy to help. You'll get an email summary from me through the case portal within the hour. Have a good rest of your day.\n[39] Dominic Flores (customer): You too, thanks."
+  },
+  "response_text": "{\n  \"call_score\": 4.0,\n  \"customer_score\": 4.0,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"positive\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"positive\"},\n    {\"index\": 29, \"label\": \"positive\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"positive\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"positive\"},\n    {\"index\": 38, \"label\": \"positive\"},\n    {\"index\": 39, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 4.0\n  },\n  \"evidence_quote\": \"Yes, that covers it. Thanks David, appreciate you walking through it with us.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 4.0,
+    "customer_score": 4.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 4.0
+    },
+    "evidence_quote": "Yes, that covers it. Thanks David, appreciate you walking through it with us.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 689,
+    "prompt_tokens": 4594,
+    "total_tokens": 5283,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00602925,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00602925,
+      "upstream_inference_prompt_cost": 0.0034455,
+      "upstream_inference_completions_cost": 0.00258375
+    }
+  },
+  "latency_s": 4.314,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:45.234762+00:00",
+  "key": "b98998d27c2ddcc102df55dde7aa856b35097b22329944b32553070abba2dc98"
+}

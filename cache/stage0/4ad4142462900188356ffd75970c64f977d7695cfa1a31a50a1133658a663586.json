@@ -1,0 +1,71 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 3,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nDavid Kim: Thank you for calling Aegis Cloud Security support, this is David Kim, how can I help you today?\nLauren Bishop: David, hi, this is Lauren Bishop, I'm the VP of Infrastructure over at Cobalt Software, and I need you to understand right now that this is a critical situation — our Aegis Detect dashboard is completely down and we have zero visibility into our threat monitoring.\nDavid Kim: Hi Lauren, I'm sorry to hear that, I understand that's — that's a serious issue, let me pull up your account right now, can you give me your organization ID or the email associated with the account?\nLauren Bishop: It's Cobalt Software, C-O-B-A-L-T, and our account ID is CSW-4492, and David I really need you to move fast here because we're a technology company, we have SLAs with our own customers, we cannot be flying blind on security right now.\nDavid Kim: Okay, I've got your account pulled up, CSW-4492, I can see you're on the Enterprise tier, and um — okay, let me check the dashboard status from our end.\nLauren Bishop: What does it show? Because on our side it's just — it's a blank screen, the dashboard loads but there's no data, no alerts, no event feed, nothing, it's like the whole thing is dead.\nDavid Kim: Right, so I'm seeing — okay, I'm actually seeing some anomalies on our infrastructure monitoring right now, Lauren, it looks like this may not be isolated to just your account, I'm seeing flags on the event processing side.\nLauren Bishop: Wait, so this is a platform-wide issue? Are you telling me that Aegis Detect is down for everyone? Why — why did nobody tell us about this, why didn't we get a notification or a status page update or anything?"
+  },
+  "response_text": "{\n  \"label\": \"support\",\n  \"evidence_quote\": \"Thank you for calling Aegis Cloud Security support, this is David Kim, how can I help you today?\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"David Kim\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Lauren Bishop\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "Thank you for calling Aegis Cloud Security support, this is David Kim, how can I help you today?",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "David Kim",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Lauren Bishop",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 109,
+    "prompt_tokens": 948,
+    "total_tokens": 1057,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00111975,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00111975,
+      "upstream_inference_prompt_cost": 0.000711,
+      "upstream_inference_completions_cost": 0.00040875
+    }
+  },
+  "latency_s": 2.119,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:42:28.901132+00:00",
+  "key": "4ad4142462900188356ffd75970c64f977d7695cfa1a31a50a1133658a663586"
+}

@@ -1,0 +1,228 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (40 turns, indices 0 to 39; per_turn needs exactly 40 entries, one per index in order):\n[0] Marcus Williams (aegis_staff): Hi, this is Marcus Williams from Aegis Cloud Security support, am I speaking with Oliver Grant?\n[1] Oliver Grant (customer): Yeah, that's me. Hi Marcus, thanks for getting back to me so quickly.\n[2] Marcus Williams (aegis_staff): Of course, happy to help. So I'm pulling up support case number 3296 here — you're reporting a formatting issue with Aegis Comply v2 reports?\n[3] Oliver Grant (customer): Yeah, exactly. So we just upgraded to — or I guess it launched yesterday, right, the v2 — and we ran our first on-demand SOC 2 report this morning and the output is just... it's not right.\n[4] Marcus Williams (aegis_staff): Okay, can you describe what you're seeing? Like is it a visual formatting thing, or is data missing, or...?\n[5] Oliver Grant (customer): It's — okay so a couple of things. First, the section headers in the PDF export are getting cut off. Like the text is truncating mid-word on some of the longer control category names. And then second, the control status table, the one that shows pass, fail, not applicable — it's rendering across two pages in a really awkward way. Like the header row is on one page and then all the data is on the next.\n[6] Marcus Williams (aegis_staff): Got it, okay. And just to confirm — is this happening on every report you generate, or is it specific to the SOC 2 framework?\n[7] Oliver Grant (customer): Uh, we only ran SOC 2 so far. We were planning to run a PCI DSS one later today but haven't done that yet.\n[8] Marcus Williams (aegis_staff): Okay, that's helpful. And when you say PDF export — are you using the direct download from the Comply dashboard, or are you going through the API?\n[9] Oliver Grant (customer): Dashboard. Just the download button in the UI.\n[10] Marcus Williams (aegis_staff): Alright. And what browser are you using, just so I can note that down?\n[11] Oliver Grant (customer): Chrome. Latest version, I keep it updated.\n[12] Marcus Williams (aegis_staff): Okay, Chrome, noted. And um — can you send me a copy of the report that's showing the issue? You can attach it to the case, or if there's any sensitivity around that I can also try to reproduce it on my end.\n[13] Oliver Grant (customer): Yeah, there's definitely sensitivity — it's a compliance report so I'd rather not send the whole thing externally. Can you reproduce it?\n[14] Marcus Williams (aegis_staff): Absolutely, totally understand. Let me just spin up a test environment here and generate a SOC 2 report... give me just a second.\n[15] Oliver Grant (customer): Sure, take your time.\n[16] Marcus Williams (aegis_staff): Okay, so I'm generating it now... and yeah, I can actually see what you're describing. The header truncation is pretty noticeable on — looks like it's specifically the longer control category labels. Like the Availability and Confidentiality sections are fine but Processing Integrity is getting cut. And yeah the table pagination issue is there too.\n[17] Oliver Grant (customer): Right, yeah, that's exactly it. Processing Integrity was one of the ones I noticed too.\n[18] Marcus Williams (aegis_staff): Okay so this is definitely a bug on our end, I'm not going to ask you to clear your cache or anything like that — this is a rendering issue in the PDF generation service. Given that v2 just went GA yesterday this is almost certainly something that came in with the new release.\n[19] Oliver Grant (customer): Yeah, that was my assumption too. Is this affecting other customers or is it just us?\n[20] Marcus Williams (aegis_staff): I don't have visibility into other cases right now but I'm going to flag this to the engineering team immediately and check if there are other reports of the same thing. I'd expect this to be a known issue shortly if it isn't already.\n[21] Oliver Grant (customer): Okay. And what's the timeline looking like for a fix? Because we have an internal audit review next week and we were hoping to have clean reports ready before that.\n[22] Marcus Williams (aegis_staff): Yeah, I hear you, that's a real constraint. I can't give you a hard commitment on timeline right now without talking to engineering, but given that this is a rendering defect and not like a data integrity issue, these types of fixes tend to be relatively quick to patch. I'll escalate this as high priority and get back to you with an ETA today — is email okay for that?\n[23] Oliver Grant (customer): Email works. And look, I appreciate that — I just want to make sure we're not scrambling the day before the review, you know.\n[24] Marcus Williams (aegis_staff): Completely understand. I'll make sure the ticket reflects that timeline urgency. In the meantime — and this is just a workaround, not a solution — do you have access to the raw CSV export for the control status data? It won't have the same formatting obviously but at least the underlying data would be available if you need something to reference before the patch lands.\n[25] Oliver Grant (customer): Hmm, yeah, I can dig into that. Where would I find that?\n[26] Marcus Williams (aegis_staff): In the Comply dashboard, if you go to the report you generated, there should be an export dropdown — not just the PDF button — and there's a CSV option in there. It'll give you the full control list with statuses. It's not formatted for presentation but it has the data.\n[27] Oliver Grant (customer): Okay, let me — yeah, I see it. Export as CSV. Alright, I'll grab that as a backup. That could work for our internal reference at least.\n[28] Marcus Williams (aegis_staff): Good. And I'll also — let me just make sure I've got all this documented correctly in the case. So we've got: SOC 2 report, PDF export via the dashboard, section header text truncation on long control category names, and the control status table pagination breaking across pages. Anything else you noticed that I should add?\n[29] Oliver Grant (customer): Uh... actually, yeah, there was one more thing. The page numbers in the footer — they seem off. Like page one of twelve or something, but the document is clearly more than twelve pages.\n[30] Marcus Williams (aegis_staff): Oh interesting, okay. Let me check that on my end too... yeah, I see it — the page count in the footer isn't matching the actual document length. Okay, adding that to the bug report. Good catch.\n[31] Oliver Grant (customer): Yeah, I figured it was probably all related but wanted to mention it.\n[32] Marcus Williams (aegis_staff): Yep, likely all the same root cause in the PDF renderer. Okay, so next steps — I'm going to file this with engineering right after this call, flag the audit timeline urgency, and send you an email update today with whatever ETA they give me. Case number stays 3296, so you can reference that in any follow-up.\n[33] Oliver Grant (customer): Sounds good. And if the fix does come through before next week, will we get notified automatically or do we need to re-download the report manually?\n[34] Oliver Grant (customer): You'd need to regenerate the report — the system doesn't auto-regenerate existing ones. But once the patch is deployed I'll let you know via the case and you can just kick off a new on-demand report and it should render correctly.\n[35] Oliver Grant (customer): Wait, sorry, that was me answering my own question — I meant to direct that to you, Marcus.\n[36] Marcus Williams (aegis_staff): Ha, no worries — and actually you were right. Reports aren't stored and auto-updated, you'd generate a fresh one after the fix. It'll pull the latest data anyway so it'd be current.\n[37] Oliver Grant (customer): Perfect. Okay, I think that covers it from my end. I appreciate you jumping on this quickly.\n[38] Marcus Williams (aegis_staff): Of course. Sorry for the hassle on day two of the v2 launch — we'll get it sorted. You'll hear from me later today on the ETA. Have a good one, Oliver.\n[39] Oliver Grant (customer): Thanks Marcus, you too."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": 3.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"positive\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"positive\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"positive\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.5,\n    \"end\": 3.5\n  },\n  \"evidence_quote\": \"Perfect. Okay, I think that covers it from my end. I appreciate you jumping on this quickly.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.5,
+      "end": 3.5
+    },
+    "evidence_quote": "Perfect. Okay, I think that covers it from my end. I appreciate you jumping on this quickly.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 692,
+    "prompt_tokens": 4444,
+    "total_tokens": 5136,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 2244,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0044133,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0044133,
+      "upstream_inference_prompt_cost": 0.0018183,
+      "upstream_inference_completions_cost": 0.002595
+    }
+  },
+  "latency_s": 5.552,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:27.893664+00:00",
+  "key": "6a2c8cb6ec0814976a9228b5a039fa91ca4021f5627cc4d976535d2d4805fefb"
+}

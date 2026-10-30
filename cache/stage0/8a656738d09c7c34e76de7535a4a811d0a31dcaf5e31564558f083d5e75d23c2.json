@@ -1,0 +1,69 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nPriya Patel: Hi, this is Priya Patel from Aegis Cloud Security support, am I speaking with Dr. Cheng?\nDr. Linda Cheng: Yes, this is Linda Cheng, and I have to say I'm — I'm really frustrated right now, we've been dealing with this API issue for going on three days and it is actively impacting our backup workflows.\nPriya Patel: I completely understand, Dr. Cheng, and I sincerely apologize for the disruption — I've pulled up your support case, number 3286, and I want to make sure we get to the bottom of this today.\nDr. Linda Cheng: Three days, Priya. We're a healthcare organization, we have patient data, we have regulatory obligations — this isn't a minor inconvenience, this is a serious problem.\nPriya Patel: Absolutely, and I take that very seriously, I do. Can you walk me through what you're seeing on your end? The case notes mention an API integration error with Aegis Protect but I want to hear it directly from you.\nDr. Linda Cheng: So we have our EHR system — it's a custom-built platform — integrated with Aegis Protect through your REST API, and starting Sunday we started getting 503 errors on the backup initiation endpoint. Specifically the... um, it's the /v2/backup/jobs/create endpoint.\nPriya Patel: Okay, the /v2/backup/jobs/create endpoint, got it. And are these errors consistent or intermittent? Like are they happening on every call or—\nDr. Linda Cheng: Every single call. One hundred percent failure rate since Sunday morning, approximately 6 AM our time, which is Pacific. We have zero successful backup jobs since then."
+  },
+  "response_text": "{\"label\":\"support\",\"evidence_quote\":\"I've pulled up your support case, number 3286, and I want to make sure we get to the bottom of this today.\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"Priya Patel\",\"side\":\"aegis_staff\"},{\"speaker\":\"Dr. Linda Cheng\",\"side\":\"customer\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "I've pulled up your support case, number 3286, and I want to make sure we get to the bottom of this today.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Priya Patel",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Dr. Linda Cheng",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 119,
+    "prompt_tokens": 1985,
+    "total_tokens": 2104,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.000258,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.000258,
+      "upstream_inference_prompt_cost": 0.0001985,
+      "upstream_inference_completions_cost": 5.95e-05
+    }
+  },
+  "latency_s": 1.51,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:06.771159+00:00",
+  "key": "8a656738d09c7c34e76de7535a4a811d0a31dcaf5e31564558f083d5e75d23c2"
+}

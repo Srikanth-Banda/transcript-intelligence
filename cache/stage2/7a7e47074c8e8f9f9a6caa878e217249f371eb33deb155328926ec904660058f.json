@@ -1,0 +1,232 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (41 turns, indices 0 to 40; per_turn needs exactly 41 entries, one per index in order):\n[0] David Kim (aegis_staff): Thank you for calling Aegis Cloud Security support, this is David Kim, how can I help you today?\n[1] Dominic Flores (customer): Hey David, yeah, this is Dominic Flores, IT Director over at Silverline Brands, I've got case number 9856 open, the one about our backup windows?\n[2] David Kim (aegis_staff): Yes, absolutely, I pulled up the case right before you called actually — so you're seeing backup jobs running well past their scheduled windows, is that right?\n[3] Dominic Flores (customer): That's the short version, yeah. I mean, look, this has been going on for about two weeks now and it's — it's becoming a real problem for us, especially with our retail operations. We're a 24/7 environment basically, and when backups are running into business hours it's causing performance degradation on our production systems.\n[4] David Kim (aegis_staff): I completely understand, and I appreciate you flagging this — two weeks is way too long to be dealing with something like this, so let's dig into it today and figure out what's going on.\n[5] Dominic Flores (customer): Yeah I mean, I submitted the case on — I think it was the 4th? And honestly I expected a faster response, I'll be honest with you. We're paying for premium support.\n[6] David Kim (aegis_staff): You're right, and I — I want to own that, the initial response time on this case wasn't where it should've been and I'm sorry about that. I want to make sure we make good use of this time right now though. Can you walk me through what you're actually seeing? Like, what was the original backup window you had configured?\n[7] Dominic Flores (customer): So we had it set to run from 1 AM to 5 AM, that's our four-hour window, which historically has been plenty. But now these jobs are running until — I've seen it go to 9, 9:30 in the morning. That's four to five hours of overage and that's right in the middle of when our warehouse and e-commerce teams are ramping up.\n[8] David Kim (aegis_staff): And this started roughly two weeks ago you said, so that would be around March 29th or so?\n[9] Dominic Flores (customer): Yeah, give or take. March 28th, 29th is when we first noticed it. My team thought maybe it was a one-off thing, like a large data change set or something, but it's been happening every night since.\n[10] David Kim (aegis_staff): Okay, and are all of your backup jobs affected or is it specific workloads — like, is it just certain VMs, certain datasets, or is this across the board?\n[11] Dominic Flores (customer): That's a good question. It seems like it's — it's pretty broad, but the worst offenders are our SQL Server instances. We've got three pretty beefy SQL servers running our e-commerce database and our inventory management system, and those are the ones really blowing past the window. Some of the smaller file server backups are also slow but not as dramatic.\n[12] David Kim (aegis_staff): Got it, so SQL workloads are the primary pain point. And are these incremental backups that are running nightly or are you doing full backups every night?\n[13] Dominic Flores (customer): Incrementals nightly, fulls on Sunday. And the Sunday fulls are — I mean those are also taking longer but that's kind of expected, the incrementals are what's really alarming me because they should be fast.\n[14] David Kim (aegis_staff): Right, yeah, incrementals ballooning like that is definitely a red flag. A few things I want to check — have you seen any significant growth in your data change rate? Like, is there any reason your daily change set might have gotten larger around that time, end of month processing, new application rollouts, anything like that?\n[15] Dominic Flores (customer): I mean, we did have our spring inventory sync run around that time, but we do that quarterly and it's never caused this before. And even if the change set was bigger it shouldn't be adding four hours, that seems excessive.\n[16] David Kim (aegis_staff): Yeah, no, you're right, a quarterly process shouldn't account for that magnitude of slowdown. I want to pull up your backup job logs from the Aegis Protect console, do you mind if I take a minute to look at those?\n[17] Dominic Flores (customer): Go ahead, yeah.\n[18] David Kim (aegis_staff): Okay, so I'm looking at your environment here... and yeah, I can see the job durations, oof — yeah that's significant. Your SQL backup for, looks like it's the instance labeled SQLPROD01, that one's averaging about eight hours over the last ten days. That's uh, that's not good.\n[19] Dominic Flores (customer): Right, exactly! And I keep getting told by my team to just expand the window but that's not a real fix, I shouldn't have to carve out more production hours for backups that used to run in under two hours.\n[20] David Kim (aegis_staff): No, absolutely not, that's a band-aid, not a solution. Let me look at the throughput metrics here... okay so I'm seeing the backup throughput dropped pretty substantially — it looks like you were averaging around 800 megabytes per second before March 27th and now you're sitting around 180 to 220. That's a massive drop in throughput.\n[21] Dominic Flores (customer): So something changed on your end? Because we didn't change anything on our infrastructure around that time, I specifically asked my team about that.\n[22] David Kim (aegis_staff): I hear you, and I want to be transparent — so looking at our platform logs, around March 10th through the 18th we had a significant incident with Aegis Detect, our threat monitoring pipeline, and as part of the remediation work we pushed some backend infrastructure updates. Now, Protect and Detect run on separate systems, but some of the underlying network routing configurations were touched as part of that work, and I'm wondering if — and I need to confirm this with our infrastructure team — if some of those changes affected the data transfer paths for backup jobs in your region.\n[23] Dominic Flores (customer): Wait, so a problem with a completely different module potentially broke our backups and nobody flagged this to customers? That's — I mean, I'm sorry David but that's pretty alarming to me.\n[24] David Kim (aegis_staff): I understand your frustration, Dominic, and I'm not going to spin this — if that's what happened, it shouldn't have happened that way and customers should have been proactively notified. I'm still confirming the root cause but I want to be upfront with you about what I'm seeing rather than tell you nothing.\n[25] Dominic Flores (customer): Okay. I — I appreciate that, at least. So what are the next steps here? Because I need this fixed before tonight, we cannot have another morning where our warehouse team is fighting with a sluggish inventory system because backups are still running.\n[26] David Kim (aegis_staff): Okay so here's what I can do right now — I can escalate this internally to our Protect infrastructure team with the throughput data I'm looking at, and I also want to check your backup agent version because I'm seeing you're running 4.1.2, and we released 4.2.0 about three weeks ago which had some improvements to the data transfer compression algorithms. That could help even before we nail down the root cause.\n[27] Dominic Flores (customer): Why wasn't that update pushed automatically? We're on managed updates.\n[28] David Kim (aegis_staff): That's a fair question — 4.2.0 was staged as an opt-in update rather than automatic because of some compatibility flags for SQL Server environments, which is ironic given your situation. But let me get that queued up for your environment, I'll push it out as a manual deployment through the console and you should see it applied within the hour if you can confirm your agents are reachable.\n[29] Dominic Flores (customer): They should be, yeah. And that update — is that going to fix the throughput issue or is that just going to help a little bit?\n[30] David Kim (aegis_staff): Honest answer? It should help, probably meaningfully, but I don't want to promise you it's the full fix until I understand whether there's a network routing issue on our backend. I'm going to get the infra team on this today — I'm flagging it as a P1 on my end — and I want to schedule a follow-up call with you tomorrow morning, before your backup window starts, so we can walk through whatever findings we have.\n[31] Dominic Flores (customer): Tomorrow morning works. And I want someone from your engineering team on that call, not just — no offense — not just a support engineer. I need someone who can actually make changes on the backend if needed.\n[32] David Kim (aegis_staff): None taken, I'll make that happen. I'll have a Protect platform engineer on the call. Can we say 10 AM your time? And what timezone are you in?\n[33] Dominic Flores (customer): We're Central, so 10 AM Central works.\n[34] David Kim (aegis_staff): Perfect, I'll send a calendar invite to the email on your account within the next 30 minutes. And Dominic, one more thing — is there anything I can set up as a temporary workaround for tonight? For example, I can look at adjusting the backup job priority settings and throttling some of the lower-priority file server jobs so the SQL workloads get more of the available bandwidth during the window.\n[35] Dominic Flores (customer): Yeah, yeah, let's do that. The SQL servers are the priority, the file servers we can live with being a little slower if it means the SQL jobs finish closer to on time.\n[36] David Kim (aegis_staff): Okay, I'm going to make those priority adjustments now in your policy configuration, and combined with the agent update that should — hopefully — get tonight's run into a better place. I'll also set up an alert so if the SQL job duration exceeds six hours I get paged directly, and I'll check in on it tomorrow morning before our call.\n[37] Dominic Flores (customer): Alright. I mean, look, I'm still frustrated that we're two weeks into this and I'm just now getting real traction, but — I do appreciate you being straight with me about what you're seeing and not just giving me the runaround. Let's see what tomorrow brings.\n[38] David Kim (aegis_staff): That's fair, Dominic, and I get it. We'll make this right. I'll have that invite and a case update email to you within the half hour, and I'll see you tomorrow at 10 Central with the engineering team.\n[39] Dominic Flores (customer): Sounds good. Talk to you then.\n[40] David Kim (aegis_staff): Thank you Dominic, talk soon."
+  },
+  "response_text": "{\n  \"call_score\": 2.5,\n  \"customer_score\": 2.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"negative\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"negative\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"negative\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"negative\"},\n    {\"index\": 19, \"label\": \"negative\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"negative\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"negative\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"negative\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"negative\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"negative\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"negative\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 2.5,\n    \"end\": 3.0\n  },\n  \"evidence_quote\": \"Wait, so a problem with a completely different module potentially broke our backups and nobody flagged this to customers? That's — I mean, I'm sorry David but that's pretty alarming to me.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "negative"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "negative"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "negative"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "negative"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "negative"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "negative"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.5,
+      "end": 3.0
+    },
+    "evidence_quote": "Wait, so a problem with a completely different module potentially broke our backups and nobody flagged this to customers? That's — I mean, I'm sorry David but that's pretty alarming to me.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 729,
+    "prompt_tokens": 5056,
+    "total_tokens": 5785,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00652575,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00652575,
+      "upstream_inference_prompt_cost": 0.003792,
+      "upstream_inference_completions_cost": 0.00273375
+    }
+  },
+  "latency_s": 5.933,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:35.573237+00:00",
+  "key": "7a7e47074c8e8f9f9a6caa878e217249f371eb33deb155328926ec904660058f"
+}

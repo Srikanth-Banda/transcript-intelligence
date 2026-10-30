@@ -1,0 +1,5 @@
+theme,expected_type,n,share_in_expected,threshold,passed
+Billing and Usage Disputes,support,4,1.0,0.5,True
+Technical Integration and Performance Issues,support,16,0.875,0.5,True
+Commercial Renewals and Retention,external,14,1.0,0.5,True
+Internal Planning and Delivery Cadence,internal,12,1.0,0.5,True

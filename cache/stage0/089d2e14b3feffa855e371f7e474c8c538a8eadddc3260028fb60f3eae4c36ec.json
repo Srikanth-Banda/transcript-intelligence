@@ -1,0 +1,73 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 2 from Aegis, 1 from outside Aegis\n\nopening:\nDaniel Okafor: Wayne! Good to have you on, man. How are things going out there in — is it still cold in Cleveland or have you guys finally gotten some spring weather?\nWayne Keller: Ha, we actually had a really nice weekend, finally. Like sixties, sunny — my wife dragged me into the garden for the whole two days but I'm not complaining.\nDaniel Okafor: That's great, that's great. Hey I also have Mike Romano on with me — Mike's one of our staff engineers, he's been kind of the technical backbone on your account for the last few months. Mike, you want to say hey?\nMike Romano: Hey Wayne, yeah good to finally be on a call with you. I've been behind the scenes on a few of your support tickets and some of the Comply v2 migration stuff so, uh, looking forward to actually talking through things today.\nWayne Keller: Yeah, likewise. I've seen your name in a lot of the ticket updates — appreciate the thorough notes by the way, that actually makes a big difference for my team.\nMike Romano: Oh good, good to hear. We try to keep things documented especially on the technical side.\nDaniel Okafor: So Wayne, the whole purpose of today is really just — it's your annual review, renewal's coming up at the end of May, and I want to make sure we're doing right by you before we get into any of that paperwork stuff. So let's just start at a high level — how has the last year felt from where you're sitting?\nWayne Keller: Yeah, honestly? It's been pretty solid. And I'll say that as someone who was, uh, fairly skeptical when we first signed on. Our previous vendor was — well, let's just say the bar wasn't super high coming in."
+  },
+  "response_text": "{\"label\": \"external\", \"evidence_quote\": \"it's your annual review, renewal's coming up at the end of May\", \"confidence\": \"high\", \"speaker_sides\": [{\"speaker\": \"Daniel Okafor\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Wayne Keller\", \"side\": \"customer\"}, {\"speaker\": \"Mike Romano\", \"side\": \"aegis_staff\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "it's your annual review, renewal's coming up at the end of May",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Daniel Okafor",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Wayne Keller",
+        "side": "customer"
+      },
+      {
+        "speaker": "Mike Romano",
+        "side": "aegis_staff"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 136,
+    "prompt_tokens": 1981,
+    "total_tokens": 2117,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002661,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002661,
+      "upstream_inference_prompt_cost": 0.0001981,
+      "upstream_inference_completions_cost": 6.8e-05
+    }
+  },
+  "latency_s": 1.652,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:38.200626+00:00",
+  "key": "089d2e14b3feffa855e371f7e474c8c538a8eadddc3260028fb60f3eae4c36ec"
+}

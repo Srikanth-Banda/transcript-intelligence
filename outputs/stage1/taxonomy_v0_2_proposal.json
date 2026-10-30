@@ -1,0 +1,137 @@
+{
+  "themes": [
+    {
+      "name": "Pipeline Outage Technical Remediation",
+      "definition": "Calls addressing the architectural investigation, failover engineering, and technical root-cause remediation of streaming ingestion and pipeline outages.",
+      "boundary_note": "Focuses on underlying platform infrastructure outages and remediation rather than account churn, billing reconciliations, or ongoing SIEM egress connector tuning.",
+      "owner": "engineering lead",
+      "sources": [
+        "r1.c1",
+        "r2.c1"
+      ],
+      "note": ""
+    },
+    {
+      "name": "Commercial Renewals and Retention",
+      "definition": "Commercial discussions covering contract renewals, account expansions, multi-year commitments, SLA negotiations, and churn prevention following service disruptions.",
+      "boundary_note": "Focuses on commercial contract terms and account retention rather than transactional invoice disputes or day-to-day competitive battlecard reviews.",
+      "owner": "sales / account manager",
+      "sources": [
+        "r1.c2",
+        "r1.c6",
+        "r2.c3"
+      ],
+      "note": ""
+    },
+    {
+      "name": "Compliance Product Adoption and Expansion",
+      "definition": "Calls involving product previews, rollout readiness, feature demonstrations, roadmap requests, and post-launch template formatting for multi-framework compliance reporting.",
+      "boundary_note": "Covers feature adoption, custom framework requests, and post-launch template reporting issues in Comply rather than billing overages or commercial contract negotiations.",
+      "owner": "product manager",
+      "sources": [
+        "r1.c3",
+        "r1.c4",
+        "r1.c5",
+        "r2.c2"
+      ],
+      "note": "Broadened slightly to incorporate post-launch report formatting and template defects identified in the pilot."
+    },
+    {
+      "name": "Identity Authentication and Directory Provisioning",
+      "definition": "Calls concerning directory synchronization queues, SAML SSO regressions, session timeouts, and SCIM/IAM policy provisioning.",
+      "boundary_note": "Distinguished from initial module deployment scoping by focusing on specific directory sync failures, SSO configurations, and IAM policy defects.",
+      "owner": "support lead",
+      "sources": [
+        "r1.c10",
+        "r2.c4"
+      ],
+      "note": ""
+    },
+    {
+      "name": "Backup Performance and Scalability",
+      "definition": "Calls addressing degraded backup throughput, snapshot deduplication bottlenecks, connector permission failures, and restore limitations.",
+      "boundary_note": "Focuses specifically on Aegis Protect backup and restore performance rather than initial onboarding architecture or ingestion pipeline downtime.",
+      "owner": "support lead",
+      "sources": [
+        "r1.c11",
+        "r2.c5"
+      ],
+      "note": ""
+    },
+    {
+      "name": "Customer Implementation and Architecture Scoping",
+      "definition": "Structured onboarding, technical kickoff, and environment scoping sessions guiding new customers through initial policy and module deployment.",
+      "boundary_note": "Focuses on new customer platform onboarding and design scoping before operational steady-state or post-launch defect troubleshooting.",
+      "owner": "support lead",
+      "sources": [
+        "r1.c12",
+        "r2.c6"
+      ],
+      "note": ""
+    },
+    {
+      "name": "Billing and Usage Ingestion Disputes",
+      "definition": "Calls where customers question, review, or dispute surprise invoice overages stemming from ingestion replays, report runs, retention limits, or seat count discrepancies.",
+      "boundary_note": "Addresses transactional charge reconciliations and disputed invoice line items rather than strategic contract renewals or retention negotiations.",
+      "owner": "sales / account manager",
+      "sources": [
+        "r2.c9",
+        "pilot.other"
+      ],
+      "note": "Added as a new theme to capture recurring customer invoice and overage disputes (4 calls in Other, aligning with r2.c9)."
+    },
+    {
+      "name": "Competitive Strategy and Enablement",
+      "definition": "Internal calls evaluating competitor intelligence, sales battlecards, displacement tactics, and win-loss deal dynamics against rivals.",
+      "boundary_note": "Focuses on internal competitive analysis and positioning rather than direct customer renewal or account retention meetings.",
+      "owner": "sales / account manager",
+      "sources": [
+        "r1.c7",
+        "pilot.other"
+      ],
+      "note": "Added as a new theme to capture recurring internal competitive reviews and positioning syncs (4 calls in Other, aligning with r1.c7)."
+    }
+  ],
+  "product_areas": [
+    {
+      "name": "Aegis Detect",
+      "note": "Core threat detection, streaming event ingestion, and alert monitoring module."
+    },
+    {
+      "name": "Aegis Comply",
+      "note": "Automated multi-framework compliance reporting and evidence mapping module."
+    },
+    {
+      "name": "Aegis Protect",
+      "note": "Cloud snapshot backup, deduplication, and disaster recovery orchestration module."
+    },
+    {
+      "name": "Aegis Identity",
+      "note": "Directory synchronization, SAML SSO, and cloud IAM governance module."
+    }
+  ],
+  "dropped_candidates": [
+    {
+      "source": "r1.c8",
+      "reason": "Merged out due to negligible independent call volume and folded into general support and product feedback triage."
+    },
+    {
+      "source": "r1.c9",
+      "reason": "Ingestion pipeline latency bottlenecks are subsumed into Pipeline Outage Technical Remediation or general connector troubleshooting."
+    },
+    {
+      "source": "r2.c7",
+      "reason": "Alert threshold and rule tuning generated minimal call volume and overlaps with customer support and onboarding workflows."
+    },
+    {
+      "source": "r2.c8",
+      "reason": "SIEM connector forwarding latencies and buffer timeouts represent specific technical bugs handled under support triage."
+    },
+    {
+      "source": "r2.c10",
+      "reason": "Internal corporate SOC 2 readiness meetings represent periodic internal compliance overhead without broader cross-call customer applicability."
+    }
+  ],
+  "other_policy": "Calls are routed to Other / new theme if they are routine internal operational syncs (such as sprint planning, retrospectives, or general all-hands) or isolated one-off inquiries not covered by the 8 themes.",
+  "rationale": "We resolved the high Other rate (19%) by introducing two actionable themes supported by clusters of calls in the Other dataset: Billing and Usage Ingestion Disputes and Competitive Strategy and Enablement. To remain within the 8-theme ceiling, we retired the low-volume Detection Alert Tuning theme and folded Comply defect reports into Comply Feature Adoption. Routine sprint meetings and internal SOC 2 prep are explicitly assigned to Other, reducing the unclassified volume safely below the 10% threshold."
+}

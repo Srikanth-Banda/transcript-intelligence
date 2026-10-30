@@ -1,0 +1,7 @@
+type,incident_flag,n,call,cust
+external,False,22,4.43,4.43
+external,True,18,3.36,3.14
+internal,False,16,3.81,
+internal,True,14,3.14,
+support,False,20,3.28,3.15
+support,True,10,2.25,2.2

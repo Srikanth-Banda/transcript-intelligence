@@ -1,0 +1,41 @@
+meeting_id,date,org,title,theme,customer_score,traj_delta,competitor_or_alternatives_by_customer,incident,our_points,why,provided_churn_signal_moments
+01KQ351E141926AB7CAB668D,2026-03-12,northstarpharma,Aegis / Northstar Pharma - Urgent: Detect Outage Impact,Incident and Outage Response,2.0,1.0,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,2
+01KQ2217B066855A3B7814CB,2026-03-14,meridiancapital,Aegis / Meridian Capital - Service Reliability Discussion,Incident and Outage Response,2.0,0.0,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,1
+01KQ8C5A044F54EE1774D53C,2026-03-17,helixdata,Aegis / Helix Data - Post-Incident Review,Incident and Outage Response,2.0,0.0,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,1
+01KQ1DCC80852AE384C898C9,2026-03-19,quantumedge,Aegis / Quantum Edge - Renewal Concerns,Commercial Renewals and Retention,2.0,0.5,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,1
+01KQ5A966832A146DA4B7D41,2026-03-26,summittrust,Aegis / Summit Trust - Platform Concerns Discussion,Technical Integration and Performance Issues,2.0,1.0,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,2
+01KQ6CAA850EAFDC48B52846,2026-04-14,ironworkscorp,Aegis / Ironworks Corp - Vendor Comparison Discussion,Commercial Renewals and Retention,2.0,1.0,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,1
+01KQ7FA71CF70FAFEE4B6251,2026-03-21,novaretail,Aegis / Nova Retail Group - Renewal Discussion,Commercial Renewals and Retention,2.5,1.5,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,2
+01KQC1267BEB344076DD7656,2026-03-28,ironcladfinancial,Aegis / Ironclad Financial - Account Recovery Check-in,Commercial Renewals and Retention,2.5,1.0,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,2
+01KQ45F6F7349D0A620571F1,2026-04-22,brightpathcommerce,Aegis / Brightpath Commerce - Competitive Evaluation,Competitive Strategy and Win/Loss,2.5,0.5,True,True,4,customer score <= 2.5; customer raises competitor/alternatives; call concerns the outage,1
+01KQ45C76AF3AEA6B3EA6697,2026-03-24,steelpointmfg,Aegis / Steelpoint Manufacturing - Contract Review,Commercial Renewals and Retention,3.0,1.0,True,True,3,customer score <= 3.0; customer raises competitor/alternatives; call concerns the outage,1
+01KQ0F8AFF3DA34FD4580008,2026-04-11,cobaltsoftware,Aegis / Cobalt Software - Q2 Planning,Commercial Renewals and Retention,3.0,0.5,True,True,3,customer score <= 3.0; customer raises competitor/alternatives; call concerns the outage,2
+01KQ3D8C1EF16C042F31FAFD,2026-04-05,trailheadmkt,Aegis / Trailhead Marketplace - Renewal Confirmation,Commercial Renewals and Retention,4.5,0.5,True,True,2,customer raises competitor/alternatives; call concerns the outage,0
+01KQ410FB7E434BA3F99EE7D,2026-04-17,axiomlabs,Aegis / Axiom Labs - Multi-Year Renewal,Commercial Renewals and Retention,4.5,0.0,True,True,2,customer raises competitor/alternatives; call concerns the outage,1
+01KQD199788883B6F18C81E8,2026-04-28,atlasprecision,Aegis / Atlas Precision - Annual Review & Renewal,Commercial Renewals and Retention,4.5,0.0,True,True,2,customer raises competitor/alternatives; call concerns the outage,0
+01KQ51DC4345D9DAE005678C,2026-02-22,redwoodclinical,Aegis / Redwood Clinical - Product Feedback Session,"Product Adoption, Feedback and Expansion",3.5,0.5,True,False,1,customer raises competitor/alternatives,1
+01KQCA6EA8B603EBB6C9FE34,2026-03-07,ridgelinelogistics,Aegis / Ridgeline Logistics - Identity Roadmap Discussion,"Product Adoption, Feedback and Expansion",3.5,0.5,True,False,1,customer raises competitor/alternatives,1
+01KQ8D9A06510DD623EFB1A6,2026-04-16,pinnacleins,Aegis / Pinnacle Insurance - Detect Roadmap Review,"Product Adoption, Feedback and Expansion",3.5,1.0,False,True,1,call concerns the outage,1
+01KQAEA50436D047BC39CFC7,2026-02-17,crestlinewealth,Aegis / Crestline Wealth - Account Review,Commercial Renewals and Retention,4.0,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQ41FB5CCFD9EA583FB020,2026-03-05,harborviewbank,Aegis / Harborview Banking - Threat Detection Tuning,"Product Adoption, Feedback and Expansion",4.0,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQ65D43540846FA994B6C4,2026-04-25,frostbyte,Aegis / Frostbyte AI - Product Feedback,"Product Adoption, Feedback and Expansion",4.0,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQ85D10E82A26A8F754FB8,2026-02-13,bridgeporthealth,Aegis / Bridgeport Health - Compliance Review,"Product Adoption, Feedback and Expansion",4.5,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQB95605C6F873C6036285,2026-04-09,forgeindustries,Aegis / Forge Industries - PCI DSS Compliance Review,"Product Adoption, Feedback and Expansion",4.5,0.0,False,True,1,call concerns the outage,1
+01KQ4D71CDFB1045A2458216,2026-04-23,bridgeporthealth,Aegis / Bridgeport Health - Renewal Finalization,Commercial Renewals and Retention,4.5,1.0,False,True,1,call concerns the outage,0
+01KQ0DFE299AC7A74E8022CA,2026-04-26,redwoodclinical,Aegis / Redwood Clinical - ISO 27001 Preparation,"Product Adoption, Feedback and Expansion",4.5,1.0,True,False,1,customer raises competitor/alternatives,0
+01KQ9BB82FD97C9607D57E90,2026-02-04,coastalliving,Aegis / Coastal Living Co - Onboarding Kickoff,Onboarding and Implementation Scoping,5.0,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQA502E222E2A60330237B,2026-03-03,pineridge,Aegis / Pineridge Systems - Q1 Business Review,"Product Adoption, Feedback and Expansion",5.0,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQD4D9DEBA2D55AC2AA9F5,2026-03-09,keystonehealth,Aegis / Keystone Health - Renewal Planning,Commercial Renewals and Retention,5.0,0.5,False,True,1,call concerns the outage,0
+01KQ54917E3931712516916D,2026-04-01,nimbusplatform,Aegis / Nimbus Platform - Comply v2 Preview,"Product Adoption, Feedback and Expansion",5.0,0.5,True,False,1,customer raises competitor/alternatives,0
+01KQ77F2867FC54E13A8C495,2026-02-11,brightpathcommerce,Aegis / Brightpath Commerce - Detect Module Deployment,Onboarding and Implementation Scoping,4.0,0.5,False,False,0,,1
+01KQ1DC6CA536DE1B31ED8F5,2026-02-25,atlasprecision,Aegis / Atlas Precision - Contract Discussion,Commercial Renewals and Retention,4.0,1.0,False,False,0,,0
+01KQC3A2EBC501837E973B16,2026-02-19,frostbyte,Aegis / Frostbyte AI - Identity Module Setup,Onboarding and Implementation Scoping,4.5,0.0,False,False,0,,0
+01KQAFB8DBF6E1E2FDEF0B75,2026-02-27,maplewoodgoods,Aegis / Maplewood Goods - SOC 2 Prep Review,"Product Adoption, Feedback and Expansion",4.5,0.5,False,False,0,,0
+01KQA1AFDC1306A000B0C7D9,2026-02-28,vantahealth,Aegis / Vanta Health Systems - Backup Strategy Workshop,Onboarding and Implementation Scoping,4.5,0.5,False,False,0,,1
+01KQ2B4878EC7B3EE5547007,2026-03-06,stratoscloud,Aegis / Stratos Cloud - Audit Preparation,"Product Adoption, Feedback and Expansion",4.5,1.0,False,False,0,,0
+01KQ560FF1570C5E7F71D752,2026-04-19,coastalliving,Aegis / Coastal Living Co - Protect Module Expansion,Onboarding and Implementation Scoping,4.5,0.5,False,False,0,,0
+01KQ3BD8DEEBC7FECD107F0F,2026-04-21,blackridgeinvest,Aegis / Blackridge Investments - HIPAA Compliance Review,"Product Adoption, Feedback and Expansion",4.5,0.5,False,False,0,,0
+01KQ5AFAE8264DDC0ED2AE7F,2026-04-24,crestlinewealth,Aegis / Crestline Wealth - Identity Module Deployment,Onboarding and Implementation Scoping,4.5,0.0,False,False,0,,0
+01KQFFC0F889AE8CFEE7A00D,2026-02-07,blackridgeinvest,Aegis / Blackridge Investments - Renewal Discussion,Commercial Renewals and Retention,5.0,0.5,False,False,0,,0
+01KQ45C0AD36B351A3571940,2026-04-03,silverlinebrands,Aegis / Silverline Brands - Comply v2 Early Access Demo,"Product Adoption, Feedback and Expansion",5.0,0.5,False,False,0,,0
+01KQ4D01DCB15C69672AB5AF,2026-04-07,clearwatermed,Aegis / Clearwater Medical - Comply v2 Deployment Kickoff,Onboarding and Implementation Scoping,5.0,0.0,False,False,0,,0

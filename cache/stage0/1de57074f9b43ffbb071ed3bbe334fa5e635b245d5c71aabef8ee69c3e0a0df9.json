@@ -1,0 +1,71 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 2,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nMarcus Williams: Thank you for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?\nJulia Tran: Marcus, hi, this is Julia Tran from Blackridge Investments and I need you to understand right now that this is a critical, critical situation — we have zero threat visibility, zero, and it has been that way for over three hours.\nMarcus Williams: Okay, Julia, I hear you, I'm pulling up your account right now — can you give me your account ID or the email on file so I can get in faster?\nJulia Tran: It's Blackridge Investments, B-L-A-C-K-R-I-D-G-E, account number BRI-04471, and I also already submitted a ticket, ticket number... uh, I have it here somewhere — it's AGS-229183.\nMarcus Williams: Got it, pulling up AGS-229183 right now, okay I see the ticket came in about... forty minutes ago, and I can see you've flagged it P1 which is absolutely appropriate, let me just get into your Detect dashboard here.\nJulia Tran: Forty minutes ago — Marcus, I have been trying to get someone on the phone for forty minutes, do you understand what it means for a financial services firm to have no threat monitoring? We are a target, we are constantly a target, and right now we are essentially flying blind.\nMarcus Williams: You're absolutely right and I sincerely apologize for the wait time, that is not acceptable and I'm going to flag that separately, but right now my full focus is on getting your visibility restored — can you describe exactly what you're seeing on your end? Like, are you getting any events at all or is it completely flat?\nJulia Tran: Completely flat. The event feed in Aegis Detect, it just... stopped. No alerts, no events, nothing. The last event we see in the dashboard is timestamped at 7:14 AM this morning and it is now almost 10:30 and I have a team of analysts sitting here staring at a dead screen."
+  },
+  "response_text": "{\n  \"label\": \"support\",\n  \"evidence_quote\": \"Thank you for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"Marcus Williams\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Julia Tran\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "Thank you for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Marcus Williams",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Julia Tran",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 110,
+    "prompt_tokens": 988,
+    "total_tokens": 1098,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0011535,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0011535,
+      "upstream_inference_prompt_cost": 0.000741,
+      "upstream_inference_completions_cost": 0.0004125
+    }
+  },
+  "latency_s": 1.672,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:37:35.814638+00:00",
+  "key": "1de57074f9b43ffbb071ed3bbe334fa5e635b245d5c71aabef8ee69c3e0a0df9"
+}

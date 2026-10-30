@@ -1,0 +1,510 @@
+<title>Call Intelligence Explorer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky tab bar over one content column; Calls tab = filters, two charts, table; a right-hand drawer shows one call.
+   Palette: categorical slots 1-3 of the validated data-viz palette (external blue, support orange, internal aqua), validated
+   all-pairs in both modes; tone uses the blue<->red diverging pair with a gray midpoint. Type = shape + color + label. */
+:root{
+  --bg:#f2f3f5; --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#6a6963; --line:#dcdcd8; --soft:#f0efec;
+  --c-support:#eb6834; --c-external:#2a78d6; --c-internal:#1baf7a;
+  --t-neg:#e34948; --t-neu:#f0efec; --t-pos:#2a78d6;
+  --neg-tint:#fdeceb; --pos-tint:#e9f1fb; --hl:#fff1b8; --focus:#2a78d6;
+  --good:#0ca30c; --warn:#a15c07; --crit:#d03b3b; --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#5598e7; --seq4:#256abf; --seq5:#184f95;
+  --display:'Bricolage Grotesque','Segoe UI',sans-serif; --body:'Instrument Sans','Segoe UI',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121214; --surface:#1a1a19; --ink:#f0efec; --ink2:#c3c2b7; --muted:#9a998f; --line:#2e2e2c; --soft:#262624;
+  --c-support:#d95926; --c-external:#3987e5; --c-internal:#199e70;
+  --t-neg:#e66767; --t-neu:#383835; --t-pos:#3987e5;
+  --neg-tint:#2f1d1d; --pos-tint:#1b2636; --hl:#4a4220; --focus:#7ea2ff;
+  --good:#0ca30c; --warn:#fab219; --crit:#e66767; --seq1:#184f95; --seq2:#1c5cab; --seq3:#2a78d6; --seq4:#5598e7; --seq5:#9ec5f4; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121214; --surface:#1a1a19; --ink:#f0efec; --ink2:#c3c2b7; --muted:#9a998f; --line:#2e2e2c; --soft:#262624;
+  --c-support:#d95926; --c-external:#3987e5; --c-internal:#199e70;
+  --t-neg:#e66767; --t-neu:#383835; --t-pos:#3987e5;
+  --neg-tint:#2f1d1d; --pos-tint:#1b2636; --hl:#4a4220; --focus:#7ea2ff;
+  --good:#0ca30c; --warn:#fab219; --crit:#e66767; --seq1:#184f95; --seq2:#1c5cab; --seq3:#2a78d6; --seq4:#5598e7; --seq5:#9ec5f4; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:18px 56px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(24px,3.6vw,34px);letter-spacing:-.01em} h2{font-size:20px} h3{font-size:16px} h4{font-size:13px}
+p{margin:0} button,select,input{font:inherit;color:inherit}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-size:12px} .muted{color:var(--muted)} .ink2{color:var(--ink2)}
+header{position:relative;display:grid;gap:6px;padding-right:76px}
+.lede{color:var(--ink2);max-width:72ch}
+.themebtn{position:absolute;right:0;top:0;font:500 12px var(--mono);background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:5px 9px;cursor:pointer}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin-top:16px;display:flex;gap:2px;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;cursor:pointer;color:var(--muted);font-weight:500;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+section.tab{display:grid;gap:18px;padding-top:18px;grid-template-columns:minmax(0,1fr)}
+section.tab>*,#insBody>*{min-width:0}
+#insBody{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;min-width:0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.grid2{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.pill{display:inline-flex;gap:5px;align-items:center;font:500 11px var(--mono);padding:2px 8px;border-radius:99px;border:1px solid var(--line);background:var(--soft);white-space:nowrap}
+.pill.support{border-color:var(--c-support)} .pill.external{border-color:var(--c-external)} .pill.internal{border-color:var(--c-internal)}
+.pill.strong{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:6px 10px;cursor:pointer}
+.btn:hover{border-color:var(--ink2)} .btn.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.callout{border:1px solid var(--line);border-left:3px solid var(--ink2);background:var(--surface);padding:10px 12px;border-radius:4px}
+.note{font-size:12px;color:var(--muted)}
+/* pipeline strip */
+.pipe{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:900px){.pipe{grid-template-columns:minmax(0,1fr)}}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:grid;gap:6px;align-content:start;position:relative}
+.stage b.big{font:700 26px var(--display);font-variant-numeric:tabular-nums}
+.stage .tag{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.arrow{color:var(--muted)}
+/* findings */
+.fcard{display:grid;gap:8px;align-content:start}
+.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.clamp.open{display:block}
+/* filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.filters label{flex:1 1 130px;max-width:100%;min-width:0;display:grid;gap:2px;font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+select,input[type=search]{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:0;max-width:100%}
+input[type=search]{min-width:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:var(--soft);border:1px solid var(--line);border-radius:99px;padding:2px 10px;cursor:pointer;font-size:12px}
+/* charts */
+.chartbox{display:grid;gap:6px;min-width:0}
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--ink2);font:11px var(--body)} svg .ax{stroke:var(--line);stroke-width:1} svg .gr{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3;opacity:.8}
+svg .val{fill:var(--ink);font:600 11px var(--mono)} svg .nlab{fill:var(--muted);font:10px var(--mono)}
+.chartbox .legend svg,.legend svg{display:inline-block;width:14px;height:14px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:4px;vertical-align:-1px}
+details.tbl summary{cursor:pointer;font-size:12px;color:var(--muted)}
+details.tbl table{margin-top:6px}
+/* tables */
+.scroll{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.scrollx{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font:500 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);white-space:nowrap}
+th button{background:none;border:0;padding:0;cursor:pointer;color:inherit;font:inherit;text-transform:inherit;letter-spacing:inherit}
+td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr.clickable{cursor:pointer} tbody tr.clickable:hover,tbody tr.sel{background:var(--soft)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.tt{max-width:340px}
+/* drawer */
+#veil{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(620px,100%);background:var(--bg);border-left:1px solid var(--line);z-index:50;overflow:auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 40px 16px;padding-top:calc(16px + env(safe-area-inset-top,0px));display:grid;gap:12px;align-content:start}
+.dhead{display:flex;justify-content:space-between;gap:8px;align-items:start}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;display:grid;gap:6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+.quote{border-left:3px solid var(--line);padding-left:8px;color:var(--ink2);font-style:italic}
+.strip{display:flex;gap:1px;align-items:center}
+.strip button{padding:0;border:1px solid var(--line);flex:1 1 0;min-width:3px;cursor:pointer;background:var(--t-neu)}
+.strip.m button{height:16px} .strip.p button{height:6px}
+.strip .g{background:var(--t-neg)} .strip .p{background:var(--t-pos)} .strip .n{background:var(--t-neu)}
+.turn{display:grid;grid-template-columns:96px 1fr;gap:8px;padding:6px 8px;border-left:3px solid transparent;border-bottom:1px solid var(--line);font-size:13px}
+.turn.g{border-left-color:var(--t-neg);background:var(--neg-tint)} .turn.p{border-left-color:var(--t-pos);background:var(--pos-tint)}
+.turn .who{font-size:12px;font-weight:600;overflow-wrap:anywhere} .turn .side{font:10px var(--mono);color:var(--muted)}
+mark{background:transparent;color:inherit}
+mark.q0{text-decoration:underline dotted 2px;text-underline-offset:3px}
+mark.q1{background:var(--hl)}
+mark.q2{text-decoration:underline solid 2px;text-underline-offset:3px;font-weight:600}
+.flash{outline:2px solid var(--focus)}
+/* outage pills */
+.pc{display:inline-flex;gap:4px;align-items:center;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin:2px 4px 2px 0;background:var(--surface);cursor:pointer;font:500 12px var(--mono)}
+.pc.support{border-color:var(--c-support)} .pc.external{border-color:var(--c-external)} .pc.internal{border-color:var(--c-internal)}
+.pc.touch{border-style:dashed;border-width:2px;background:var(--soft)}
+.sub{display:flex;gap:6px;flex-wrap:wrap}.sub button{max-width:100%}
+.sub button{padding:6px 12px;border:1px solid var(--line);background:var(--surface);border-radius:99px;cursor:pointer}
+.sub button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.bar-pts{display:inline-flex;gap:2px;vertical-align:middle}
+.bar-pts i{display:inline-block;width:12px;height:12px;border:1px solid var(--line);background:var(--soft)}
+.bar-pts i.on{background:var(--ink)}
+.heat td{text-align:center;font-family:var(--mono)}
+#tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:var(--surface);padding:5px 8px;border-radius:4px;font-size:12px;max-width:280px;display:none}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .12s}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Transcript Intelligence · pipeline outputs for 100 calls</div>
+  <h1>Call Intelligence Explorer</h1>
+  <p class="lede" id="lede"></p>
+  <button class="themebtn" id="themeBtn" aria-label="Toggle light and dark theme">theme</button>
+</header>
+<nav role="tablist" aria-label="Views" id="tabs">
+  <button role="tab" data-tab="overview">Overview</button>
+  <button role="tab" data-tab="calls">Calls</button>
+  <button role="tab" data-tab="themes">Themes</button>
+  <button role="tab" data-tab="insights">Insights</button>
+  <button role="tab" data-tab="trust">Trust</button>
+</nav>
+
+<section class="tab" id="tab-overview" role="tabpanel"></section>
+<section class="tab" id="tab-calls" role="tabpanel" hidden>
+  <div class="filters" id="filters"></div>
+  <div class="row" id="special"></div>
+  <div class="grid2">
+    <div class="card chartbox"><h3>Calls over time</h3><div id="scatter"></div>
+      <div class="legend" id="scatterLegend"></div><p class="note">Vertical jitter added so overlapping half-step scores stay visible. Dashed ring = the call touches the March Detect outage. Shaded band = the Mar 10 to 31 window used in the analysis. Click a mark to open the call.</p></div>
+    <div class="card chartbox"><h3>Mean call score by month and type</h3><div id="monthbars"></div>
+      <div class="legend" id="monthLegend"></div><p class="note" id="monthNote"></p><div id="monthTable"></div></div>
+  </div>
+  <div><div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 id="tblTitle">Calls</h3><span class="mono muted" id="count"></span></div>
+    <div class="scroll"><table id="calltable"><thead></thead><tbody></tbody></table></div>
+    <p class="note" style="margin-top:6px">This table is the full data behind both charts. Rows open with Enter or Space.</p></div>
+</section>
+<section class="tab" id="tab-themes" role="tabpanel" hidden></section>
+<section class="tab" id="tab-insights" role="tabpanel" hidden></section>
+<section class="tab" id="tab-trust" role="tabpanel" hidden></section>
+</div>
+
+<div id="veil" hidden></div>
+<aside id="drawer" role="dialog" aria-modal="true" aria-label="Call detail" hidden></aside>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D=/*DATA*/null;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const TY={support:{label:'Support',glyph:'▲'},external:{label:'External',glyph:'●'},internal:{label:'Internal',glyph:'■'}};
+const TYPES=D.meta.types, N=D.meta.n;
+const col=t=>`var(--c-${t})`;
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const f1=x=>x==null?'n/a':(Math.round(x*100)/100).toFixed(2).replace(/0$/,'');
+const f2=x=>x==null?'n/a':x.toFixed(2);
+const pct=x=>(x*100).toFixed(1).replace(/\.0$/,'')+'%';
+const MON={'2026-02':'Feb','2026-03':'Mar','2026-04':'Apr'};
+const byId=Object.fromEntries(D.calls.map(c=>[c.id,c]));
+const pill=t=>`<span class="pill ${t}">${TY[t].glyph} ${TY[t].label}</span>`;
+const tip=$('#tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.display='block';const w=tip.offsetWidth,h=tip.offsetHeight;
+  let x=e.clientX+12,y=e.clientY+12;if(x+w>innerWidth-8)x=e.clientX-w-12;if(y+h>innerHeight-8)y=e.clientY-h-12;tip.style.left=Math.max(4,x)+'px';tip.style.top=Math.max(4,y)+'px'}
+const hideTip=()=>{tip.style.display='none'};
+function tipOn(node,html){node.addEventListener('mousemove',e=>showTip(e,html));node.addEventListener('mouseleave',hideTip);
+  node.addEventListener('focus',()=>{const r=node.getBoundingClientRect();showTip({clientX:r.left+r.width/2,clientY:r.top},html)});node.addEventListener('blur',hideTip)}
+function width(el,min=280){return Math.max(min,Math.floor(el.getBoundingClientRect().width)||min)}
+function markSVG(t,x,y,r,extra=''){
+  if(t==='external')return `<circle cx="${x}" cy="${y}" r="${r}" fill="${col(t)}" ${extra}/>`;
+  if(t==='internal')return `<rect x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" fill="${col(t)}" ${extra}/>`;
+  return `<polygon points="${x},${y-r-1} ${x+r+1},${y+r} ${x-r-1},${y+r}" fill="${col(t)}" ${extra}/>`}
+function tableView(title,head,rows){return `<details class="tbl"><summary>Show ${esc(title)} as a table</summary><div class="scrollx"><table><thead><tr>${head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`}
+
+/* ---------- state ---------- */
+const F0={type:'',theme:'',area:'',inc:'',month:'',smin:'1',smax:'5',q:'',endLow:false,diff:false};
+const S={tab:'overview',f:{...F0},sort:{k:'date',d:1},sel:null,insSub:'comp',compSel:'',compCust:false,lastFocus:null};
+const text=c=>(c.title+' '+c.org+' '+c.theme+' '+c.area+' '+c.s0q+' '+c.s1q+' '+c.s2q+' '+c.tr.map(t=>t[2]).join(' ')).toLowerCase();
+D.calls.forEach(c=>{c._t=text(c)});
+function passes(c,f=S.f){
+  if(f.type&&c.type!==f.type)return false; if(f.theme&&c.theme!==f.theme)return false; if(f.area&&c.area!==f.area)return false;
+  if(f.month&&c.month!==f.month)return false;
+  if(f.inc==='core'&&!c.core)return false; if(f.inc==='touch'&&!c.inc)return false; if(f.inc==='none'&&c.inc)return false;
+  if(c.cs<+f.smin||c.cs>+f.smax)return false;
+  if(f.q&&!c._t.includes(f.q.toLowerCase()))return false;
+  if(f.endLow&&!(c.t1<=2.5))return false; if(f.diff&&!(Math.abs(c.cs-c.ps)>=0.6))return false;
+  return true}
+const filtered=()=>D.calls.filter(c=>passes(c));
+
+/* ---------- tabs ---------- */
+function setTab(t,push=true){
+  if(!$('#tab-'+t))t='overview'; S.tab=t;
+  $$('#tabs button').forEach(b=>{const on=b.dataset.tab===t;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1});
+  $$('section.tab').forEach(s=>s.hidden=s.id!=='tab-'+t);
+  if(push){try{history.replaceState(null,'','#'+t)}catch(e){}}
+  renderTab(t)}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setTab(b.dataset.tab)});
+$('#tabs').addEventListener('keydown',e=>{const bs=$$('#tabs button');const i=bs.findIndex(b=>b.dataset.tab===S.tab);
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const j=(i+(e.key==='ArrowRight'?1:bs.length-1))%bs.length;setTab(bs[j].dataset.tab);bs[j].focus();e.preventDefault()}});
+$('#themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';renderTab(S.tab)};
+function renderTab(t){({overview:rOverview,calls:rCalls,themes:rThemes,insights:rInsights,trust:rTrust})[t]()}
+
+/* ---------- overview ---------- */
+function rOverview(){
+  const P=D.pipeline;
+  $('#lede').textContent=`Frozen outputs of a three-stage pipeline over ${N} recorded calls. Every number on this page is computed from those outputs at build time; findings are directional (small, apparently synthetic sample).`;
+  const th=P.s1.themes.map(([n,c])=>`<tr><td>${esc(n)}</td><td class="num">${c}</td></tr>`).join('');
+  $('#tab-overview').innerHTML=`
+  <div class="pipe">
+    <div class="stage"><span class="tag">Stage 0 · call type</span><b class="big">${N}</b>
+      <p>${P.s0.by_metadata} internal by rule (no outside attendee), ${P.s0.by_llm} customer calls classified by the LLM from the opening.</p>
+      <p class="mono">${TYPES.map(t=>`${TY[t].glyph} ${t} ${P.s0.counts[t]}`).join(' · ')}</p>
+      <p class="note">Reviewed by hand: the reviewer agreed with the model on ${P.s0.review_agree_model} of ${P.s0.review_n} items, with the title rule on ${P.s0.review_agree_rule}.</p></div>
+    <div class="stage"><span class="tag">Stage 1 · themes</span><b class="big">${P.s1.themes.length}</b>
+      <p>themes plus an Other bucket (${P.s1.other} of ${N} calls in Other). ${P.s1.incident_touch} calls touch the March outage; ${P.s1.incident_core} have it as their main theme.</p>
+      <details class="tbl"><summary>Calls per theme</summary><table><tbody>${th}</tbody></table></details></div>
+    <div class="stage"><span class="tag">Stage 2 · sentiment</span><b class="big">${P.s2.turns.toLocaleString()}</b>
+      <p>turns labeled across ${N} calls, each call scored 1 to 5 against written anchors.</p>
+      <p class="mono">${TYPES.map(t=>`${TY[t].glyph} ${t} ${f2(P.s2.mean[t])}`).join(' · ')}</p>
+      <p class="note">Mean call score by call type.</p></div>
+  </div>
+  <div><h2 style="margin-bottom:8px">Headline findings</h2><p class="note" style="margin-bottom:10px">Strength labels come from the analysis. Open "See it" to land on the filtered view that shows the finding.</p>
+  <div class="grid">${D.heads.map(h=>`<article class="card fcard"><div class="row"><span class="pill ${h.strength==='strongest'?'strong':''}">${esc(h.id)} · ${esc(h.strength)}</span></div>
+    <h3>${esc(h.title)}</h3><p class="clamp ink2" id="cl-${h.id}">${esc(h.finding)}</p>
+    <p><b>So what.</b> ${esc(h.so_what)}</p><p class="note"><b>Could be wrong if.</b> ${esc(h.wrong)}</p>
+    <div class="row"><button class="btn primary" data-see="${h.id}">See it</button><button class="btn" data-more="${h.id}">Full numbers</button></div></article>`).join('')}</div></div>`;
+}
+document.addEventListener('click',e=>{
+  const s=e.target.closest('[data-see]');
+  if(s){const id=s.dataset.see;S.f={...F0};
+    if(id==='H2'){S.f.month='2026-03';S.f.inc='touch'}
+    if(id==='H4')S.f.endLow=true; if(id==='H5')S.f.diff=true;
+    if(id==='H3'){S.insSub='out';setTab('insights')}else setTab('calls');
+    if(id==='H1'||id==='H2')setTimeout(()=>$('#monthbars')?.scrollIntoView({behavior:'smooth',block:'center'}),50)}
+  const m=e.target.closest('[data-more]');
+  if(m){const p=$('#cl-'+m.dataset.more);p.classList.toggle('open');m.textContent=p.classList.contains('open')?'Fewer numbers':'Full numbers'}
+  const o=e.target.closest('[data-open]');
+  if(o){openCall(o.dataset.open)}
+  const th=e.target.closest('[data-theme-go]');
+  if(th){S.f={...F0,theme:th.dataset.themeGo};setTab('calls')}
+});
+
+/* ---------- calls ---------- */
+function rCalls(){
+  const f=S.f;
+  const opt=(arr,v,all)=>`<option value="">${all}</option>`+arr.map(x=>`<option value="${esc(x[0])}" ${v===x[0]?'selected':''}>${esc(x[1])}</option>`).join('');
+  const sc=[];for(let x=1;x<=5;x+=.5)sc.push([String(x),String(x)]);
+  $('#filters').innerHTML=`
+   <label>Type<select id="fType">${opt(TYPES.map(t=>[t,TY[t].label]),f.type,'All')}</select></label>
+   <label>Theme<select id="fTheme">${opt(D.meta.themes.map(t=>[t,t]),f.theme,'All')}</select></label>
+   <label>Product area<select id="fArea">${opt(D.meta.areas.map(t=>[t,t]),f.area,'All')}</select></label>
+   <label>Outage<select id="fInc">${opt([['core','Main theme'],['touch','Touches (any)'],['none','Does not touch']],f.inc,'Any')}</select></label>
+   <label>Month<select id="fMonth">${opt(D.meta.months.map(m=>[m,MON[m]||m]),f.month,'All')}</select></label>
+   <label>Score from<select id="fMin">${sc.map(([v,l])=>`<option ${f.smin===v?'selected':''}>${l}</option>`).join('')}</select></label>
+   <label>to<select id="fMax">${sc.map(([v,l])=>`<option ${f.smax===v?'selected':''}>${l}</option>`).join('')}</select></label>
+   <label>Search<input type="search" id="fQ" value="${esc(f.q)}" placeholder="title, account, quote, transcript"></label>
+   <button class="btn" id="fReset">Reset</button>`;
+  const bind=(id,k)=>{$(id).addEventListener('input',e=>{S.f[k]=e.target.value;calcCalls()})};
+  bind('#fType','type');bind('#fTheme','theme');bind('#fArea','area');bind('#fInc','inc');bind('#fMonth','month');bind('#fMin','smin');bind('#fMax','smax');
+  $('#fQ').addEventListener('input',e=>{S.f.q=e.target.value;calcCalls(true)});
+  $('#fReset').onclick=()=>{S.f={...F0};rCalls()};
+  $('#calltable thead').innerHTML=`<tr>${[['date','Date'],['type','Type'],['title','Title'],['theme','Theme'],['area','Area'],['cs','Call'],['cu','Cust.'],['t1','End'],['inc','Outage']].map(([k,l])=>`<th class="${['cs','cu','t1'].includes(k)?'num':''}" aria-sort="${S.sort.k===k?(S.sort.d>0?'ascending':'descending'):'none'}"><button data-sort="${k}">${l}${S.sort.k===k?(S.sort.d>0?' ↑':' ↓'):''}</button></th>`).join('')}</tr>`;
+  $$('#calltable [data-sort]').forEach(b=>b.onclick=()=>{const k=b.dataset.sort;S.sort=S.sort.k===k?{k,d:-S.sort.d}:{k,d:1};rCalls()});
+  calcCalls();
+}
+function calcCalls(keepFocus){
+  const rows=filtered();const f=S.f;
+  const sp=[];if(f.endLow)sp.push(['endLow','Calls whose last third scores 2.5 or lower']);if(f.diff)sp.push(['diff','Calls where our score differs from the provided score by 0.6 or more']);
+  $('#special').innerHTML=sp.map(([k,l])=>`<button class="chip" data-clear="${k}" aria-label="Remove filter: ${esc(l)}">${esc(l)} ✕</button>`).join('');
+  $$('#special [data-clear]').forEach(b=>b.onclick=()=>{S.f[b.dataset.clear]=false;calcCalls()});
+  const k=S.sort.k,d=S.sort.d;
+  rows.sort((a,b)=>{let x=a[k],y=b[k];if(x==null)x=-1;if(y==null)y=-1;return (x>y?1:x<y?-1:0)*d||a.date.localeCompare(b.date)});
+  $('#count').textContent=`${rows.length} of ${N} calls`;
+  $('#tblTitle').textContent='Calls';
+  $('#calltable tbody').innerHTML=rows.length?rows.map(c=>`<tr class="clickable ${S.sel===c.id?'sel':''}" tabindex="0" data-open="${c.id}"><td class="mono">${c.date.slice(5)}</td><td>${pill(c.type)}</td><td class="tt">${esc(c.title)}</td><td>${esc(c.theme)}</td><td>${esc(c.area)}</td><td class="num">${f2(c.cs)}</td><td class="num">${c.cu==null?'':f2(c.cu)}</td><td class="num">${f2(c.t1)}</td><td>${c.core?'main':c.inc?'touches':''}</td></tr>`).join(''):`<tr><td colspan="9" class="empty">No calls match these filters. Reset to start again.</td></tr>`;
+  drawScatter();drawMonthBars(rows);
+}
+$('#calltable').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('tr[data-open]')){e.preventDefault();openCall(e.target.dataset.open)}});
+window.addEventListener('resize',()=>{if(S.tab==='calls'){drawScatter();drawMonthBars(filtered())}else if(S.tab==='insights')rInsights();else if(S.tab==='themes')rThemes()});
+
+const T0=Date.UTC(2026,1,1),T1=Date.UTC(2026,3,30),DAY=864e5;
+const dayN=s=>{const [y,m,d]=s.split('-').map(Number);return (Date.UTC(y,m-1,d)-T0)/DAY};
+function jit(id){let h=0;for(const ch of id)h=(h*31+ch.charCodeAt(0))>>>0;return ((h%1000)/1000-.5)*0.28}
+function drawScatter(){
+  const host=$('#scatter');const W=width(host,300),H=Math.round(Math.max(240,W*.42)),m={l:34,r:10,t:10,b:26};
+  const X=d=>m.l+(d/((T1-T0)/DAY))*(W-m.l-m.r), Y=v=>H-m.b-((v-1)/4)*(H-m.t-m.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter of call score by date, colored by call type. The same data is in the table below.">`;
+  s+=`<rect x="${X(dayN('2026-03-10'))}" y="${m.t}" width="${X(dayN('2026-03-31'))-X(dayN('2026-03-10'))}" height="${H-m.t-m.b}" fill="var(--c-support)" opacity=".10"/><text x="${X(dayN('2026-03-10'))+4}" y="${m.t+10}">outage window</text>`;
+  for(let v=1;v<=5;v++)s+=`<line class="gr" x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l-6}" y="${Y(v)+4}" text-anchor="end">${v}</text>`;
+  [['2026-02-01','Feb'],['2026-03-01','Mar'],['2026-04-01','Apr']].forEach(([d,l])=>{s+=`<line class="ax" x1="${X(dayN(d))}" x2="${X(dayN(d))}" y1="${H-m.b}" y2="${H-m.b+4}"/><text x="${X(dayN(d))+3}" y="${H-6}">${l}</text>`});
+  s+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/>`;
+  const ok=new Set(filtered().map(c=>c.id));
+  const order=[...D.calls].sort((a,b)=>(ok.has(a.id)?1:0)-(ok.has(b.id)?1:0));
+  order.forEach(c=>{const on=ok.has(c.id),x=X(dayN(c.date)),y=Y(c.cs+jit(c.id));
+    s+=`<g class="pt" data-id="${c.id}" style="cursor:pointer" opacity="${on?1:.14}">`+(c.inc?`<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="var(--ink2)" stroke-width="1.3" stroke-dasharray="3 2"/>`:'')+markSVG(c.type,x,y,5,`stroke="var(--surface)" stroke-width="2"`)+`</g>`});
+  s+=`</svg>`;host.innerHTML=s;
+  $$('.pt',host).forEach(g=>{const c=byId[g.dataset.id];tipOn(g,`<b>${esc(c.title)}</b><br>${c.date} · ${TY[c.type].label} · score ${f2(c.cs)}${c.inc?' · touches outage':''}`);g.addEventListener('click',()=>openCall(c.id))});
+  $('#scatterLegend').innerHTML=TYPES.map(t=>`<span><svg width="14" height="14" style="vertical-align:-2px">${markSVG(t,7,7,5)}</svg> ${TY[t].label}</span>`).join('');
+}
+function drawMonthBars(rows){
+  const host=$('#monthbars');const W=width(host,300),H=Math.round(Math.max(240,W*.42)),m={l:34,r:8,t:16,b:38};
+  const months=D.meta.months;const gw=(W-m.l-m.r)/months.length, bw=Math.min(34,(gw-14)/3);
+  const Y=v=>H-m.b-((v-1)/4)*(H-m.t-m.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mean call score by month and call type for the filtered calls">`;
+  for(let v=1;v<=5;v++)s+=`<line class="gr" x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l-6}" y="${Y(v)+4}" text-anchor="end">${v}</text>`;
+  const tbl=[];
+  months.forEach((mo,i)=>{const gx=m.l+i*gw+(gw-3*bw-4)/2;
+    TYPES.forEach((t,j)=>{const xs=rows.filter(c=>c.month===mo&&c.type===t).map(c=>c.cs),mu=mean(xs),x=gx+j*(bw+2);
+      tbl.push([MON[mo],TY[t].label,xs.length,mu==null?'':f2(mu)]);
+      if(mu==null){s+=`<text class="nlab" x="${x+bw/2}" y="${H-m.b+26}" text-anchor="middle">n=0</text>`;return}
+      const y=Y(mu),h=H-m.b-y,r=Math.min(4,bw/2);
+      s+=`<g class="bar" tabindex="0" data-tip="${esc(`${MON[mo]} · ${TY[t].label}: mean ${f2(mu)} (n=${xs.length})`)}"><path d="M${x},${H-m.b} V${y+r} Q${x},${y} ${x+r},${y} H${x+bw-r} Q${x+bw},${y} ${x+bw},${y+r} V${H-m.b} Z" fill="${col(t)}" stroke="var(--surface)" stroke-width="0"/>`+
+        `<text class="val" x="${x+bw/2}" y="${y-4}" text-anchor="middle">${f1(mu)}</text><text class="nlab" x="${x+bw/2}" y="${H-m.b+26}" text-anchor="middle">n=${xs.length}</text></g>`});
+    s+=`<text x="${m.l+i*gw+gw/2}" y="${H-m.b+13}" text-anchor="middle" style="font-weight:600">${MON[mo]}</text>`});
+  s+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/></svg>`;host.innerHTML=s;
+  $$('.bar',host).forEach(g=>tipOn(g,g.dataset.tip));
+  $('#monthLegend').innerHTML=TYPES.map(t=>`<span><i style="background:${col(t)}"></i>${TY[t].glyph} ${TY[t].label}</span>`).join('');
+  $('#monthNote').textContent=`Bars start at score 1 (the scale minimum). Group sizes are shown under each bar and follow the filters. Cells with few calls, and the internal-versus-other differences, are directional only.`;
+  $('#monthTable').innerHTML=tableView('mean score by month and type',['Month','Type','n','Mean call score'],tbl);
+}
+
+/* ---------- drawer ---------- */
+function openCall(id){
+  const c=byId[id];if(!c)return;S.sel=id;S.lastFocus=document.activeElement;
+  const d=$('#drawer');d.hidden=false;$('#veil').hidden=false;
+  const q=(k,label)=>{const r=c.qloc[k];return r?`<button class="btn" data-jump="${r[0]}">Jump to ${label}</button>`:''};
+  const sideTxt=a=>a[1]==='c'?'customer':'Aegis';
+  const diff=c.type!==c.rule?`<p class="note"><b>The title rule would say ${esc(c.rule)}.</b> This is a disagreement between the two methods.</p>`:'';
+  const nTurns=c.tr.length;
+  d.innerHTML=`<div class="dhead"><div class="eyebrow">${c.date} · ${c.min} min · ${c.att.length} attendees · id …${c.sid}</div><button class="btn" id="dClose" aria-label="Close call detail">Close ✕</button></div>
+  <div><h2>${esc(c.title)}</h2><div class="row" style="margin-top:6px">${pill(c.type)}${c.org?`<span class="pill">${esc(c.org)}</span>`:''}${c.core?'<span class="pill strong">Outage: main theme</span>':c.inc?'<span class="pill">Touches the outage</span>':''}</div></div>
+  <div class="block"><h4>Attendees</h4><div class="row">${c.att.map(a=>`<span class="pill">${a[1]==='c'?'customer':'Aegis'} · ${esc(a[0])}</span>`).join('')}</div></div>
+  <div class="block"><h4>Stage 0 · call type</h4><dl class="kv"><dt>Label</dt><dd>${pill(c.type)} ${c.s0src==='metadata'?'<span class="note">by rule: no outside attendee, no model used</span>':`confidence ${esc(c.s0conf)}`}</dd>${c.s0src==='metadata'?'':`<dt>Evidence</dt><dd class="quote">${esc(c.s0q)}</dd>`}<dt>Title rule</dt><dd>${esc(c.rule)}</dd></dl>${diff}</div>
+  <div class="block"><h4>Stage 1 · theme</h4><dl class="kv"><dt>Primary</dt><dd>${esc(c.theme)}</dd><dt>Tags</dt><dd>${c.tags.length?esc(c.tags.join('; ')):'none'}</dd><dt>Product area</dt><dd>${esc(c.area)}</dd><dt>Outage</dt><dd>${c.core?'main theme':c.inc?'touches (flag set)':'no'}</dd><dt>Confidence</dt><dd>${esc(c.s1conf)}</dd><dt>Evidence</dt><dd class="quote">${esc(c.s1q)}</dd></dl></div>
+  <div class="block"><h4>Stage 2 · sentiment</h4><dl class="kv"><dt>Call score</dt><dd><b>${f2(c.cs)}</b> of 5</dd><dt>Customer score</dt><dd>${c.cu==null?'none (no customer on the call)':f2(c.cu)}</dd><dt>Trajectory</dt><dd>first third ${f2(c.t0)} → last third ${f2(c.t1)}</dd><dt>Confidence</dt><dd>${esc(c.s2conf)}</dd><dt>Evidence</dt><dd class="quote">${esc(c.s2q)}</dd><dt>Provided score</dt><dd>${f2(c.ps)} (${esc(c.pl)}) <span class="note">comparison only: an upstream AI output, not a ground truth</span></dd></dl></div>
+  <div class="block"><h4>Tone of each turn</h4>
+    <div class="strip m" aria-label="Our tone label per turn">${[...c.tm].map((ch,i)=>`<button class="${ch}" data-jump="${i}" aria-label="turn ${i+1}: ${ch==='g'?'negative':ch==='p'?'positive':'neutral'}" title="turn ${i+1}: ${ch==='g'?'negative':ch==='p'?'positive':'neutral'} (ours)"></button>`).join('')}</div>
+    <div class="strip p" aria-label="Provided tone label per turn">${[...c.pv].map((ch,i)=>`<button class="${ch}" data-jump="${i}" tabindex="-1" aria-hidden="true" title="turn ${i+1}: ${ch==='g'?'negative':ch==='p'?'positive':'neutral'} (provided)"></button>`).join('')}</div>
+    <div class="legend"><span><i style="background:var(--t-neg)"></i>negative</span><span><i style="background:var(--t-neu);border:1px solid var(--line)"></i>neutral</span><span><i style="background:var(--t-pos)"></i>positive</span><span class="note">top bar = our labels · thin bar = provided labels · ${nTurns} turns</span></div></div>
+  <div class="row">${q('0','Stage 0 quote')}${q('1','Stage 1 quote')}${q('2','Stage 2 quote')}</div>
+  <div class="legend"><span><mark class="q0">dotted</mark> Stage 0 quote</span><span><mark class="q1">highlight</mark> Stage 1 quote</span><span><mark class="q2">underline</mark> Stage 2 quote</span></div>
+  <div id="transcript" style="border:1px solid var(--line);border-radius:6px;background:var(--surface)">${c.tr.map((t,i)=>`<div class="turn ${c.tm[i]==='g'||c.tm[i]==='p'?c.tm[i]:''}" id="turn-${i}"><div><div class="who">${esc(t[0])}</div><div class="side">${t[1]==='c'?'customer':'Aegis'} · ${i+1}</div></div><div>${hl(t[2],ranges(c,i))}</div></div>`).join('')}</div>`;
+  $('#dClose').focus();d.scrollTop=0;calcRowSel();
+}
+function ranges(c,i){const out=[];['0','1','2'].forEach(k=>{const r=c.qloc[k];if(r&&r[0]===i)out.push({s:r[1],e:r[2],cls:'q'+k})});return out}
+function hl(sentence,rs){
+  if(!rs.length)return esc(sentence);
+  const cuts=new Set([0,sentence.length]);rs.forEach(r=>{cuts.add(r.s);cuts.add(r.e)});
+  const pts=[...cuts].sort((a,b)=>a-b);let out='';
+  for(let i=0;i<pts.length-1;i++){const a=pts[i],b=pts[i+1];const cls=rs.filter(r=>r.s<=a&&r.e>=b).map(r=>r.cls);const t=esc(sentence.slice(a,b));out+=cls.length?`<mark class="${cls.join(' ')}">${t}</mark>`:t}
+  return out}
+function closeCall(){$('#drawer').hidden=true;$('#veil').hidden=true;if(S.lastFocus&&document.contains(S.lastFocus))S.lastFocus.focus()}
+function calcRowSel(){$$('#calltable tbody tr').forEach(r=>r.classList.toggle('sel',r.dataset.open===S.sel))}
+$('#veil').onclick=closeCall;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#drawer').hidden)closeCall()});
+$('#drawer').addEventListener('click',e=>{
+  if(e.target.closest('#dClose'))return closeCall();
+  const j=e.target.closest('[data-jump]');
+  if(j){const t=$('#turn-'+j.dataset.jump);if(t){t.scrollIntoView({behavior:'smooth',block:'center'});t.classList.add('flash');setTimeout(()=>t.classList.remove('flash'),1400)}}});
+
+/* ---------- themes ---------- */
+function rThemes(){
+  const host=$('#tab-themes');const calls=D.calls;
+  const rows=D.meta.themes.map(t=>({t,n:calls.filter(c=>c.theme===t).length,by:Object.fromEntries(TYPES.map(y=>[y,calls.filter(c=>c.theme===t&&c.type===y).length]))})).sort((a,b)=>b.n-a.n);
+  const W=Math.max(300,Math.floor(host.getBoundingClientRect().width)-30),lab=Math.min(250,W*.42),rh=26,H=rows.length*rh+14;
+  const maxn=Math.max(...rows.map(r=>r.n));const X=v=>lab+(v/maxn)*(W-lab-40);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Calls per theme, split by call type">`;
+  rows.forEach((r,i)=>{const y=i*rh+6;let x=lab;s+=`<text x="${lab-8}" y="${y+14}" text-anchor="end">${esc(r.t.length>34&&W<640?r.t.slice(0,32)+'…':r.t)}</text>`;
+    TYPES.forEach(ty=>{const w=X(r.by[ty])-lab;if(r.by[ty]>0){s+=`<g class="bar" tabindex="0" data-tip="${esc(`${r.t} · ${TY[ty].label}: ${r.by[ty]} calls`)}"><rect x="${x}" y="${y}" width="${Math.max(w-2,2)}" height="18" fill="${col(ty)}"/>${w>22?`<text x="${x+(w-2)/2}" y="${y+13}" text-anchor="middle" style="fill:#fff;font:600 11px var(--mono)">${r.by[ty]}</text>`:''}</g>`;x+=w}});
+    s+=`<text class="val" x="${x+6}" y="${y+14}">${r.n}</text>`});
+  s+=`</svg>`;
+  const mons=D.meta.months;const grid=rows.map(r=>[r.t,...mons.map(m=>calls.filter(c=>c.theme===r.t&&c.month===m).length)]);const gmax=Math.max(...grid.flatMap(g=>g.slice(1)));
+  const shade=v=>v===0?'transparent':`var(--seq${Math.min(5,1+Math.floor((v/gmax)*4.999))})`;
+  const light=v=>v/gmax>.55?'color:#fff':'';
+  host.innerHTML=`<div class="grid2"><div class="card chartbox"><h3>Calls per theme and call type</h3><div class="legend">${TYPES.map(t=>`<span><i style="background:${col(t)}"></i>${TY[t].glyph} ${TY[t].label}</span>`).join('')}</div>${s}
+      <p class="note">Total shown at the end of each bar. n=${N} calls; one primary theme per call.</p>${tableView('theme by call type',['Theme','Support','External','Internal','Total'],rows.map(r=>[r.t,r.by.support,r.by.external,r.by.internal,r.n]))}</div>
+    <div class="card chartbox"><h3>Calls per theme and month</h3><div class="scrollx"><table class="heat"><thead><tr><th>Theme</th>${mons.map(m=>`<th>${MON[m]}</th>`).join('')}</tr></thead><tbody>${grid.map(g=>`<tr><td style="text-align:left;font-family:var(--body)">${esc(g[0])}</td>${g.slice(1).map(v=>`<td style="background:${shade(v)};${light(v)}">${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <p class="note">Darker cell = more calls (scale is relative to the busiest cell, ${gmax}). The outage theme appears in March; the product-adoption theme grows in April.</p></div></div>
+    <div><h2 style="margin-bottom:8px">The taxonomy</h2><p class="note" style="margin-bottom:10px">Eight themes plus Other, with an owner who could act on each. Themes were proposed by an LLM from the transcripts and finalised under delegation; see Trust.</p>
+    <div class="grid">${D.themes.map(t=>{const n=rows.find(r=>r.t===t.name).n;return `<article class="card" style="display:grid;gap:6px;align-content:start"><div class="row" style="justify-content:space-between"><h3>${esc(t.name)}</h3><span class="pill">${n} calls</span></div>
+      <p class="ink2">${esc(t.definition)}</p><p class="note"><b>Boundary.</b> ${esc(t.boundary)}</p><p class="note"><b>Owner.</b> ${esc(t.owner)}</p>
+      ${t.examples.map(e=>{const full=D.calls.find(c=>c.sid===e.sid);return `<p class="quote">“${esc(e.quote)}” <button class="btn" ${full?`data-open="${full.id}"`:'disabled'} style="padding:1px 6px">${esc(e.title)}</button></p>`}).join('')}
+      <div><button class="btn" data-theme-go="${esc(t.name)}">Show these calls</button></div></article>`}).join('')}</div></div>`;
+  $$('.bar',host).forEach(g=>tipOn(g,g.dataset.tip));
+}
+
+/* ---------- insights ---------- */
+function rInsights(){
+  const host=$('#tab-insights');
+  host.innerHTML=`<div class="sub" role="group" aria-label="Insight"><button data-ins="comp" aria-pressed="${S.insSub==='comp'}">Competitive mentions</button><button data-ins="out" aria-pressed="${S.insSub==='out'}">Outage blast radius</button><button data-ins="risk" aria-pressed="${S.insSub==='risk'}">Account risk ranking</button></div><div id="insBody"></div>`;
+  $$('[data-ins]',host).forEach(b=>b.onclick=()=>{S.insSub=b.dataset.ins;rInsights()});
+  ({comp:iComp,out:iOut,risk:iRisk})[S.insSub]($('#insBody'));
+}
+function iComp(h){
+  const C=D.comp,W=Math.max(300,Math.floor(h.getBoundingClientRect().width/2)-34),lab=110,rh=30;
+  const names=C.names.slice().sort((a,b)=>C.calls[b]-C.calls[a]);const maxn=Math.max(...names.map(n=>C.calls[n]));
+  const X=v=>lab+(v/maxn)*(W-lab-36);
+  let s=`<svg viewBox="0 0 ${W} ${names.length*rh+8}" role="img" aria-label="Calls naming each competitor, split by call type">`;
+  names.forEach((n,i)=>{const y=i*rh+4;let x=lab;s+=`<text x="${lab-8}" y="${y+15}" text-anchor="end">${esc(n)}</text>`;
+    TYPES.forEach(ty=>{const v=C.by_type[n][ty],w=X(v)-lab;if(v>0){s+=`<g class="bar" tabindex="0" data-tip="${esc(`${n} · ${TY[ty].label}: ${v} calls`)}"><rect x="${x}" y="${y}" width="${Math.max(w-2,2)}" height="20" fill="${col(ty)}"/>${w>22?`<text x="${x+(w-2)/2}" y="${y+14}" text-anchor="middle" style="fill:#fff;font:600 11px var(--mono)">${v}</text>`:''}</g>`;x+=w}});
+    s+=`<text class="val" x="${x+6}" y="${y+15}">${C.calls[n]}</text>`});s+=`</svg>`;
+  const mons=D.meta.months;
+  const sel=S.compSel,list=C.mentions.filter(m=>(!sel||m.comp===sel)&&(!S.compCust||m.side==='c'));
+  h.innerHTML=`<div class="callout"><b>${C.any_calls} of ${N} calls name a competitor.</b> Calls that name one touch the outage in ${pct(C.inc_share_comp)} of cases, against ${pct(C.inc_share_all)} of all calls. Names come from a proper-noun scan of the transcripts plus a manual check, not from a fixed list; counts are calls, not mentions.</div>
+  <div class="grid2"><div class="card chartbox"><h3>Calls naming each competitor</h3><div class="legend">${TYPES.map(t=>`<span><i style="background:${col(t)}"></i>${TY[t].glyph} ${TY[t].label}</span>`).join('')}</div>${s}
+      ${tableView('competitor calls by type',['Competitor','Support','External','Internal','Calls'],names.map(n=>[n,C.by_type[n].support,C.by_type[n].external,C.by_type[n].internal,C.calls[n]]))}</div>
+    <div class="card chartbox"><h3>Share of calls naming any competitor, by month</h3><table><thead><tr><th>Month</th><th class="num">Calls</th><th class="num">Naming a competitor</th><th class="num">Share</th></tr></thead><tbody>${mons.map(m=>{const a=C.month_calls[m]||0,b=C.any_by_month[m]||0;return `<tr><td>${MON[m]}</td><td class="num">${a}</td><td class="num">${b}</td><td class="num">${pct(b/a)}</td></tr>`}).join('')}</tbody></table>
+      <p class="note">Small groups, directional only. Competitor names appearing more often in March lines up with the outage.</p></div></div>
+  <div class="card"><div class="row" style="justify-content:space-between"><h3>What was said</h3><span class="mono muted">${list.length} mentions</span></div>
+    <div class="filters" style="margin:8px 0"><label>Competitor<select id="cSel"><option value="">All</option>${names.map(n=>`<option ${sel===n?'selected':''}>${esc(n)}</option>`).join('')}</select></label>
+    <label><span>&nbsp;</span><span><input type="checkbox" id="cCust" ${S.compCust?'checked':''}> Customer-raised only</span></label></div>
+    <div style="max-height:420px;overflow:auto;display:grid;gap:8px">${list.map(m=>{const c=byId[m.cid];return `<div class="block"><p class="quote">“${esc(m.quote)}”</p><div class="row note"><span>${m.side==='c'?'customer':'Aegis staff'} · ${esc(m.speaker)}</span><span>${pill(c.type)}</span><span>${esc(m.comp)}</span><button class="btn" data-open="${c.id}" style="padding:1px 6px">${esc(c.title)}</button></div></div>`}).join('')||'<p class="empty">No mentions for this selection.</p>'}</div></div>`;
+  $$('.bar',h).forEach(g=>tipOn(g,g.dataset.tip));
+  $('#cSel').onchange=e=>{S.compSel=e.target.value;iComp(h)};$('#cCust').onchange=e=>{S.compCust=e.target.checked;iComp(h)};
+}
+function iOut(h){
+  const B=D.blast;const W=Math.max(300,Math.floor(h.getBoundingClientRect().width/2)-34),H=230,m={l:34,r:8,t:16,b:44};
+  const gw=(W-m.l-m.r)/3,bw=Math.min(40,(gw-14)/2),Y=v=>H-m.b-((v-1)/4)*(H-m.t-m.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mean call score by call type for calls that touch the outage and calls that do not">`;
+  for(let v=1;v<=5;v++)s+=`<line class="gr" x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l-6}" y="${Y(v)+4}" text-anchor="end">${v}</text>`;
+  TYPES.forEach((t,i)=>{const gx=m.l+i*gw+(gw-2*bw-2)/2;
+    [[1,'touches'],[0,'does not']].forEach(([fl,l],j)=>{const d=B.tone[`${t}|${fl}`],x=gx+j*(bw+2);
+      if(d.mean==null){s+=`<text class="nlab" x="${x+bw/2}" y="${H-m.b+26}" text-anchor="middle">n=0</text>`;return}
+      const y=Y(d.mean),r=Math.min(4,bw/2);
+      s+=`<g class="bar" tabindex="0" data-tip="${esc(`${TY[t].label}, ${l} the outage: mean ${f2(d.mean)} (n=${d.n})`)}"><path d="M${x},${H-m.b} V${y+r} Q${x},${y} ${x+r},${y} H${x+bw-r} Q${x+bw},${y} ${x+bw},${y+r} V${H-m.b} Z" fill="${col(t)}" ${fl?'':'fill-opacity=".45"'}/>`+(fl?'':`<path d="M${x},${H-m.b} V${y+r} Q${x},${y} ${x+r},${y} H${x+bw-r} Q${x+bw},${y} ${x+bw},${y+r} V${H-m.b} Z" fill="none" stroke="${col(t)}" stroke-width="2"/>`)+
+        `<text class="val" x="${x+bw/2}" y="${y-4}" text-anchor="middle">${f1(d.mean)}</text><text class="nlab" x="${x+bw/2}" y="${H-m.b+26}" text-anchor="middle">n=${d.n}</text></g>`});
+    s+=`<text x="${m.l+i*gw+gw/2}" y="${H-m.b+13}" text-anchor="middle" style="font-weight:600">${TY[t].label}</text>`});
+  s+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}"/></svg>`;
+  const wk=B.week;const WW=Math.max(300,Math.floor(h.getBoundingClientRect().width/2)-34),HH=190,mm={l:34,r:12,t:12,b:26};
+  const X=i=>mm.l+(i/(wk.length-1))*(WW-mm.l-mm.r),Y2=v=>HH-mm.b-((v-1)/4)*(HH-mm.t-mm.b);
+  let w=`<svg viewBox="0 0 ${WW} ${HH}" role="img" aria-label="Weekly mean call score">`;
+  for(let v=1;v<=5;v++)w+=`<line class="gr" x1="${mm.l}" x2="${WW-mm.r}" y1="${Y2(v)}" y2="${Y2(v)}"/><text x="${mm.l-6}" y="${Y2(v)+4}" text-anchor="end">${v}</text>`;
+  w+=`<polyline fill="none" stroke="var(--ink2)" stroke-width="2" points="${wk.map((d,i)=>`${X(i)},${Y2(d.mean)}`).join(' ')}"/>`;
+  wk.forEach((d,i)=>{w+=`<g class="bar" tabindex="0" data-tip="${esc(`${d.week}: mean ${f2(d.mean)}, n=${d.n}, ${pct(d.inc)} touch the outage`)}"><circle cx="${X(i)}" cy="${Y2(d.mean)}" r="${d.n>=8?5:3.5}" fill="${d.inc>=.5?'var(--c-support)':'var(--surface)'}" stroke="var(--ink2)" stroke-width="2"/></g><text class="nlab" x="${X(i)}" y="${HH-12}" text-anchor="middle">${d.week.slice(-3)}</text>`});
+  w+=`<line class="ax" x1="${mm.l}" x2="${WW-mm.r}" y1="${HH-mm.b}" y2="${HH-mm.b}"/></svg>`;
+  const acc=B.accounts.filter(a=>a.calls.some(c=>c.type!=='internal'));
+  h.innerHTML=`<div class="callout"><b>${B.n_touched_accounts} of ${B.n_accounts} customer accounts</b> had at least one call that touches the outage. Calls that touch it: ${TYPES.map(t=>`${TY[t].glyph} ${B.touch_by_type[t]} ${t}`).join(', ')}. The outage flag is an LLM judgment (in my 20-call check it missed 3 and never over-flagged, so the count is probably a floor); "main theme" is the narrower version (see Calls filter).</div>
+  <div class="grid2"><div class="card chartbox"><h3>Mean call score: calls that touch the outage vs not</h3>${s}<div class="legend"><span>solid = touches the outage</span><span>outlined = does not</span>${TYPES.map(t=>`<span><i style="background:${col(t)}"></i>${TY[t].label}</span>`).join('')}</div>
+      <p class="note">n under each bar. Tone is lower for outage-touching calls in every type, partly because a call about an outage is tense by definition.</p>${tableView('outage vs not by type',['Type','Touches outage','n','Mean call score'],TYPES.flatMap(t=>[1,0].map(fl=>[TY[t].label,fl?'yes':'no',B.tone[`${t}|${fl}`].n,B.tone[`${t}|${fl}`].mean==null?'':f2(B.tone[`${t}|${fl}`].mean)])))}</div>
+    <div class="card chartbox"><h3>Weekly mean call score</h3>${w}<p class="note">Orange-filled points = more than half of that week’s calls touch the outage; larger points = 8 or more calls. Axis labels are ISO weeks. Dates in the data are partly inconsistent with content, so the timeline is context, not proof.</p>${tableView('weekly means',['Week','Calls','Mean call score','Share touching outage'],wk.map(d=>[d.week,d.n,f2(d.mean),pct(d.inc)]))}</div></div>
+  <div class="card"><h3>Accounts with calls across types</h3><p class="note" style="margin:4px 0 8px">Each tag is one call: shape = type, number = call score, dashed = touches the outage. Internal calls cannot be tied to an account. Accounts have 1 to a few calls with different purposes, so these are leads, not conclusions. Click a tag to open the call.</p>
+    <div style="max-height:460px;overflow:auto">${acc.map(a=>`<div class="row" style="border-top:1px solid var(--line);padding:5px 0"><b style="min-width:150px">${esc(a.name)}</b><span>${a.calls.filter(c=>c.type!=='internal').map(c=>`<button class="pc ${c.type} ${c.inc?'touch':''}" data-open="${c.cid}" title="${esc(c.date+' · '+c.title)}">${TY[c.type].glyph} ${f1(c.cs)} <span class="muted">${c.date.slice(5)}</span></button>`).join('')}</span></div>`).join('')}</div></div>`;
+  $$('.bar',h).forEach(g=>tipOn(g,g.dataset.tip));
+}
+function iRisk(h){
+  const R=D.risk;const lab={tone_le_2_5:'Customer score ≤ 2.5 (+2)',tone_le_3_0:'Customer score ≤ 3.0 (+1)',fell:'Tone fell during call (+1)',competitor:'Customer raises a competitor or alternative (+1)',outage:'Call concerns the outage (+1)'};
+  h.innerHTML=`<div class="callout" style="border-left-color:var(--crit)"><b>A ranked list for a human to follow up, not a churn prediction.</b> There are no churn outcomes in the data to check it against. The index adds points from signals that overlap (a competitor mention and an outage call often come together), and it is built on ${R.length} external calls.</div>
+  <div class="card"><h3>How the index works</h3><ul style="margin:6px 0 0;padding-left:18px">${Object.values(lab).map(l=>`<li>${esc(l)}</li>`).join('')}</ul><p class="note" style="margin-top:6px">Points range from 0 to 5. The last column is the number of churn-signal moments in the dataset’s own provided notes: an upstream AI output, shown for comparison and never used by our pipeline.</p></div>
+  <div class="scroll" style="max-height:640px"><table><thead><tr><th>Points</th><th>Account</th><th>Date</th><th>Call</th><th class="num">Cust.</th><th>Signals</th><th class="num">Provided churn notes</th></tr></thead><tbody>${R.map(r=>`<tr class="clickable" tabindex="0" data-open="${r.cid}"><td><span class="bar-pts" aria-label="${r.pts} points">${[1,2,3,4,5].map(i=>`<i class="${i<=r.pts?'on':''}"></i>`).join('')}</span> <b class="mono">${r.pts}</b></td><td>${esc(r.org)}</td><td class="mono">${r.date.slice(5)}</td><td class="tt">${esc(r.title)}</td><td class="num">${f2(r.cu)}</td><td class="note">${[r.comps.tone_le_2_5?'tone ≤ 2.5':r.comps.tone_le_3_0?'tone ≤ 3.0':'',r.comps.fell?'tone fell':'',r.comps.competitor?'competitor':'',r.comps.outage?'outage':''].filter(Boolean).join(' · ')}</td><td class="num">${r.prov}</td></tr>`).join('')}</tbody></table></div>
+  <p class="note">Rows open the call so the evidence quotes can be read before acting.</p>`;
+  $$('#insBody tr[data-open]').forEach(tr=>tr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCall(tr.dataset.open)}}));
+}
+
+/* ---------- trust ---------- */
+function rTrust(){
+  const T=D.trust,sl=T.sentence_level;
+  const tile=(big,label,sub)=>`<div class="card"><b style="font:700 26px var(--display);font-variant-numeric:tabular-nums">${big}</b><p>${esc(label)}</p><p class="note">${sub}</p></div>`;
+  $('#tab-trust').innerHTML=`<div class="callout">What we checked, and what each check does not prove. Agreement with the provided labels is consistency with an upstream AI output, not accuracy. Nothing in this file is an independent accuracy figure for Stages 1 and 2.</div>
+  <div class="grid">
+   ${tile(`${T.s0_review.agree_model} of ${T.s0_review.n}`,'Stage 0 items where the reviewer agreed with the model',`Agreed with the title rule on ${T.s0_review.agree_rule} of ${T.s0_review.n}. The items were the disagreements plus a sample of agreements, so this is not a rate over all 70 customer calls.`)}
+   ${tile(pct(T.s1_stab.primary_theme_agreement),'Stage 1 primary theme identical on a re-run',`${T.s1_stab.n} calls re-run. Product area ${pct(T.s1_stab.product_area_agreement)}, outage flag ${pct(T.s1_stab.incident_agreement)}, tag overlap ${f2(T.s1_stab.tag_set_mean_jaccard)}.`)}
+   ${tile(f2(T.s2_stab.call_score_mad),'Stage 2 mean absolute difference between two runs',`${T.s2_stab.n} calls re-run; ${T.s2_stab.call_score_identical} identical, largest difference ${f2(T.s2_stab.max_call_score_diff)}. Per-turn labels agreed on ${pct(T.s2_stab.per_turn_label_agreement)} of ${T.s2_stab.per_turn_n} turns.`)}
+   ${tile(pct(sl.overall),'Sentence-level agreement with the provided labels',`Over ${sl.n.toLocaleString()} turns; support ${pct(sl.by_type.support)}, external ${pct(sl.by_type.external)}, internal ${pct(sl.by_type.internal)}. The provided labels are an upstream AI output: this is consistency, not accuracy.`)}
+  </div>
+  <div class="grid2"><div class="card"><h3>Limitations</h3><ul style="margin:6px 0 0;padding-left:18px;display:grid;gap:4px">
+    <li>${N} calls, apparently synthetic, from one fictional company. Findings are directional.</li>
+    <li>No gold labels and no outcomes (no churn, no renewal results).</li>
+    <li>Call dates are partly inconsistent with content, so date-based before and after comparisons are avoided.</li>
+    <li>The outage flag is an LLM judgment and probably a floor (it missed 3 of 20 in my check): ${D.pipeline.s1.incident_touch} calls touch it, ${D.pipeline.s1.incident_core} have it as the main theme.</li>
+    <li>The Other bucket was never used (${D.pipeline.s1.other} of ${N}), so its drift alarm is untested here.</li>
+    <li>Temperature 0 does not make the model repeat exactly; reproducibility comes from saved model responses, not from re-running.</li>
+    <li>The taxonomy and the scoring anchors were derived from the same ${N} calls they are applied to, and were finalised under delegation to the assistant.</li>
+    <li>Some quotes are longer than the prompt’s word limit; all are verbatim.</li></ul></div>
+   <div class="card"><h3>What we do not claim</h3><ul style="margin:6px 0 0;padding-left:18px;display:grid;gap:4px">
+    <li>That sentiment predicts churn or any outcome.</li>
+    <li>That the outage caused the March dip. With outage-touching calls removed the dip is not distinguishable from zero, but the flag is partly definitional.</li>
+    <li>That internal calls differ from the other types.</li>
+    <li>That the risk ranking is a prediction.</li>
+    <li>That calls ending warmer than they start means customers were satisfied.</li>
+    <li>That conclusions about a single account hold from its few calls.</li></ul></div></div>
+  <p class="note">Method: ${esc(T.meta.ci)}; ${esc(T.meta.tests)}. Built by app/build_explorer.py from the frozen outputs; no network, no model calls.</p>`;
+}
+
+/* ---------- init ---------- */
+setTab((location.hash||'').slice(1)||'overview',false);
+</script>

@@ -1,0 +1,4062 @@
+[
+  {
+    "meeting_id": "01KQDD5172176D02DB51360A",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 39,
+    "call_score": 2.5,
+    "customer_score": 2.5,
+    "evidence_quote": "Three days of radio silence from Aegis is not acceptable for a healthcare customer.",
+    "confidence": "high",
+    "traj_start": 2.0,
+    "traj_end": 3.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "negative"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "negative"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "negative"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 8,
+    "n_neu": 27,
+    "n_pos": 4,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004111,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQ9BB82FD97C9607D57E90",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 40,
+    "call_score": 5.0,
+    "customer_score": 5.0,
+    "evidence_quote": "And honestly just the way you've walked through everything today has given me so much confidence. I feel like we made the right call choosing Aegis.",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "positive"
+      },
+      {
+        "index": 13,
+        "label": "positive"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 23,
+    "n_pos": 17,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": false,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004217,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQ4EE836687F95080D92AB",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 41,
+    "call_score": 3.5,
+    "customer_score": null,
+    "evidence_quote": "Yeah, that's a reasonable scope.",
+    "confidence": "high",
+    "traj_start": 3.0,
+    "traj_end": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "negative"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "negative"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "negative"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 3,
+    "n_neu": 35,
+    "n_pos": 3,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004352,
+    "has_customer_turn": false
+  },
+  {
+    "meeting_id": "01KQFFC0F889AE8CFEE7A00D",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 52,
+    "call_score": 5.0,
+    "customer_score": 5.0,
+    "evidence_quote": "So honestly, um, the short version is — we're happy. Like genuinely happy, which is not something I say lightly",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "positive"
+      },
+      {
+        "index": 7,
+        "label": "positive"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "positive"
+      },
+      {
+        "index": 10,
+        "label": "positive"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "positive"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "positive"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "positive"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      },
+      {
+        "index": 44,
+        "label": "positive"
+      },
+      {
+        "index": 45,
+        "label": "positive"
+      },
+      {
+        "index": 46,
+        "label": "neutral"
+      },
+      {
+        "index": 47,
+        "label": "neutral"
+      },
+      {
+        "index": 48,
+        "label": "positive"
+      },
+      {
+        "index": 49,
+        "label": "positive"
+      },
+      {
+        "index": 50,
+        "label": "positive"
+      },
+      {
+        "index": 51,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 23,
+    "n_pos": 29,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004978,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQB3B16F255B65F39597D0",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 40,
+    "call_score": 4.5,
+    "customer_score": null,
+    "evidence_quote": "I'm feeling a lot more confident about the April date after this conversation.",
+    "confidence": "high",
+    "traj_start": 4.0,
+    "traj_end": 4.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "positive"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "positive"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "positive"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "positive"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "positive"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 22,
+    "n_pos": 18,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004142,
+    "has_customer_turn": false
+  },
+  {
+    "meeting_id": "01KQBB7C4D4789DB2F3DA9C2",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 45,
+    "call_score": 2.5,
+    "customer_score": 2.0,
+    "evidence_quote": "and right now I'm sitting here wondering if we made the right call.",
+    "confidence": "high",
+    "traj_start": 2.5,
+    "traj_end": 3.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "negative"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "negative"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "negative"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "negative"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "negative"
+      },
+      {
+        "index": 35,
+        "label": "negative"
+      },
+      {
+        "index": 36,
+        "label": "negative"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 11,
+    "n_neu": 32,
+    "n_pos": 2,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004479,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQC3A2EBC501837E973B16",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 42,
+    "call_score": 5.0,
+    "customer_score": 5.0,
+    "evidence_quote": "Oh that's — yeah, that's exactly the kind of granularity we've been missing.",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "positive"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 28,
+    "n_pos": 14,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004287,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQ773D68723289E4A98889",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 43,
+    "call_score": 4.0,
+    "customer_score": 4.0,
+    "evidence_quote": "Okay good, that's good to hear. Alright, I think that covers everything I needed from this call. I appreciate you both digging into it.",
+    "confidence": "high",
+    "traj_start": 3.5,
+    "traj_end": 4.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 39,
+    "n_pos": 4,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004373,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQAFB8DBF6E1E2FDEF0B75",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 37,
+    "call_score": 4.5,
+    "customer_score": 4.5,
+    "evidence_quote": "Okay so — yeah, I think I'm pretty sold on the concept. Can we talk about what next steps would look like?",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "negative"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "positive"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "positive"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "positive"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "positive"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 2,
+    "n_neu": 12,
+    "n_pos": 23,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004052,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQA1AFDC1306A000B0C7D9",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 55,
+    "call_score": 4.5,
+    "customer_score": 4.5,
+    "evidence_quote": "Okay that is genuinely exciting because our current process for even attempting a restore test is like a whole weekend project that nobody wants to volunteer for.",
+    "confidence": "high",
+    "traj_start": 4.0,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "positive"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      },
+      {
+        "index": 45,
+        "label": "positive"
+      },
+      {
+        "index": 46,
+        "label": "neutral"
+      },
+      {
+        "index": 47,
+        "label": "positive"
+      },
+      {
+        "index": 48,
+        "label": "positive"
+      },
+      {
+        "index": 49,
+        "label": "positive"
+      },
+      {
+        "index": 50,
+        "label": "positive"
+      },
+      {
+        "index": 51,
+        "label": "neutral"
+      },
+      {
+        "index": 52,
+        "label": "positive"
+      },
+      {
+        "index": 53,
+        "label": "positive"
+      },
+      {
+        "index": 54,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 30,
+    "n_pos": 25,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": false,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.005128,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQD4D9DEBA2D55AC2AA9F5",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 43,
+    "call_score": 5.0,
+    "customer_score": 5.0,
+    "evidence_quote": "and genuinely, thanks for being a good partner on this, it makes a difference when the vendor relationship feels collaborative rather than just transactional.",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "positive"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "positive"
+      },
+      {
+        "index": 10,
+        "label": "positive"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "positive"
+      },
+      {
+        "index": 13,
+        "label": "positive"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "positive"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 22,
+    "n_pos": 21,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004363,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQE110900B8A65D80AE694",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 38,
+    "call_score": 2.5,
+    "customer_score": null,
+    "evidence_quote": "That is honestly really frustrating to hear, Mike, because we had six hours — six hours — where customers had zero threat monitoring visibility.",
+    "confidence": "high",
+    "traj_start": 2.5,
+    "traj_end": 3.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "negative"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "negative"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "negative"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "negative"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "negative"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "negative"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "negative"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "negative"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 12,
+    "n_neu": 26,
+    "n_pos": 0,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004152,
+    "has_customer_turn": false
+  },
+  {
+    "meeting_id": "01KQEDE682B4A8D67C657CF1",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 41,
+    "call_score": 2.5,
+    "customer_score": 2.0,
+    "evidence_quote": "We're evaluating other vendors at renewal time, Sarah. I want to be transparent about that. This isn't a threat, it's just",
+    "confidence": "high",
+    "traj_start": 2.5,
+    "traj_end": 2.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "negative"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "negative"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "negative"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "negative"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "negative"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      },
+      {
+        "index": 37,
+        "label": "negative"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 11,
+    "n_neu": 29,
+    "n_pos": 1,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004264,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQ45C76AF3AEA6B3EA6697",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 40,
+    "call_score": 2.5,
+    "customer_score": 2.5,
+    "evidence_quote": "I'll be honest with you though — and this is not meant as a threat, it's just where we are — we have been in some conversations with CyberNova",
+    "confidence": "high",
+    "traj_start": 2.5,
+    "traj_end": 3.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "negative"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "positive"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "negative"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "negative"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "negative"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 9,
+    "n_neu": 27,
+    "n_pos": 4,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": false,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004258,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQ45C0AD36B351A3571940",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 47,
+    "call_score": 5.0,
+    "customer_score": 5.0,
+    "evidence_quote": "honestly this has been one of the more exciting demos I've sat through in a while, like usually I'm looking at features and thinking",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "positive"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "positive"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "positive"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "positive"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      },
+      {
+        "index": 44,
+        "label": "positive"
+      },
+      {
+        "index": 45,
+        "label": "positive"
+      },
+      {
+        "index": 46,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 21,
+    "n_pos": 26,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004633,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQCF9872BF130D33B1B5EC",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 43,
+    "call_score": 5.0,
+    "customer_score": null,
+    "evidence_quote": "Alright, I think we're in genuinely great shape. Like, better than I expected three days out if I'm being honest.",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "positive"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "positive"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 27,
+    "n_pos": 16,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004349,
+    "has_customer_turn": false
+  },
+  {
+    "meeting_id": "01KQ764171AC27A3A94DC695",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 53,
+    "call_score": 3.5,
+    "customer_score": null,
+    "evidence_quote": "That's actually a good angle — turning a service recovery situation into a broader platform conversation. I like that.",
+    "confidence": "high",
+    "traj_start": 3.0,
+    "traj_end": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      },
+      {
+        "index": 45,
+        "label": "neutral"
+      },
+      {
+        "index": 46,
+        "label": "neutral"
+      },
+      {
+        "index": 47,
+        "label": "neutral"
+      },
+      {
+        "index": 48,
+        "label": "neutral"
+      },
+      {
+        "index": 49,
+        "label": "neutral"
+      },
+      {
+        "index": 50,
+        "label": "positive"
+      },
+      {
+        "index": 51,
+        "label": "positive"
+      },
+      {
+        "index": 52,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 49,
+    "n_pos": 4,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004967,
+    "has_customer_turn": false
+  },
+  {
+    "meeting_id": "01KQBBF753B44DE677670E6D",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 41,
+    "call_score": 3.0,
+    "customer_score": 2.5,
+    "evidence_quote": "David, six hours of no threat monitoring visibility and we're hearing about it right now, on April 15th?",
+    "confidence": "high",
+    "traj_start": 2.0,
+    "traj_end": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "negative"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "negative"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "negative"
+      },
+      {
+        "index": 11,
+        "label": "negative"
+      },
+      {
+        "index": 12,
+        "label": "negative"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "negative"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "negative"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "negative"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 9,
+    "n_neu": 30,
+    "n_pos": 2,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004293,
+    "has_customer_turn": true
+  },
+  {
+    "meeting_id": "01KQFEEFFF8E80B0DFD10880",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 44,
+    "call_score": 4.5,
+    "customer_score": null,
+    "evidence_quote": "Honestly, this whole process has been so much smoother than I expected — like, last year's audit was just a nightmare in comparison.",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "positive"
+      },
+      {
+        "index": 7,
+        "label": "positive"
+      },
+      {
+        "index": 8,
+        "label": "positive"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "positive"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "positive"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "positive"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 22,
+    "n_pos": 22,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.004414,
+    "has_customer_turn": false
+  },
+  {
+    "meeting_id": "01KQ92EA85FE4C537400227D",
+    "run": 2,
+    "prompt_version": "stage2_v1",
+    "n_turns": 36,
+    "call_score": 5.0,
+    "customer_score": 5.0,
+    "evidence_quote": "Priya this has been genuinely one of the more productive support calls I've had in a while",
+    "confidence": "high",
+    "traj_start": 4.5,
+    "traj_end": 5.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "positive"
+      },
+      {
+        "index": 13,
+        "label": "positive"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "positive"
+      },
+      {
+        "index": 17,
+        "label": "positive"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "positive"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      }
+    ],
+    "n_neg": 0,
+    "n_neu": 19,
+    "n_pos": 17,
+    "per_turn_ok": true,
+    "customer_null_ok": true,
+    "quote_exact": true,
+    "quote_loose": true,
+    "quote_words_ok": true,
+    "attempts": 1,
+    "cache_hit": false,
+    "model_returned": "google/gemini-3.8-flash",
+    "provider_returned": "Google AI Studio",
+    "structured_mode": "json_schema",
+    "finish_reason": "stop",
+    "status": "ok",
+    "cost": 0.003936,
+    "has_customer_turn": true
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 1,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nPriya Patel: Hi Warren, thanks for holding — this is Priya Patel from the Aegis support team, I'm the team lead on the compliance side of things. How are you doing today?\nWarren Beck: Priya! Yeah, doing well, doing well. Thanks for jumping on this — I know it's a bit of an unusual support case, but we're pretty excited about where this could go.\nPriya Patel: Absolutely, no that's — unusual is fine, we love those. So I've got the case here, case number 8811, and it looks like you're coming in with a feature request around custom compliance templates in Aegis Comply. Is that the right starting point?\nWarren Beck: That's exactly it. So, you know, we upgraded to Comply v2 — gosh, what was it, like mid-April? — and honestly the on-demand reporting has been phenomenal. The SOC 2 and the PCI DSS reports especially, our audit team is basically over the moon.\nPriya Patel: Oh that's great to hear, we launched v2 on April 7th so yeah you're right around that mark. And yeah the on-demand piece was a big lift for our engineering team so I'm glad it's landing well.\nWarren Beck: Yeah it really has. But here's the thing — we're a financial services firm, right, so on top of the standard frameworks we've got some internal control requirements. Blackridge-specific stuff that our board and our regulators kind of expect us to track. And I'm wondering if there's any way to build a custom template inside Comply that maps to those internal controls.\nPriya Patel: Right, so like a bespoke framework essentially — where you define the control categories, the evidence requirements, all of that, rather than using one of the out-of-the-box frameworks we ship with.\nWarren Beck: Exactly, yeah. We're not trying to replace SOC 2 or anything like that, we still need those. But we want something that can sit alongside them. Like maybe a Blackridge Internal Controls Report — something I can hand to our board quarterly."
+  },
+  "response_text": "{\n  \"label\": \"support\",\n  \"evidence_quote\": \"this is Priya Patel from the Aegis support team, I'm the team lead on the compliance side of things.\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"Priya Patel\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Warren Beck\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "this is Priya Patel from the Aegis support team, I'm the team lead on the compliance side of things.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Priya Patel",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Warren Beck",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 113,
+    "prompt_tokens": 997,
+    "total_tokens": 1110,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0011715,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0011715,
+      "upstream_inference_prompt_cost": 0.00074775,
+      "upstream_inference_completions_cost": 0.00042375
+    }
+  },
+  "latency_s": 2.44,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:37:17.263918+00:00",
+  "key": "a9703265583966425869098ff462947900024cdb82d0df40f4c8a63f5433fe2f"
+}

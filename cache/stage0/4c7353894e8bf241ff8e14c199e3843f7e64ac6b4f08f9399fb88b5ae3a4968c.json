@@ -1,0 +1,73 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 2 from Aegis, 1 from outside Aegis\n\nopening:\nRachel Torres: Alright, I think we've got everyone on — Derek, can you hear us okay?\nDerek Owens: Yeah, loud and clear. Good to go.\nRachel Torres: Perfect. Okay so, welcome everyone — I'm Rachel Torres, Senior Account Manager here at Aegis, and I have Sofia Petrov with me today, she's one of our Senior Engineers on the Identity side of things. Sofia, you wanna say a quick hi?\nSofia Petrov: Hey Derek, great to meet you. Really excited to be working with Crestline on this — Identity deployments in financial services are kind of my favorite thing to dig into, so, yeah, looking forward to the conversation.\nDerek Owens: Likewise, honestly. I've been looking forward to this one. We've had Protect and Detect running for a while now and the team's been happy, so adding Identity feels like a natural next step.\nRachel Torres: That's great to hear, and yeah, that's — that's kind of the pattern we see with a lot of our financial services customers. They start with backup and threat monitoring and then once Identity is on the roadmap it sort of becomes a priority real fast, especially given the regulatory environment you're dealing with.\nDerek Owens: Exactly, yeah. We had our annual audit in February and the auditors flagged some gaps around privileged access management and MFA coverage across our admin accounts specifically. So that sort of lit a fire under us to get this moving.\nRachel Torres: Okay, that's — that's actually super helpful context, Derek, thank you. So Sofia, that kind of shapes where we should probably start today, right?"
+  },
+  "response_text": "{\"label\": \"external\", \"evidence_quote\": \"I'm Rachel Torres, Senior Account Manager here at Aegis\", \"confidence\": \"high\", \"speaker_sides\": [{\"speaker\": \"Rachel Torres\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Sofia Petrov\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Derek Owens\", \"side\": \"customer\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "I'm Rachel Torres, Senior Account Manager here at Aegis",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Rachel Torres",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Sofia Petrov",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Derek Owens",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 142,
+    "prompt_tokens": 1963,
+    "total_tokens": 2105,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002673,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002673,
+      "upstream_inference_prompt_cost": 0.0001963,
+      "upstream_inference_completions_cost": 7.1e-05
+    }
+  },
+  "latency_s": 1.831,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:35.984528+00:00",
+  "key": "4c7353894e8bf241ff8e14c199e3843f7e64ac6b4f08f9399fb88b5ae3a4968c"
+}

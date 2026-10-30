@@ -1,0 +1,184 @@
+{
+  "stage": "stage1_proposal",
+  "prompt_version": "stage1_proposal_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 16000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You propose a draft theme taxonomy for recorded calls at Aegis Cloud Security (customer support calls, account manager calls with customers, internal meetings). The taxonomy is shared across all call types, so a theme must not be defined by the type of call.\n\nInput: two independent discovery runs, each a consolidated list of candidate themes (source ids \"r1.cN\" and \"r2.cN\", with name, definition, owner and the number of calls each covers) and product areas, plus a scripted overlap table saying which run 1 and run 2 candidates cover mostly the same calls.\n\nTask: propose a draft taxonomy \"v0\" of 6 to 8 themes.\n- Prefer themes that both runs found (high overlap); a theme found by only one run needs a clear reason to stay.\n- Each theme must pass the actionability test: one of \"support lead\", \"sales / account manager\", \"product manager\", \"engineering lead\" would act on a pattern of calls with that theme.\n- Themes should be distinguishable from each other and together cover most calls. Keep an explicit \"Other / new theme\" bucket outside the 6 to 8.\n- For each theme give: name (2 to 5 words), definition (one sentence), boundary_note (one sentence on how to tell it from its nearest neighbor), owner, sources (the r1/r2 ids it draws on), and note (why merged, or why kept despite being found in one run only; empty string if nothing to add).\n- dropped_candidates: candidates you left out (or folded away), each with the source id and a one-sentence reason. Every candidate source id must appear in a theme's sources or in dropped_candidates.\n- product_areas: the product names to use as a separate field, each with a one-sentence note. Merge variants and keep only products that the runs found with evidence.\n- other_policy: one sentence on when a call goes to \"Other / new theme\" and what to do when that bucket grows.\n- rationale: three sentences at most on how you chose the set.\n\nReturn only JSON matching the schema.",
+    "user": "{\n \"run1\": {\n  \"themes\": [\n   {\n    \"source\": \"r1.c1\",\n    \"name\": \"Pipeline Outage Technical Remediation\",\n    \"definition\": \"Calls addressing the architectural investigation, redundant node failover, circuit breaker implementation, and technical root-cause remediation of the Detect event ingestion pipeline outage.\",\n    \"distinguishing\": \"Focuses strictly on engineering root causes, infrastructure fixes, and pipeline recovery rather than commercial account retention or customer relationship management.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 15\n   },\n   {\n    \"source\": \"r1.c2\",\n    \"name\": \"Post Outage Account Retention\",\n    \"definition\": \"Calls where customers demand SLAs, executive briefings, credits, and remediation documentation following monitoring downtime, creating elevated churn and competitive risk.\",\n    \"distinguishing\": \"Focuses on commercial damage control, customer trust restoration, and SLA negotiations rather than internal technical debugging or general renewal discussions.\",\n    \"owner\": \"sales / account manager\",\n    \"calls\": 20\n   },\n   {\n    \"source\": \"r1.c3\",\n    \"name\": \"Comply v2 Feature Adoption\",\n    \"definition\": \"Calls involving product previews, onboarding readiness, sales demos, and early adoption tracking for Comply v2 multi-framework on-demand reporting.\",\n    \"distinguishing\": \"Centers on adoption and capability education for standard Comply v2 functionality rather than post-launch bug triage or custom template requests.\",\n    \"owner\": \"product manager\",\n    \"calls\": 20\n   },\n   {\n    \"source\": \"r1.c4\",\n    \"name\": \"Comply Post Launch Defects\",\n    \"definition\": \"Calls focused on diagnosing and resolving software bugs, query timeouts, export formatting errors, and billing discrepancies following migration to Comply v2.\",\n    \"distinguishing\": \"Addresses functional code defects, system timeouts, and billing errors in Comply rather than adoption planning or feature roadmap requests.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 3\n   },\n   {\n    \"source\": \"r1.c5\",\n    \"name\": \"Custom Compliance Reporting Requests\",\n    \"definition\": \"Calls where customers explicitly request custom control frameworks, bespoke cross-framework matrices, and non-standard reporting templates.\",\n    \"distinguishing\": \"Focuses on future product expansion for non-standard, custom compliance templates rather than standard Comply v2 adoption or bug fixing.\",\n    \"owner\": \"product manager\",\n    \"calls\": 3\n   },\n   {\n    \"source\": \"r1.c6\",\n    \"name\": \"Contract Renewal and Expansion\",\n    \"definition\": \"Commercial discussions covering scheduled renewals, seat expansion, multi-year commitments, tier upgrades, and cross-selling additional platform modules.\",\n    \"distinguishing\": \"Focuses on standard contract renewals and commercial expansion terms rather than acute post-outage retention saves.\",\n    \"owner\": \"sales / account manager\",\n    \"calls\": 13\n   },\n   {\n    \"source\": \"r1.c7\",\n    \"name\": \"Competitive Strategy and Positioning\",\n    \"definition\": \"Internal calls evaluating competitive threats, competitor displacement tactics, deal win-loss reviews, and sales battlecards against rivals like SentinelShield and CyberNova.\",\n    \"distinguishing\": \"Focuses on internal competitive analysis and objection handling across the market rather than individual commercial contract renewal terms.\",\n    \"owner\": \"sales / account manager\",\n    \"calls\": 4\n   },\n   {\n    \"source\": \"r1.c8\",\n    \"name\": \"Detect Tuning and Noise Optimization\",\n    \"definition\": \"Calls focused on configuring behavioral baselines, suppressing false-positive spikes, and tuning detection thresholds to minimize operational alert fatigue.\",\n    \"distinguishing\": \"Deals with the behavioral calibration and sensitivity of detection rules during normal operation rather than catastrophic pipeline outages.\",\n    \"owner\": \"support lead\",\n    \"calls\": 2\n   },\n   {\n    \"source\": \"r1.c9\",\n    \"name\": \"Ingestion Pipeline Latency and Bottlenecks\",\n    \"definition\": \"Calls addressing event latency, alert delivery delays, connector queue depth imbalances, and SIEM webhook timeouts within the Detect streaming pipeline.\",\n    \"distinguishing\": \"Deals with partial degradation, connector latency, and queue backpressure rather than total system-wide service outages.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 3\n   },\n   {\n    \"source\": \"r1.c10\",\n    \"name\": \"Identity Provisioning and Authentication\",\n    \"definition\": \"Calls concerning directory synchronization queues, SAML SSO authentication regressions, session timeouts, and SCIM or JIT provisioning feature requirements in Aegis Identity.\",\n    \"distinguishing\": \"Focuses exclusively on Identity module defects, authentication configurations, and IAM feature gaps rather than Detect or Protect platform issues.\",\n    \"owner\": \"product manager\",\n    \"calls\": 9\n   },\n   {\n    \"source\": \"r1.c11\",\n    \"name\": \"Protect Scalability and Backup Failures\",\n    \"definition\": \"Calls addressing degraded backup throughput, snapshot deduplication bottlenecks, orchestration failures, and missing granular restore capabilities in Aegis Protect.\",\n    \"distinguishing\": \"Focuses specifically on storage architecture, snapshot throughput, and restore limitations within the Protect product area.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 6\n   },\n   {\n    \"source\": \"r1.c12\",\n    \"name\": \"Customer Module Onboarding Architecture\",\n    \"definition\": \"Structured implementation and kickoff sessions assisting customers with initial environment discovery, architecture scoping, and policy deployment for newly purchased modules.\",\n    \"distinguishing\": \"Centers on initial deployment setup and onboarding project planning rather than resolving existing bugs or negotiating renewals.\",\n    \"owner\": \"support lead\",\n    \"calls\": 5\n   }\n  ],\n  \"product_areas\": [\n   {\n    \"source\": \"r1.p1\",\n    \"name\": \"Aegis Detect\",\n    \"calls\": 58\n   },\n   {\n    \"source\": \"r1.p2\",\n    \"name\": \"Aegis Comply\",\n    \"calls\": 51\n   },\n   {\n    \"source\": \"r1.p3\",\n    \"name\": \"Aegis Protect\",\n    \"calls\": 21\n   },\n   {\n    \"source\": \"r1.p4\",\n    \"name\": \"Aegis Identity\",\n    \"calls\": 22\n   }\n  ],\n  \"other_note\": \"Calls that fit no specific theme typically involve routine administrative inquiries, general customer relationship check-ins, or one-off operational questions that lack recurring systemic patterns.\"\n },\n \"run2\": {\n  \"themes\": [\n   {\n    \"source\": \"r2.c1\",\n    \"name\": \"Detect Ingestion Pipeline Remediation\",\n    \"definition\": \"Calls addressing the architectural resilience, root cause investigation, and infrastructure remediation following platform outages in the Detect ingestion pipeline.\",\n    \"distinguishing\": \"Focuses on internal backend architectural fixes and technical incident post-mortems for Detect, rather than commercial retention negotiations or routine SIEM export latency.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 32\n   },\n   {\n    \"source\": \"r2.c2\",\n    \"name\": \"Comply v2 Reporting Expansion\",\n    \"definition\": \"Calls concerning customer demonstrations, roadmap scoping, audit template customization, and rollout readiness for Comply v2 multi-framework reporting.\",\n    \"distinguishing\": \"Focuses on feature adoption, reporting frameworks, and release readiness for Aegis Comply rather than internal corporate compliance checks or contract pricing.\",\n    \"owner\": \"product manager\",\n    \"calls\": 21\n   },\n   {\n    \"source\": \"r2.c3\",\n    \"name\": \"Contract Renewals and Retention\",\n    \"definition\": \"Commercial discussions covering contract renewals, multi-module packaging, volume rightsizing, and defending accounts against churn following service disruptions.\",\n    \"distinguishing\": \"Focuses on contractual terms, commercial pricing concessions, and overall retention strategy rather than day-to-day invoice overage triage or technical support debugging.\",\n    \"owner\": \"sales / account manager\",\n    \"calls\": 20\n   },\n   {\n    \"source\": \"r2.c4\",\n    \"name\": \"Identity Authentication and Integration\",\n    \"definition\": \"Calls regarding directory synchronization breakdowns, SSO authentication failures, MFA validation issues, and IAM policy provisioning in Aegis Identity.\",\n    \"distinguishing\": \"Focuses on identity directory connector and authentication failures rather than threat alert calibration or backup job throughput.\",\n    \"owner\": \"support lead\",\n    \"calls\": 10\n   },\n   {\n    \"source\": \"r2.c5\",\n    \"name\": \"Protect Backup Performance Bottlenecks\",\n    \"definition\": \"Calls concerning extended backup windows, connector permission failures, agent version incompatibilities, and throughput drops within Aegis Protect.\",\n    \"distinguishing\": \"Focuses on runtime performance degradation and connector job failures in backup workflows rather than initial environment architecture and deployment planning.\",\n    \"owner\": \"support lead\",\n    \"calls\": 5\n   },\n   {\n    \"source\": \"r2.c6\",\n    \"name\": \"Protect Onboarding and Architecture\",\n    \"definition\": \"Calls covering technical architecture design, RTO/RPO scoping, and deployment planning for initial customer implementations of Aegis Protect.\",\n    \"distinguishing\": \"Focuses on pre-deployment architecture planning and onboarding milestone management rather than active troubleshooting of degraded backup jobs.\",\n    \"owner\": \"sales / account manager\",\n    \"calls\": 2\n   },\n   {\n    \"source\": \"r2.c7\",\n    \"name\": \"Threat Detection Rule Tuning\",\n    \"definition\": \"Calls assisting customers with tuning detection thresholds, suppressing noisy alert baselines, and mitigating SOC fatigue caused by false positives.\",\n    \"distinguishing\": \"Deals with alert rule sensitivity and baseline calibration in Aegis Detect rather than complete event ingestion outages or SIEM bridge latency.\",\n    \"owner\": \"product manager\",\n    \"calls\": 2\n   },\n   {\n    \"source\": \"r2.c8\",\n    \"name\": \"SIEM Connector Forwarding Latency\",\n    \"definition\": \"Calls addressing telemetry forwarding delays, connector buffer retries, and dropped event queues between Aegis Detect and external SIEM solutions.\",\n    \"distinguishing\": \"Focuses specifically on the third-party SIEM egress connector and queue buffering rather than internal Detect ingestion pipeline failures.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 4\n   },\n   {\n    \"source\": \"r2.c9\",\n    \"name\": \"Usage Ingestion Overage Disputes\",\n    \"definition\": \"Calls where customers question, review, or dispute surprise invoice overage charges stemming from ingestion spikes and data retention limits.\",\n    \"distinguishing\": \"Centers on transactional billing disputes and consumption threshold visibility rather than broader multi-year contract renewals or technical platform bugs.\",\n    \"owner\": \"support lead\",\n    \"calls\": 3\n   },\n   {\n    \"source\": \"r2.c10\",\n    \"name\": \"Internal Enterprise Audit Readiness\",\n    \"definition\": \"Internal meetings dedicated to organizing, auditing, and validating internal technical control evidence across access and CI/CD for upcoming SOC 2 audits.\",\n    \"distinguishing\": \"Focuses on Aegis's own internal compliance posture and control evidence rather than customer-facing Comply v2 product features.\",\n    \"owner\": \"engineering lead\",\n    \"calls\": 2\n   }\n  ],\n  \"product_areas\": [\n   {\n    \"source\": \"r2.p1\",\n    \"name\": \"Aegis Comply\",\n    \"calls\": 51\n   },\n   {\n    \"source\": \"r2.p2\",\n    \"name\": \"Aegis Detect\",\n    \"calls\": 56\n   },\n   {\n    \"source\": \"r2.p3\",\n    \"name\": \"Aegis Protect\",\n    \"calls\": 24\n   },\n   {\n    \"source\": \"r2.p4\",\n    \"name\": \"Aegis Identity\",\n    \"calls\": 22\n   }\n  ],\n  \"other_note\": \"Calls that do not fit into the primary product or operational themes generally consist of routine administrative check-ins, broad exploratory discussions, or isolated general inquiries that lack recurring patterns.\"\n },\n \"overlap_by_calls\": [\n  {\n   \"run1\": \"r1.c1\",\n   \"best_match_in_run2\": \"r2.c1\",\n   \"jaccard\": 0.382\n  },\n  {\n   \"run1\": \"r1.c2\",\n   \"best_match_in_run2\": \"r2.c1\",\n   \"jaccard\": 0.368\n  },\n  {\n   \"run1\": \"r1.c3\",\n   \"best_match_in_run2\": \"r2.c2\",\n   \"jaccard\": 0.577\n  },\n  {\n   \"run1\": \"r1.c4\",\n   \"best_match_in_run2\": \"r2.c1\",\n   \"jaccard\": 0.029\n  },\n  {\n   \"run1\": \"r1.c5\",\n   \"best_match_in_run2\": \"r2.c2\",\n   \"jaccard\": 0.143\n  },\n  {\n   \"run1\": \"r1.c6\",\n   \"best_match_in_run2\": \"r2.c3\",\n   \"jaccard\": 0.65\n  },\n  {\n   \"run1\": \"r1.c7\",\n   \"best_match_in_run2\": \"r2.c8\",\n   \"jaccard\": 0.143\n  },\n  {\n   \"run1\": \"r1.c8\",\n   \"best_match_in_run2\": \"r2.c7\",\n   \"jaccard\": 0.333\n  },\n  {\n   \"run1\": \"r1.c9\",\n   \"best_match_in_run2\": \"r2.c8\",\n   \"jaccard\": 0.167\n  },\n  {\n   \"run1\": \"r1.c10\",\n   \"best_match_in_run2\": \"r2.c4\",\n   \"jaccard\": 0.583\n  },\n  {\n   \"run1\": \"r1.c11\",\n   \"best_match_in_run2\": \"r2.c5\",\n   \"jaccard\": 0.571\n  },\n  {\n   \"run1\": \"r1.c12\",\n   \"best_match_in_run2\": \"r2.c6\",\n   \"jaccard\": 0.4\n  },\n  {\n   \"run2\": \"r2.c1\",\n   \"best_match_in_run1\": \"r1.c1\",\n   \"jaccard\": 0.382\n  },\n  {\n   \"run2\": \"r2.c2\",\n   \"best_match_in_run1\": \"r1.c3\",\n   \"jaccard\": 0.577\n  },\n  {\n   \"run2\": \"r2.c3\",\n   \"best_match_in_run1\": \"r1.c6\",\n   \"jaccard\": 0.65\n  },\n  {\n   \"run2\": \"r2.c4\",\n   \"best_match_in_run1\": \"r1.c10\",\n   \"jaccard\": 0.583\n  },\n  {\n   \"run2\": \"r2.c5\",\n   \"best_match_in_run1\": \"r1.c11\",\n   \"jaccard\": 0.571\n  },\n  {\n   \"run2\": \"r2.c6\",\n   \"best_match_in_run1\": \"r1.c12\",\n   \"jaccard\": 0.4\n  },\n  {\n   \"run2\": \"r2.c7\",\n   \"best_match_in_run1\": \"r1.c8\",\n   \"jaccard\": 0.333\n  },\n  {\n   \"run2\": \"r2.c8\",\n   \"best_match_in_run1\": \"r1.c9\",\n   \"jaccard\": 0.167\n  },\n  {\n   \"run2\": \"r2.c9\",\n   \"best_match_in_run1\": \"r1.c6\",\n   \"jaccard\": 0.067\n  },\n  {\n   \"run2\": \"r2.c10\",\n   \"best_match_in_run1\": \"r1.c3\",\n   \"jaccard\": 0.048\n  }\n ]\n}"
+  },
+  "response_text": "{\n  \"themes\": [\n    {\n      \"name\": \"Pipeline Outage Technical Remediation\",\n      \"definition\": \"Calls addressing the architectural investigation, failover engineering, and technical root-cause remediation of streaming ingestion and pipeline outages.\",\n      \"boundary_note\": \"Focuses strictly on engineering infrastructure stabilization and post-mortems rather than commercial SLA retention discussions or routine connector latency.\",\n      \"owner\": \"engineering lead\",\n      \"sources\": [\n        \"r1.c1\",\n        \"r2.c1\"\n      ],\n      \"note\": \"Merges run 1 and run 2 engineering remediation topics that share the technical incident response call cluster.\"\n    },\n    {\n      \"name\": \"Commercial Renewals and Retention\",\n      \"definition\": \"Commercial discussions covering contract renewals, account expansions, multi-year commitments, SLA negotiations, and churn prevention following service disruptions.\",\n      \"boundary_note\": \"Focuses on commercial contract terms, packaging, and account retention rather than root-cause technical debugging or new deployment kickoffs.\",\n      \"owner\": \"sales / account manager\",\n      \"sources\": [\n        \"r1.c2\",\n        \"r1.c6\",\n        \"r2.c3\"\n      ],\n      \"note\": \"Consolidates standard renewals with post-outage SLA retention saves into a unified sales account preservation theme.\"\n    },\n    {\n      \"name\": \"Compliance Product Adoption and Expansion\",\n      \"definition\": \"Calls involving product previews, rollout readiness, feature demonstrations, and roadmap requests for multi-framework compliance reporting.\",\n      \"boundary_note\": \"Focuses on capability education and roadmap requests for compliance features rather than commercial contract negotiations or internal corporate audits.\",\n      \"owner\": \"product manager\",\n      \"sources\": [\n        \"r1.c3\",\n        \"r1.c5\",\n        \"r2.c2\"\n      ],\n      \"note\": \"Combines Comply v2 adoption tracking with custom reporting framework expansion requests.\"\n    },\n    {\n      \"name\": \"Identity Authentication and Directory Provisioning\",\n      \"definition\": \"Calls concerning directory synchronization queues, SAML SSO regressions, session timeouts, and SCIM/IAM policy provisioning.\",\n      \"boundary_note\": \"Centers strictly on access control and directory sync troubleshooting rather than alert rule tuning or backup job infrastructure.\",\n      \"owner\": \"support lead\",\n      \"sources\": [\n        \"r1.c10\",\n        \"r2.c4\"\n      ],\n      \"note\": \"Merged high-overlap identity access management topics across both discovery runs.\"\n    },\n    {\n      \"name\": \"Backup Performance and Scalability\",\n      \"definition\": \"Calls addressing degraded backup throughput, snapshot deduplication bottlenecks, connector permission failures, and restore limitations.\",\n      \"boundary_note\": \"Covers runtime degradation and storage failures in protection workflows rather than initial implementation architecture design.\",\n      \"owner\": \"support lead\",\n      \"sources\": [\n        \"r1.c11\",\n        \"r2.c5\"\n      ],\n      \"note\": \"Unifies operational storage performance bottlenecks and backup failure candidate themes.\"\n    },\n    {\n      \"name\": \"Customer Implementation and Architecture Scoping\",\n      \"definition\": \"Structured onboarding, technical kickoff, and environment scoping sessions guiding new customers through initial policy and module deployment.\",\n      \"boundary_note\": \"Focuses on initial pre-production deployment architecture and milestones rather than post-launch break-fix troubleshooting or renewal discussions.\",\n      \"owner\": \"support lead\",\n      \"sources\": [\n        \"r1.c12\",\n        \"r2.c6\"\n      ],\n      \"note\": \"Brings together implementation kickoff and deployment architecture candidate themes across both runs.\"\n    },\n    {\n      \"name\": \"Detection Alert Tuning and Optimization\",\n      \"definition\": \"Calls assisting customers with configuring behavioral baselines, suppressing false-positive spikes, and tuning detection thresholds to reduce SOC fatigue.\",\n      \"boundary_note\": \"Deals with rule sensitivity and baseline calibration during operational monitoring rather than total streaming pipeline outages.\",\n      \"owner\": \"product manager\",\n      \"sources\": [\n        \"r1.c8\",\n        \"r2.c7\"\n      ],\n      \"note\": \"Captures recurring operational calls regarding rule noise calibration identified in both runs.\"\n    }\n  ],\n  \"product_areas\": [\n    {\n      \"name\": \"Aegis Detect\",\n      \"note\": \"Platform module for threat detection, alert calibration, and high-throughput telemetry ingestion.\"\n    },\n    {\n      \"name\": \"Aegis Comply\",\n      \"note\": \"Platform module delivering multi-framework compliance auditing and scheduled reporting.\"\n    },\n    {\n      \"name\": \"Aegis Protect\",\n      \"note\": \"Platform module managing data backup jobs, snapshot deduplication, and restore orchestration.\"\n    },\n    {\n      \"name\": \"Aegis Identity\",\n      \"note\": \"Platform module managing directory synchronization, SSO authentication, and IAM provisioning.\"\n    }\n  ],\n  \"dropped_candidates\": [\n    {\n      \"source\": \"r1.c4\",\n      \"reason\": \"Exhibits negligible call volume and represents isolated post-launch bug triage that fits into standard product feedback or Other.\"\n    },\n    {\n      \"source\": \"r1.c7\",\n      \"reason\": \"Internal competitive intelligence and battlecard reviews lack clear cross-run overlap and are better handled via internal sales strategy channels.\"\n    },\n    {\n      \"source\": \"r1.c9\",\n      \"reason\": \"Overlaps minimally with pipeline remediation and SIEM egress buffering; subsumed into general infrastructure triage.\"\n    },\n    {\n      \"source\": \"r2.c8\",\n      \"reason\": \"Egress connector buffer latencies are specific low-frequency connector issues that fold into general technical support.\"\n    },\n    {\n      \"source\": \"r2.c9\",\n      \"reason\": \"One-off invoice consumption disputes are low-volume transactional billing inquiries best managed by general support.\"\n    },\n    {\n      \"source\": \"r2.c10\",\n      \"reason\": \"Internal SOC 2 readiness meetings reflect internal operational overhead rather than cross-cutting call themes across customer and internal interactions.\"\n    }\n  ],\n  \"other_policy\": \"A call is routed to 'Other / new theme' when it entails routine one-off administrative check-ins, miscellaneous billing questions, or isolated internal discussions; if this bucket exceeds 10% of total volume, calls should be re-clustered to identify emerging product or operational categories.\",\n  \"rationale\": \"Themes were selected by prioritizing core clusters that appeared across both runs with high overlap scores and distinct operational owners. Sub-scale themes such as isolated bug reports, internal SOC 2 reviews, and one-off overage disputes were dropped or consolidated to preserve clear boundaries. The resulting seven themes ensure comprehensive coverage across incident engineering, commercial lifecycle, compliance adoption, and core module support.\"\n}",
+  "parsed": {
+    "themes": [
+      {
+        "name": "Pipeline Outage Technical Remediation",
+        "definition": "Calls addressing the architectural investigation, failover engineering, and technical root-cause remediation of streaming ingestion and pipeline outages.",
+        "boundary_note": "Focuses strictly on engineering infrastructure stabilization and post-mortems rather than commercial SLA retention discussions or routine connector latency.",
+        "owner": "engineering lead",
+        "sources": [
+          "r1.c1",
+          "r2.c1"
+        ],
+        "note": "Merges run 1 and run 2 engineering remediation topics that share the technical incident response call cluster."
+      },
+      {
+        "name": "Commercial Renewals and Retention",
+        "definition": "Commercial discussions covering contract renewals, account expansions, multi-year commitments, SLA negotiations, and churn prevention following service disruptions.",
+        "boundary_note": "Focuses on commercial contract terms, packaging, and account retention rather than root-cause technical debugging or new deployment kickoffs.",
+        "owner": "sales / account manager",
+        "sources": [
+          "r1.c2",
+          "r1.c6",
+          "r2.c3"
+        ],
+        "note": "Consolidates standard renewals with post-outage SLA retention saves into a unified sales account preservation theme."
+      },
+      {
+        "name": "Compliance Product Adoption and Expansion",
+        "definition": "Calls involving product previews, rollout readiness, feature demonstrations, and roadmap requests for multi-framework compliance reporting.",
+        "boundary_note": "Focuses on capability education and roadmap requests for compliance features rather than commercial contract negotiations or internal corporate audits.",
+        "owner": "product manager",
+        "sources": [
+          "r1.c3",
+          "r1.c5",
+          "r2.c2"
+        ],
+        "note": "Combines Comply v2 adoption tracking with custom reporting framework expansion requests."
+      },
+      {
+        "name": "Identity Authentication and Directory Provisioning",
+        "definition": "Calls concerning directory synchronization queues, SAML SSO regressions, session timeouts, and SCIM/IAM policy provisioning.",
+        "boundary_note": "Centers strictly on access control and directory sync troubleshooting rather than alert rule tuning or backup job infrastructure.",
+        "owner": "support lead",
+        "sources": [
+          "r1.c10",
+          "r2.c4"
+        ],
+        "note": "Merged high-overlap identity access management topics across both discovery runs."
+      },
+      {
+        "name": "Backup Performance and Scalability",
+        "definition": "Calls addressing degraded backup throughput, snapshot deduplication bottlenecks, connector permission failures, and restore limitations.",
+        "boundary_note": "Covers runtime degradation and storage failures in protection workflows rather than initial implementation architecture design.",
+        "owner": "support lead",
+        "sources": [
+          "r1.c11",
+          "r2.c5"
+        ],
+        "note": "Unifies operational storage performance bottlenecks and backup failure candidate themes."
+      },
+      {
+        "name": "Customer Implementation and Architecture Scoping",
+        "definition": "Structured onboarding, technical kickoff, and environment scoping sessions guiding new customers through initial policy and module deployment.",
+        "boundary_note": "Focuses on initial pre-production deployment architecture and milestones rather than post-launch break-fix troubleshooting or renewal discussions.",
+        "owner": "support lead",
+        "sources": [
+          "r1.c12",
+          "r2.c6"
+        ],
+        "note": "Brings together implementation kickoff and deployment architecture candidate themes across both runs."
+      },
+      {
+        "name": "Detection Alert Tuning and Optimization",
+        "definition": "Calls assisting customers with configuring behavioral baselines, suppressing false-positive spikes, and tuning detection thresholds to reduce SOC fatigue.",
+        "boundary_note": "Deals with rule sensitivity and baseline calibration during operational monitoring rather than total streaming pipeline outages.",
+        "owner": "product manager",
+        "sources": [
+          "r1.c8",
+          "r2.c7"
+        ],
+        "note": "Captures recurring operational calls regarding rule noise calibration identified in both runs."
+      }
+    ],
+    "product_areas": [
+      {
+        "name": "Aegis Detect",
+        "note": "Platform module for threat detection, alert calibration, and high-throughput telemetry ingestion."
+      },
+      {
+        "name": "Aegis Comply",
+        "note": "Platform module delivering multi-framework compliance auditing and scheduled reporting."
+      },
+      {
+        "name": "Aegis Protect",
+        "note": "Platform module managing data backup jobs, snapshot deduplication, and restore orchestration."
+      },
+      {
+        "name": "Aegis Identity",
+        "note": "Platform module managing directory synchronization, SSO authentication, and IAM provisioning."
+      }
+    ],
+    "dropped_candidates": [
+      {
+        "source": "r1.c4",
+        "reason": "Exhibits negligible call volume and represents isolated post-launch bug triage that fits into standard product feedback or Other."
+      },
+      {
+        "source": "r1.c7",
+        "reason": "Internal competitive intelligence and battlecard reviews lack clear cross-run overlap and are better handled via internal sales strategy channels."
+      },
+      {
+        "source": "r1.c9",
+        "reason": "Overlaps minimally with pipeline remediation and SIEM egress buffering; subsumed into general infrastructure triage."
+      },
+      {
+        "source": "r2.c8",
+        "reason": "Egress connector buffer latencies are specific low-frequency connector issues that fold into general technical support."
+      },
+      {
+        "source": "r2.c9",
+        "reason": "One-off invoice consumption disputes are low-volume transactional billing inquiries best managed by general support."
+      },
+      {
+        "source": "r2.c10",
+        "reason": "Internal SOC 2 readiness meetings reflect internal operational overhead rather than cross-cutting call themes across customer and internal interactions."
+      }
+    ],
+    "other_policy": "A call is routed to 'Other / new theme' when it entails routine one-off administrative check-ins, miscellaneous billing questions, or isolated internal discussions; if this bucket exceeds 10% of total volume, calls should be re-clustered to identify emerging product or operational categories.",
+    "rationale": "Themes were selected by prioritizing core clusters that appeared across both runs with high overlap scores and distinct operational owners. Sub-scale themes such as isolated bug reports, internal SOC 2 reviews, and one-off overage disputes were dropped or consolidated to preserve clear boundaries. The resulting seven themes ensure comprehensive coverage across incident engineering, commercial lifecycle, compliance adoption, and core module support."
+  },
+  "usage": {
+    "completion_tokens": 1559,
+    "prompt_tokens": 4409,
+    "total_tokens": 5968,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.009153,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.009153,
+      "upstream_inference_prompt_cost": 0.00330675,
+      "upstream_inference_completions_cost": 0.00584625
+    }
+  },
+  "latency_s": 13.203,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:03:15.357772+00:00",
+  "key": "36bdbb81eccc9ab65ee6d4653c38ef2cd77c300776cddb1a44a7d660b8d9bdaf"
+}

@@ -1,0 +1,69 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nKevin O'Brien: Hey Vanessa, good morning! Can you hear me okay?\nVanessa Cruz: Yes! Hi Kevin, I can hear you perfectly. Good morning — thanks for making time for this.\nKevin O'Brien: Of course, of course. I've been looking forward to this one actually. So, uh, how's everything going at Coastal Living? You guys just wrapped up your spring collection launch, right?\nVanessa Cruz: We did, yeah! It went really well actually. Traffic was way up compared to last year, which is great but also... you know, it puts a lot of pressure on the backend systems. So that's kind of part of why we're talking today.\nKevin O'Brien: Yeah, absolutely, that makes total sense. More traffic, more data, more things that need to be protected. So let's dig into that. Before I jump into anything, can you just walk me through where you're at right now with your backup and recovery setup? Like what does that look like today?\nVanessa Cruz: Sure. So right now we have, um, kind of a patchwork honestly. We've got our e-commerce platform on CloudPrime, we've got some on-prem systems still — legacy stuff from before my time — and we've been using a third-party backup tool that... it does the job but it's not really built for what we're doing at scale now.\nKevin O'Brien: Got it. And when you say it's not built for scale, is that more of a performance issue, or is it more around visibility — like you can't see across all your environments from one place?\nVanessa Cruz: Both, honestly. The visibility is probably the bigger pain point for me personally. My team is going into like three different dashboards to figure out whether a backup job actually completed successfully. And during peak season that's... that's just not sustainable."
+  },
+  "response_text": "{\"label\":\"external\",\"evidence_quote\":\"Can you hear me okay?\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"Kevin O'Brien\",\"side\":\"aegis_staff\"},{\"speaker\":\"Vanessa Cruz\",\"side\":\"customer\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "Can you hear me okay?",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Kevin O'Brien",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Vanessa Cruz",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 96,
+    "prompt_tokens": 1994,
+    "total_tokens": 2090,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002474,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002474,
+      "upstream_inference_prompt_cost": 0.0001994,
+      "upstream_inference_completions_cost": 4.8e-05
+    }
+  },
+  "latency_s": 1.217,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:32.522385+00:00",
+  "key": "49e2934325c56f99239b05f0ae63166bb679ec2d444c3a4bd3dd8d2cc291bed7"
+}

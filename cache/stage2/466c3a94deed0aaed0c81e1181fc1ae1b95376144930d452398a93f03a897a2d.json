@@ -1,0 +1,244 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (44 turns, indices 0 to 43; per_turn needs exactly 44 entries, one per index in order):\n[0] Daniel Okafor (aegis_staff): Paula, hey, thanks for making time today. I know Thursdays are usually pretty packed for you.\n[1] Paula Schneider (customer): Yeah, no, it's fine. We had a planning session move to next week so actually the morning opened up a bit. Good timing.\n[2] Daniel Okafor (aegis_staff): Perfect. Well I appreciate it. So the agenda I had in mind — I wanted to walk through where we are on the Identity roadmap, get your input on some of the features we're scoping, and then just make sure we're aligned on what Ridgeline actually needs over the next couple of quarters. Does that work?\n[3] Paula Schneider (customer): Yeah that works. I've got a few things on my end I wanted to raise too, so we can weave those in.\n[4] Daniel Okafor (aegis_staff): Absolutely, let's do it. So, starting with Aegis Identity — you've been on the platform, I think it's been about eight months now since you fully deployed the IAM module. How's day-to-day been with it?\n[5] Paula Schneider (customer): It's been okay. I mean, the core IAM stuff works fine, provisioning and deprovisioning is faster than what we had before. MFA rollout went smoother than expected honestly, given that we're dealing with, you know, warehouse floor workers who aren't exactly used to that kind of workflow.\n[6] Daniel Okafor (aegis_staff): Yeah that's actually a use case we hear a lot from manufacturing customers specifically. The non-desk worker angle is tricky.\n[7] Paula Schneider (customer): Right, and we made it work, but it required some customization on our end. Which brings me to one of the things I wanted to flag — we need better support for shared workstation scenarios. So like, on the floor we have terminals that multiple workers log into across shifts, and right now the session management is kind of clunky. There's no clean handoff.\n[8] Daniel Okafor (aegis_staff): Okay, yeah. Can you describe what clunky looks like? Is it a timeout issue, is it a re-auth issue, or...?\n[9] Paula Schneider (customer): It's kind of both. So the session timeout is set globally right now, and we can't scope it by device group or location. So a desk employee in corporate gets the same timeout window as a warehouse terminal, which doesn't make sense. And then when worker A logs out and worker B logs in, sometimes the previous session data is still cached and that creates... it creates issues. We've had a couple of incidents where someone had residual access they shouldn't have had.\n[10] Daniel Okafor (aegis_staff): Got it. So you're really asking for two things — granular session timeout policies by device or group, and then cleaner session termination on the shared workstation side.\n[11] Paula Schneider (customer): Exactly. And I've submitted a support ticket on this, I think it was back in January, but I haven't seen any movement. I don't know if it got escalated or just, uh, sat somewhere.\n[12] Daniel Okafor (aegis_staff): I'll track that down after this call. I want to make sure it's actually in the right queue. And I'll be honest with you, the session policy granularity piece — that is something our product team has been scoping. It's not in the current release but it's been flagged as a near-term priority. I can't give you a hard date yet but it's actively being looked at.\n[13] Paula Schneider (customer): Okay. I mean, near-term is a bit vague but I understand you probably can't commit to a date. Is there any way to get visibility into where it sits on the roadmap? Even just a rough quarter?\n[14] Daniel Okafor (aegis_staff): I can set up a call with our product manager for Identity, his name is Marcus. He can give you a more specific picture. I'd rather him speak to it directly than me guess and then you hold me to the wrong timeline.\n[15] Paula Schneider (customer): Yeah, that would be useful. I'd rather get it from the source anyway.\n[16] Daniel Okafor (aegis_staff): Good, I'll set that up. Okay, the other thing I wanted to cover — on the SSO side. You're using our SSO integration with, I think it's primarily your ERP and your warehouse management system. Are there other apps you're looking to bring in?\n[17] Paula Schneider (customer): Yeah, we're evaluating a new fleet management platform right now. It's called Translog, I don't know if you've heard of it. And the question is whether Aegis Identity can support the SSO integration natively or if we'd have to go custom.\n[18] Daniel Okafor (aegis_staff): Translog — I'm not immediately familiar with that one. Do you know if they support SAML 2.0 or OIDC?\n[19] Paula Schneider (customer): I believe they support SAML. I'd have to double-check with their team. We're still mid-evaluation so nothing's been decided but I want to make sure we're not creating an integration problem for ourselves down the road.\n[20] Daniel Okafor (aegis_staff): That's the right time to ask the question, honestly. If they're SAML 2.0 compatible, we should be able to handle it natively. I can have our integration team do a quick compatibility check once you have the vendor's technical docs. Just send those over to me.\n[21] Paula Schneider (customer): Okay, I can do that once we get further along. Probably another few weeks before we have the full technical spec from them.\n[22] Daniel Okafor (aegis_staff): Perfect, no rush. Just keep me looped in.\n[23] Paula Schneider (customer): Will do. The other thing — and this is maybe more of a, uh, feature request in the traditional sense — we need more flexibility around MFA policy exceptions. Right now it's pretty binary, either MFA is required or it's not. But we have certain service accounts and automated processes where MFA enforcement breaks the workflow, and managing those exceptions is a pain.\n[24] Daniel Okafor (aegis_staff): So you're looking for like a conditional exclusion model? Where you can carve out specific account types or identity classes without just turning MFA off globally?\n[25] Paula Schneider (customer): Yes. And with some kind of audit trail so I can demonstrate to our auditors that those exclusions are intentional and documented. Not just, you know, someone flipped a switch.\n[26] Daniel Okafor (aegis_staff): That's actually a really good point and I think that ties into what we're building for the compliance side too. Um, have you looked at Aegis Comply at all? I know you're primarily on Identity and Protect right now.\n[27] Paula Schneider (customer): We've seen the overview but we haven't done anything with it. We handle compliance reporting separately through a third-party tool right now.\n[28] Daniel Okafor (aegis_staff): Noted. I'll just say we have some things coming on that front that might be relevant to you, but that's probably a separate conversation. I don't want to sidetrack from Identity today.\n[29] Paula Schneider (customer): Sure, we can table that. Okay so back to the MFA exceptions — is that something that's on the roadmap or is this new information for you?\n[30] Daniel Okafor (aegis_staff): Honestly it's something I've heard from a few customers but I want to make sure it's formally captured from Ridgeline specifically. The more customers who articulate the same need, the stronger the case for prioritization. So I'll make sure this is logged as a feature request with your name on it.\n[31] Paula Schneider (customer): Yeah, please do. I mean, it's not a blocker right now but it's adding operational overhead and that compounds over time.\n[32] Daniel Okafor (aegis_staff): Understood. I want to make sure our product team understands the operational impact, not just the technical ask. So I'll frame it that way when I log it.\n[33] Paula Schneider (customer): Good. I think that covers the main things I had. Is there anything on your side — you mentioned you had things to cover from the roadmap perspective?\n[34] Daniel Okafor (aegis_staff): Yeah, a couple of things. One is around role-based access control enhancements — we're planning to ship more granular RBAC controls in the next release, and I wanted to flag that because I think it touches on some of what you've described. Especially around those shared workstation scenarios, being able to scope roles more tightly at the device level.\n[35] Paula Schneider (customer): Okay, that's good to know. Is there documentation on that I can review?\n[36] Daniel Okafor (aegis_staff): Not public yet but I can share a preview doc under NDA. I'll send it over after the call.\n[37] Paula Schneider (customer): That works. We already have an NDA in place so no issue there.\n[38] Daniel Okafor (aegis_staff): Great. And then the other thing I just wanted to touch on quickly — your renewal is coming up in, I think, Q3. I just want to make sure we're not getting to that conversation cold. If there are things we should be addressing between now and then, I'd rather know early.\n[39] Paula Schneider (customer): Honestly the things I've raised today are the main things. If those are moving in the right direction, I don't anticipate any issues at renewal. But I'll say — the shared workstation thing is probably the most pressing for us operationally. If that's still unresolved by summer, it's going to be a talking point.\n[40] Daniel Okafor (aegis_staff): I hear you. I'll make sure that one has the right visibility internally. Okay — so to recap next steps: I'll track down that support ticket from January, I'll set up the call with Marcus on the product side, I'll log the MFA exception request formally, and I'll send over the RBAC preview doc. Does that cover it?\n[41] Paula Schneider (customer): Yeah, that covers it. And I'll send you the Translog technical specs once we have them.\n[42] Daniel Okafor (aegis_staff): Perfect. Thanks Paula, this was really useful. I'll get those follow-ups out to you by end of week.\n[43] Paula Schneider (customer): Sounds good. Talk soon."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": 3.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"negative\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"negative\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"negative\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"negative\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"positive\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"negative\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"neutral\"},\n    {\"index\": 42, \"label\": \"positive\"},\n    {\"index\": 43, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 3.5\n  },\n  \"evidence_quote\": \"If those are moving in the right direction, I don't anticipate any issues at renewal.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": 3.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "negative"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "positive"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "negative"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 3.5
+    },
+    "evidence_quote": "If those are moving in the right direction, I don't anticipate any issues at renewal.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 751,
+    "prompt_tokens": 4916,
+    "total_tokens": 5667,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00650325,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00650325,
+      "upstream_inference_prompt_cost": 0.003687,
+      "upstream_inference_completions_cost": 0.00281625
+    }
+  },
+  "latency_s": 5.166,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:33.086489+00:00",
+  "key": "466c3a94deed0aaed0c81e1181fc1ae1b95376144930d452398a93f03a897a2d"
+}

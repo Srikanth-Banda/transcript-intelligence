@@ -1,0 +1,69 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 1
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 2 total, 1 from Aegis, 1 from outside Aegis\n\nopening:\nDavid Kim: Hi, this is David Kim calling from Aegis Cloud Security support. Am I speaking with Keith Donovan?\nKeith Donovan: Yeah, that's me. Hi David, thanks for calling back.\nDavid Kim: Of course, absolutely. So I'm calling in reference to support case number 3615. Looks like you submitted a request around custom reporting in Aegis Comply — is that right?\nKeith Donovan: Yeah, exactly. So we've been using Comply for a few months now and overall it's been fine, but we've run into a pretty specific need that I don't think the platform currently supports, and I wanted to get some clarity on where things stand.\nDavid Kim: Sure, yeah, let's dig into it. Can you walk me through what you're trying to accomplish? Like what does the ideal output look like for you?\nKeith Donovan: So right now the reports we're pulling out of Comply are pretty much the standard framework reports, right — you get your SOC 2 summary, your control status, all that. Which is fine. But what we need is the ability to kind of cross-reference controls across multiple frameworks in a single report. So for example, I want to see a control that maps to both SOC 2 and ISO 27001 in the same view, side by side.\nDavid Kim: Okay, so a unified cross-framework control mapping report essentially.\nKeith Donovan: Exactly. And ideally exportable, you know, to PDF or CSV or something we can hand off to our auditors without them having to reconcile two separate documents."
+  },
+  "response_text": "{\"label\": \"support\", \"evidence_quote\": \"I'm calling in reference to support case number 3615.\", \"confidence\": \"high\", \"speaker_sides\": [{\"speaker\": \"David Kim\", \"side\": \"aegis_staff\"}, {\"speaker\": \"Keith Donovan\", \"side\": \"customer\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "I'm calling in reference to support case number 3615.",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "David Kim",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Keith Donovan",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 102,
+    "prompt_tokens": 1910,
+    "total_tokens": 2012,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.000242,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.000242,
+      "upstream_inference_prompt_cost": 0.000191,
+      "upstream_inference_completions_cost": 5.1e-05
+    }
+  },
+  "latency_s": 1.792,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:35:36.425356+00:00",
+  "key": "1bf03669d7dcb1ccd6efa7ccee541adf21214a2b93deea4ebde69ef0cf72b4db"
+}

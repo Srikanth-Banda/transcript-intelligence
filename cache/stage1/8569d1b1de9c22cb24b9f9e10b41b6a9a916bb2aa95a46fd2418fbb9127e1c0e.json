@@ -1,0 +1,63 @@
+{
+  "stage": "stage1",
+  "prompt_version": "stage1_bakeoff_v0",
+  "model_requested": "openai/gpt-6.1-terra",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 4000,
+    "provider_order": [
+      "openai"
+    ],
+    "run": 1,
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You label one recorded call at Aegis Cloud Security, a B2B SaaS company that sells these products: Detect (threat detection and monitoring), Comply (compliance reporting, including Comply v2), Identity (SSO, SAML, SCIM, LDAP, MFA, identity management), Protect (data protection), and backup / CloudPrime (backup and restore). You will receive the full transcript as numbered turns, each with speaker, side (customer or aegis_staff) and sentence.\n\nPick exactly one primary theme from this PROVISIONAL list (the theme the call is mostly about):\n1. Outage & incident response\n2. Compliance & audit\n3. Renewal, pricing & billing\n4. Churn & competitive risk\n5. Onboarding & rollout\n6. Identity & access\n7. Product roadmap & planning\n8. Integrations, backup & data\n9. Other / new theme (use only if none of the eight fits; then say what the call is about in `tags`)\n\nRules:\n1. `primary_theme`: copy one theme name exactly as written above.\n2. `tags`: zero, one or two further themes from the same list that also clearly come up (never repeat the primary theme). For \"Other / new theme\" put a short description in tags[0].\n3. `product_area`: the one Aegis product the call is mostly about: \"Detect\", \"Comply\", \"Identity\", \"Protect\", \"Backup\", or \"Platform/General\" when no single product dominates.\n4. `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn of the transcript that best supports the primary theme. Do not paraphrase and do not join text from different turns.\n5. `confidence`: \"high\" if the call is clearly about the primary theme, \"medium\" if two themes compete, \"low\" if it fits poorly.\n6. `taxonomy_version`: always the string \"provisional-bakeoff\".\n7. Judge only from the transcript. Do not guess from names or invent details.\n\nReturn only JSON:\n{\n  \"primary_theme\": \"<theme>\",\n  \"tags\": [\"<theme>\", \"<theme>\"],\n  \"product_area\": \"<product area>\",\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"taxonomy_version\": \"provisional-bakeoff\"\n}",
+    "user": "transcript:\n[0] Sofia Petrov (aegis_staff): Alright, I think we've got everyone — let me just pull up the board real quick.\n[1] Tyler Washington (aegis_staff): Yeah, I'm here. Sorry I was a couple minutes late, my previous meeting ran over.\n[2] Sofia Petrov (aegis_staff): No worries, we were just getting started. Ravi, you on?\n[3] Ravi Gupta (aegis_staff): Yep, I'm here. Can everyone hear me okay?\n[4] Sofia Petrov (aegis_staff): Loud and clear. Okay so, uh, let's just do a quick run through of what we're carrying over from last sprint and then figure out what we're committing to for this one. Nina, do you have the QA status on the event filtering tickets?\n[5] Nina Kowalski (aegis_staff): Yeah so, DETECT-214 is done, that's fully verified. DETECT-219 is still in progress — Tyler's fix came through but I found two edge cases that need to be addressed before I can close it out.\n[6] Tyler Washington (aegis_staff): Oh, the — is that the one with the regex matching issue on the custom rule engine?\n[7] Nina Kowalski (aegis_staff): Yeah exactly. So when you pass in a rule with a wildcard at the start of the pattern, it's not matching correctly against certain log formats. I can send you the repro steps after this.\n[8] Tyler Washington (aegis_staff): Yeah please do, I thought I had that covered but... apparently not. I'll take a look today.\n[9] Sofia Petrov (aegis_staff): How long do you think that fix will take, Tyler? Because I want to factor that into what we're pulling into this sprint.\n[10] Tyler Washington (aegis_staff): Uh, honestly if it's just the wildcard handling, maybe a couple hours? But I don't want to commit to that without actually seeing Nina's repro first.\n[11] Sofia Petrov (aegis_staff): Fair enough. Let's call it a two-point carryover for now and adjust if needed. Ananya, what's the status on the ingestion pipeline work? I know you were heads-down on that last week.\n[12] Ananya Sharma (aegis_staff): So, uh, the core refactor is done — I finished that Thursday. But I want to flag something, and I think this is actually worth a conversation for sprint planning. The current architecture has a single ingestion node that everything funnels through, and I'm a little uncomfortable with that given the load we're projecting for Q2.\n[13] Ravi Gupta (aegis_staff): Yeah I've had the same thought honestly. What are you thinking, like introducing redundancy at that layer?\n[14] Ananya Sharma (aegis_staff): Right, or at minimum some kind of failover mechanism. If that node goes down, we basically have a blind spot in event processing. That's not great.\n[15] Sofia Petrov (aegis_staff): I mean, agreed in principle, but is that realistically something we can scope into this sprint? That feels like a pretty significant chunk of work.\n[16] Ananya Sharma (aegis_staff): Probably not a full implementation, no. But maybe we scope it as a design spike this sprint and carry the build work into next sprint? At least we'd have the architecture figured out.\n[17] Sofia Petrov (aegis_staff): That makes sense to me. Ravi, from an infra standpoint what would redundant nodes actually look like? Like are we talking a lot of new infrastructure or is it relatively contained?\n[18] Ravi Gupta (aegis_staff): So it depends on how we want to handle state. If the nodes need to share state, then it gets complicated fast — we'd need some kind of coordination layer. If they're stateless and we just route around failures, it's simpler. I'd want to sit down with Ananya and look at what the node is actually doing before I give a real estimate.\n[19] Sofia Petrov (aegis_staff): Okay, let's do this — Ananya and Ravi, can you two block some time this week, maybe Wednesday, to look at that together and come back with a rough scope? We don't need to solve it today.\n[20] Ravi Gupta (aegis_staff): Works for me.\n[21] Ananya Sharma (aegis_staff): Yeah, I'm free Wednesday afternoon.\n[22] Sofia Petrov (aegis_staff): Great. Okay so for this sprint — carryover on 219, the ingestion refactor from Ananya landing and going through QA, the design spike on redundancy, and then what else were we planning to pull in? I had a few new tickets flagged.\n[23] Tyler Washington (aegis_staff): DETECT-231 is the alert deduplication improvement. That one's been sitting in the backlog for a while and product has been asking about it.\n[24] Sofia Petrov (aegis_staff): Right, yeah. How are we estimating that?\n[25] Tyler Washington (aegis_staff): I put it at five points. It's not super complex but there's a fair amount of testing surface — like we need to make sure we're not accidentally suppressing legit alerts while we're deduplicating. Nina, you'd probably need to write a decent set of test cases for that.\n[26] Nina Kowalski (aegis_staff): Yeah, that one's going to need a solid test matrix. I'd want to cover at least twenty or so distinct scenarios. Five points sounds right to me — maybe push it to eight if we're being conservative.\n[27] Sofia Petrov (aegis_staff): Let's say five for now and flag it if we're running into issues mid-sprint. I don't want to over-inflate points just out of caution if the engineering side is relatively clean.\n[28] Nina Kowalski (aegis_staff): Fine by me.\n[29] Ananya Sharma (aegis_staff): What about DETECT-240, the latency metrics dashboard? I know Ravi had some thoughts on that.\n[30] Ravi Gupta (aegis_staff): Yeah so I actually think that one should wait. We're in the middle of some infra changes and I don't want to build a dashboard off metrics that might shift once we've stabilized the environment. I'd rather do it after we've landed those infra changes so we're actually measuring the right thing.\n[31] Sofia Petrov (aegis_staff): That's a reasonable point. Okay, we'll push 240 to next sprint. What's our total looking like then? Carryover 219 at two, ingestion refactor QA... Nina what are you estimating for that?\n[32] Nina Kowalski (aegis_staff): Probably three points for QA, assuming the code is clean. If Ananya's refactor introduces anything unexpected I might need more time but let's start at three.\n[33] Sofia Petrov (aegis_staff): Okay so two plus three plus the design spike — what are we calling that, three points? — and then 231 at five. That's thirteen, which is pretty comfortable. Do we want to pull in anything else or leave some buffer?\n[34] Tyler Washington (aegis_staff): I'd vote for buffer honestly. Last sprint we overcommitted a little and it wasn't fun.\n[35] Sofia Petrov (aegis_staff): Yeah I agree, let's not do that again. Thirteen is fine. If we're burning through it early, we can always pull something in.\n[36] Ananya Sharma (aegis_staff): Sounds good. Are we doing the usual check-in cadence — async updates in Slack, then syncing Thursday?\n[37] Sofia Petrov (aegis_staff): Yeah, same as always. Daily async, Thursday sync at two. Any blockers come up before then, just ping the channel and we'll sort it out. Alright, I think that's everything — any other questions before we wrap?\n[38] Ravi Gupta (aegis_staff): Nothing from me.\n[39] Tyler Washington (aegis_staff): Nope, good to go.\n[40] Sofia Petrov (aegis_staff): Alright, good. Okay everyone, talk Thursday. Thanks."
+  },
+  "response_text": "{\"primary_theme\":\"Product roadmap & planning\",\"tags\":[],\"product_area\":\"Detect\",\"evidence_quote\":\"Okay so, uh, let's just do a quick run through of what we're carrying over from last sprint and then figure out what we're committing to for this one.\",\"confidence\":\"high\",\"taxonomy_version\":\"provisional-bakeoff\"}",
+  "parsed": {
+    "primary_theme": "Product roadmap & planning",
+    "tags": [],
+    "product_area": "Detect",
+    "evidence_quote": "Okay so, uh, let's just do a quick run through of what we're carrying over from last sprint and then figure out what we're committing to for this one.",
+    "confidence": "high",
+    "taxonomy_version": "provisional-bakeoff"
+  },
+  "usage": {
+    "completion_tokens": 75,
+    "prompt_tokens": 2357,
+    "total_tokens": 2432,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 2354,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0033205,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0033205,
+      "upstream_inference_prompt_cost": 0.0029455,
+      "upstream_inference_completions_cost": 0.000375
+    }
+  },
+  "latency_s": 2.627,
+  "finish_reason": "stop",
+  "model_returned": "openai/gpt-6.1-terra",
+  "provider_returned": "OpenAI",
+  "timestamp": "2026-10-29T20:38:59.308999+00:00",
+  "key": "8569d1b1de9c22cb24b9f9e10b41b6a9a916bb2aa95a46fd2418fbb9127e1c0e"
+}

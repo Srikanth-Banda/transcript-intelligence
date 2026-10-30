@@ -1,0 +1,129 @@
+{
+  "themes": [
+    {
+      "name": "Pipeline Outage Technical Remediation",
+      "definition": "Calls addressing the architectural investigation, failover engineering, and technical root-cause remediation of streaming ingestion and pipeline outages.",
+      "boundary_note": "Focuses strictly on engineering infrastructure stabilization and post-mortems rather than commercial SLA retention discussions or routine connector latency.",
+      "owner": "engineering lead",
+      "sources": [
+        "r1.c1",
+        "r2.c1"
+      ],
+      "note": "Merges run 1 and run 2 engineering remediation topics that share the technical incident response call cluster."
+    },
+    {
+      "name": "Commercial Renewals and Retention",
+      "definition": "Commercial discussions covering contract renewals, account expansions, multi-year commitments, SLA negotiations, and churn prevention following service disruptions.",
+      "boundary_note": "Focuses on commercial contract terms, packaging, and account retention rather than root-cause technical debugging or new deployment kickoffs.",
+      "owner": "sales / account manager",
+      "sources": [
+        "r1.c2",
+        "r1.c6",
+        "r2.c3"
+      ],
+      "note": "Consolidates standard renewals with post-outage SLA retention saves into a unified sales account preservation theme."
+    },
+    {
+      "name": "Compliance Product Adoption and Expansion",
+      "definition": "Calls involving product previews, rollout readiness, feature demonstrations, and roadmap requests for multi-framework compliance reporting.",
+      "boundary_note": "Focuses on capability education and roadmap requests for compliance features rather than commercial contract negotiations or internal corporate audits.",
+      "owner": "product manager",
+      "sources": [
+        "r1.c3",
+        "r1.c5",
+        "r2.c2"
+      ],
+      "note": "Combines Comply v2 adoption tracking with custom reporting framework expansion requests."
+    },
+    {
+      "name": "Identity Authentication and Directory Provisioning",
+      "definition": "Calls concerning directory synchronization queues, SAML SSO regressions, session timeouts, and SCIM/IAM policy provisioning.",
+      "boundary_note": "Centers strictly on access control and directory sync troubleshooting rather than alert rule tuning or backup job infrastructure.",
+      "owner": "support lead",
+      "sources": [
+        "r1.c10",
+        "r2.c4"
+      ],
+      "note": "Merged high-overlap identity access management topics across both discovery runs."
+    },
+    {
+      "name": "Backup Performance and Scalability",
+      "definition": "Calls addressing degraded backup throughput, snapshot deduplication bottlenecks, connector permission failures, and restore limitations.",
+      "boundary_note": "Covers runtime degradation and storage failures in protection workflows rather than initial implementation architecture design.",
+      "owner": "support lead",
+      "sources": [
+        "r1.c11",
+        "r2.c5"
+      ],
+      "note": "Unifies operational storage performance bottlenecks and backup failure candidate themes."
+    },
+    {
+      "name": "Customer Implementation and Architecture Scoping",
+      "definition": "Structured onboarding, technical kickoff, and environment scoping sessions guiding new customers through initial policy and module deployment.",
+      "boundary_note": "Focuses on initial pre-production deployment architecture and milestones rather than post-launch break-fix troubleshooting or renewal discussions.",
+      "owner": "support lead",
+      "sources": [
+        "r1.c12",
+        "r2.c6"
+      ],
+      "note": "Brings together implementation kickoff and deployment architecture candidate themes across both runs."
+    },
+    {
+      "name": "Detection Alert Tuning and Optimization",
+      "definition": "Calls assisting customers with configuring behavioral baselines, suppressing false-positive spikes, and tuning detection thresholds to reduce SOC fatigue.",
+      "boundary_note": "Deals with rule sensitivity and baseline calibration during operational monitoring rather than total streaming pipeline outages.",
+      "owner": "product manager",
+      "sources": [
+        "r1.c8",
+        "r2.c7"
+      ],
+      "note": "Captures recurring operational calls regarding rule noise calibration identified in both runs."
+    }
+  ],
+  "product_areas": [
+    {
+      "name": "Aegis Detect",
+      "note": "Platform module for threat detection, alert calibration, and high-throughput telemetry ingestion."
+    },
+    {
+      "name": "Aegis Comply",
+      "note": "Platform module delivering multi-framework compliance auditing and scheduled reporting."
+    },
+    {
+      "name": "Aegis Protect",
+      "note": "Platform module managing data backup jobs, snapshot deduplication, and restore orchestration."
+    },
+    {
+      "name": "Aegis Identity",
+      "note": "Platform module managing directory synchronization, SSO authentication, and IAM provisioning."
+    }
+  ],
+  "dropped_candidates": [
+    {
+      "source": "r1.c4",
+      "reason": "Exhibits negligible call volume and represents isolated post-launch bug triage that fits into standard product feedback or Other."
+    },
+    {
+      "source": "r1.c7",
+      "reason": "Internal competitive intelligence and battlecard reviews lack clear cross-run overlap and are better handled via internal sales strategy channels."
+    },
+    {
+      "source": "r1.c9",
+      "reason": "Overlaps minimally with pipeline remediation and SIEM egress buffering; subsumed into general infrastructure triage."
+    },
+    {
+      "source": "r2.c8",
+      "reason": "Egress connector buffer latencies are specific low-frequency connector issues that fold into general technical support."
+    },
+    {
+      "source": "r2.c9",
+      "reason": "One-off invoice consumption disputes are low-volume transactional billing inquiries best managed by general support."
+    },
+    {
+      "source": "r2.c10",
+      "reason": "Internal SOC 2 readiness meetings reflect internal operational overhead rather than cross-cutting call themes across customer and internal interactions."
+    }
+  ],
+  "other_policy": "A call is routed to 'Other / new theme' when it entails routine one-off administrative check-ins, miscellaneous billing questions, or isolated internal discussions; if this bucket exceeds 10% of total volume, calls should be re-clustered to identify emerging product or operational categories.",
+  "rationale": "Themes were selected by prioritizing core clusters that appeared across both runs with high overlap scores and distinct operational owners. Sub-scale themes such as isolated bug reports, internal SOC 2 reviews, and one-off overage disputes were dropped or consolidated to preserve clear boundaries. The resulting seven themes ensure comprehensive coverage across incident engineering, commercial lifecycle, compliance adoption, and core module support."
+}

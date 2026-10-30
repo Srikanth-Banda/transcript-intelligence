@@ -1,0 +1,243 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_bakeoff_v0",
+  "model_requested": "openai/gpt-6.1-terra",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "provider_order": [
+      "openai"
+    ],
+    "run": 2,
+    "seed": 7
+  },
+  "structured_mode": "json_object",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence.\n\nScore the TONE of the people on the call, not how serious the topic is. A calm, factual discussion of a serious outage is not negative by itself; frustration, worry, tension, dissatisfaction or threats to leave are. Appreciation, agreement, enthusiasm and relief are positive.\n\nAnchors for the 1 to 5 scale (half steps allowed: 1, 1.5, 2, ... 5):\n- 5: clearly positive. Enthusiasm, praise, satisfaction; no unresolved problem.\n- 4: mostly positive or constructive. Small concerns, resolved or minor.\n- 3: neutral or mixed. Businesslike or factual; positives and negatives roughly balance; concerns raised but handled calmly.\n- 2: mostly negative. Visible frustration, an unresolved problem, tension, escalation, or a stated risk of leaving, but still professional.\n- 1: strongly negative. Anger, a firm threat to leave, severe distress, or the conversation breaking down.\n\nOutput fields:\n- `call_score`: tone of the whole call, all speakers, 1 to 5 in half steps.\n- `customer_score`: tone of the customer-side speakers only, same scale; null if no speaker has side \"customer\".\n- `per_turn`: one entry for EVERY turn, in order, using the turn's index: {\"index\": <int>, \"label\": \"negative\" | \"neutral\" | \"positive\"} by the tone of that turn alone (negative = frustration, concern, tension, dissatisfaction; neutral = factual or procedural; positive = appreciation, agreement, enthusiasm, relief).\n- `trajectory`: {\"start\": <score 1 to 5 of the first third of the turns>, \"end\": <score 1 to 5 of the last third of the turns>}.\n- `evidence_quote`: one short passage copied EXACTLY (character for character) from a single turn that most influenced `call_score`. Do not paraphrase.\n- `confidence`: \"low\" | \"medium\" | \"high\".\n\nJudge only from the transcript. Return only JSON:\n{\n  \"call_score\": <number>,\n  \"customer_score\": <number or null>,\n  \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, ...],\n  \"trajectory\": {\"start\": <number>, \"end\": <number>},\n  \"evidence_quote\": \"<verbatim text>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript:\n[0] Marcus Williams (aegis_staff): Thanks for calling Aegis Cloud Security support, this is Marcus Williams, how can I help you today?\n[1] Harold Jensen (customer): Yeah, hi Marcus, this is Harold Jensen, IT Director over at Steelpoint Manufacturing. I've got a case open — it's case number 6539 — and honestly I'm pretty frustrated at this point because this has been going on for a few days now.\n[2] Marcus Williams (aegis_staff): I completely understand Harold, and I appreciate you calling in. Let me pull up case 6539 right here... okay I'm seeing it, LDAP sync failures with Aegis Identity. Can you walk me through what you're experiencing on your end?\n[3] Harold Jensen (customer): Sure, so — basically our Active Directory sync through Aegis Identity just stopped working. Users aren't getting provisioned, group memberships aren't syncing, and we've got about, uh, I'd say 200 plus employees who can't get into systems they need access to. This is a manufacturing floor environment, Marcus. People can't do their jobs.\n[4] Marcus Williams (aegis_staff): Yeah, that's — that's a serious impact and I hear you. When did you first notice the sync failures? Do you have an approximate timestamp?\n[5] Harold Jensen (customer): It started March 19th, around 7 AM our time, Central. And look, I submitted the case that same morning and it took almost 24 hours to get a response, which is not acceptable for something this critical.\n[6] Marcus Williams (aegis_staff): You're right and I — I want to apologize for that response delay, that shouldn't have happened on a case with this kind of operational impact. I'm going to personally own this from here on out. Now, the 19th... let me check something real quick on our end.\n[7] Harold Jensen (customer): Okay, and while you're doing that — I also want to mention that we had some issues earlier in the month with Aegis Detect, the outage you guys had, and now this. My leadership is starting to ask questions about whether we made the right call going with Aegis and that's a conversation I really don't want to be having.\n[8] Marcus Williams (aegis_staff): I understand, and that's a fair concern. The Detect outage was — yeah, that was a significant incident and I know it affected a lot of customers. We've made infrastructure changes since then. But let's focus on getting your LDAP sync resolved right now because that's what's actively hurting you. So I'm looking at our sync logs for your tenant...\n[9] Harold Jensen (customer): Right, yeah.\n[10] Marcus Williams (aegis_staff): Okay so I'm seeing a high volume of sync errors starting the 19th, you're correct. The error codes being thrown are mostly — it looks like connection timeout errors and then some authentication failures against your LDAP endpoint. Can you tell me, did anything change in your environment around that time? Any firewall rule updates, certificate rotations, anything like that?\n[11] Harold Jensen (customer): That's — hm, that's actually a good question. We did have a scheduled maintenance window on the 18th, overnight. Our network team pushed some firewall policy updates. I didn't think that would affect the LDAP connector but...\n[12] Marcus Williams (aegis_staff): Yeah that could absolutely be it. The Aegis Identity LDAP connector needs outbound access on port 389 for standard LDAP or 636 for LDAPS — are you running LDAPS by any chance?\n[13] Harold Jensen (customer): We are, yeah, we're using LDAPS. Port 636.\n[14] Marcus Williams (aegis_staff): Okay, so there's two things I want to check then. First, can you verify with your network team that port 636 is still open from our connector's IP range? I can send you the current list of Aegis egress IPs. And second — did anything happen with your SSL certificate on the LDAP server during or after that maintenance window?\n[15] Harold Jensen (customer): I — I'm not sure about the certificate. I'd have to check. But I'll tell you what, this is information that should have been asked three days ago when I first filed the case. I had to chase your team for a response and now we're just starting the basic troubleshooting. Do you understand how that feels from my side?\n[16] Marcus Williams (aegis_staff): Yes, and honestly Harold, you're completely right. There's no excuse for the delay and I'm not going to try to make one. What I can do right now is move fast. Can you get your network team on a quick message while we're talking to check that port 636 egress rule?\n[17] Harold Jensen (customer): Yeah, let me — hold on, I'm going to ping Dave on our network team right now via Teams. Give me just a second.\n[18] Marcus Williams (aegis_staff): Of course, take your time. And while you're doing that I'm going to look at the specific authentication error details more closely. The error is... okay so it's saying SSL handshake failure. Which actually — Harold, that points more to a certificate issue than a firewall issue.\n[19] Harold Jensen (customer): Okay, Dave's responding. He says the firewall rules look — yeah he says 636 should be open. So it's not the firewall.\n[20] Marcus Williams (aegis_staff): Right, which is consistent with what I'm seeing. The SSL handshake failure means our connector is trying to establish the encrypted connection and something's going wrong on the certificate side. Two possibilities — either your LDAP server's SSL cert was renewed or changed during maintenance and the new cert isn't trusted by our connector, or the cert expired. Can you have Dave check the certificate on your Active Directory server?\n[21] Harold Jensen (customer): Okay I'm asking him now... he's checking... oh for the love of — Marcus, he's saying the SSL certificate on the AD server was renewed as part of the maintenance on the 18th and, uh, it looks like it was issued by an internal CA. Would that cause a problem?\n[22] Marcus Williams (aegis_staff): That is exactly the problem. If your certificate was issued by an internal certificate authority, our connector doesn't inherently trust that CA. You need to upload your internal CA's root certificate into Aegis Identity so that we can validate the chain. This is why the handshake is failing.\n[23] Harold Jensen (customer): Okay so — three days of my people not being able to work because of a certificate. That's — I'm glad we found it but I'm also really annoyed that it took this long.\n[24] Marcus Williams (aegis_staff): I hear that completely. Let me walk you through uploading the CA cert right now so we can get this fixed in the next few minutes. In Aegis Identity, go to Settings, then Directory Connectors, find your LDAP connector and click into it.\n[25] Harold Jensen (customer): Alright, I'm in Identity, going to Settings... Directory Connectors... okay I see our LDAP connector listed here, it's showing a red status icon.\n[26] Marcus Williams (aegis_staff): Yeah that red status is the sync failure. Click into the connector and you should see a tab called Security or TLS Settings — it might vary slightly depending on your version.\n[27] Harold Jensen (customer): I see... there's a tab that says TLS Configuration. Is that it?\n[28] Marcus Williams (aegis_staff): Perfect, yes. In there you should see an option to upload a custom CA certificate. You'll need the root CA cert from your internal certificate authority — your team should be able to export that as a PEM or CER file.\n[29] Harold Jensen (customer): Okay I'm asking Dave to pull that cert. He should have it... yeah he's exporting it now, says he'll have it in a minute. And Marcus — look, while we're waiting — I need to understand why this wasn't documented anywhere. Like shouldn't there be some kind of alert or error message in the UI that says 'hey your certificate is untrusted' instead of just showing a generic sync failure?\n[30] Marcus Williams (aegis_staff): That is a completely valid piece of feedback and honestly you're not the first person to raise that. The current error messaging in the connector is not specific enough and I'm going to log this as product feedback with our Identity team. A more descriptive SSL error message would have made this much faster to diagnose.\n[31] Harold Jensen (customer): Yeah it would have saved us three days. Okay, Dave just dropped the cert in our shared drive, I'm downloading it now. It's a .cer file, is that going to work?\n[32] Marcus Williams (aegis_staff): CER should work, yep. Go ahead and upload it through that TLS Configuration tab — there should be an Upload Certificate button.\n[33] Harold Jensen (customer): Uploading... okay it's uploaded. Now do I just save and it'll try to reconnect automatically?\n[34] Marcus Williams (aegis_staff): Hit Save and then there should be a Test Connection button — click that to trigger a manual test before you do a full sync.\n[35] Harold Jensen (customer): Okay saving... and Test Connection... it's running... Marcus, it says Connection Successful. The status icon just turned green.\n[36] Marcus Williams (aegis_staff): That's what we want to see. Now trigger a manual sync from the sync options and let's make sure user provisioning starts flowing correctly.\n[37] Harold Jensen (customer): Running manual sync now... okay it's running and I'm already seeing sync events populating. Users are coming through. This looks like it's working. I'm glad it's fixed but I — yeah, I still want to talk about the support response time issue because this cannot happen again.\n[38] Marcus Williams (aegis_staff): Absolutely, and I want to make sure that's addressed. I'm going to escalate the response time failure internally and make sure your account is flagged for priority routing on future cases. I'd also like to set up a brief call with your account manager this week so we can have that broader conversation about your experience, including the Detect outage and now this.\n[39] Harold Jensen (customer): Yeah, I think that's a good idea. I need someone from Aegis leadership to understand the impact this has had on Steelpoint. We're a 24-7 manufacturing operation — downtime isn't abstract for us, it's real dollars and real people standing around.\n[40] Marcus Williams (aegis_staff): I completely understand that and I will make sure that message gets communicated. I'll document everything in the case notes today and reach out to your account manager to schedule that follow-up. Is there anything else I can help you with right now while I have you?\n[41] Harold Jensen (customer): No, I think we're — we're good for now. Sync looks like it's running clean. Just make sure those case notes are thorough and that someone actually follows up with me. I've had cases fall through the cracks before.\n[42] Marcus Williams (aegis_staff): You have my word on that Harold. I'll send you a case summary email within the hour and copy your account manager. Thank you for your patience today and again I'm sorry for the trouble this caused.\n[43] Harold Jensen (customer): Alright. Thanks Marcus. Bye."
+  },
+  "response_text": "{\n  \"call_score\": 2.5,\n  \"customer_score\": 2,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"negative\"},\n    {\"index\": 2, \"label\": \"positive\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"negative\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"negative\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"positive\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"negative\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"negative\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"negative\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"positive\"},\n    {\"index\": 29, \"label\": \"negative\"},\n    {\"index\": 30, \"label\": \"positive\"},\n    {\"index\": 31, \"label\": \"negative\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"positive\"},\n    {\"index\": 37, \"label\": \"negative\"},\n    {\"index\": 38, \"label\": \"positive\"},\n    {\"index\": 39, \"label\": \"positive\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"negative\"},\n    {\"index\": 42, \"label\": \"positive\"},\n    {\"index\": 43, \"label\": \"positive\"}\n  ],\n  \"trajectory\": {\"start\": 2, \"end\": 3},\n  \"evidence_quote\": \"But I'll tell you what, this is information that should have been asked three days ago when I first filed the case. I had to chase your team for a response and now we're just starting the basic troubleshooting.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "negative"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "negative"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "negative"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "positive"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "negative"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "negative"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "negative"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "negative"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "negative"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "positive"
+      },
+      {
+        "index": 37,
+        "label": "negative"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "positive"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "negative"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      },
+      {
+        "index": 43,
+        "label": "positive"
+      }
+    ],
+    "trajectory": {
+      "start": 2.0,
+      "end": 3.0
+    },
+    "evidence_quote": "But I'll tell you what, this is information that should have been asked three days ago when I first filed the case. I had to chase your team for a response and now we're just starting the basic troubleshooting.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 1004,
+    "prompt_tokens": 3383,
+    "total_tokens": 4387,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 323,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 3380,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.005192,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.005192,
+      "upstream_inference_prompt_cost": 0.000172,
+      "upstream_inference_completions_cost": 0.00502
+    }
+  },
+  "latency_s": 12.533,
+  "finish_reason": "stop",
+  "model_returned": "openai/gpt-6.1-terra",
+  "provider_returned": "OpenAI",
+  "timestamp": "2026-10-29T20:41:33.586379+00:00",
+  "key": "6e0ba81ff296fd678e15a1a15c69892e4aec767b052bed2c403209fa243d041a"
+}

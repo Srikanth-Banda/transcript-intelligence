@@ -1,0 +1,2395 @@
+{
+ "meta": {
+  "seed": 20261029,
+  "n_calls": 100,
+  "label_source": "outputs/stage0_final.csv (Stage 0, frozen, reviewed)",
+  "ci": "percentile bootstrap over calls, 10000 resamples",
+  "tests": "two-sided permutation, 10000 shuffles, no multiple-comparison correction"
+ },
+ "q1_by_type": {
+  "support": {
+   "call_score": {
+    "n": 30,
+    "mean": 2.933,
+    "median": 2.5,
+    "sd": 0.917,
+    "ci95": [
+     2.617,
+     3.25
+    ]
+   },
+   "customer_score": {
+    "n": 30,
+    "mean": 2.833,
+    "median": 2.5,
+    "sd": 0.977,
+    "ci95": [
+     2.5,
+     3.167
+    ]
+   },
+   "provided_score": {
+    "n": 30,
+    "mean": 2.827,
+    "median": 2.4,
+    "sd": 0.882,
+    "ci95": [
+     2.527,
+     3.14
+    ]
+   },
+   "score_counts": {
+    "1.5": 2,
+    "2.0": 4,
+    "2.5": 12,
+    "3.0": 1,
+    "3.5": 3,
+    "4.0": 6,
+    "4.5": 1,
+    "5.0": 1
+   }
+  },
+  "external": {
+   "call_score": {
+    "n": 40,
+    "mean": 3.95,
+    "median": 4.5,
+    "sd": 0.904,
+    "ci95": [
+     3.675,
+     4.213
+    ]
+   },
+   "customer_score": {
+    "n": 40,
+    "mean": 3.85,
+    "median": 4.5,
+    "sd": 1.051,
+    "ci95": [
+     3.525,
+     4.15
+    ]
+   },
+   "provided_score": {
+    "n": 40,
+    "mean": 3.853,
+    "median": 4.1,
+    "sd": 0.917,
+    "ci95": [
+     3.57,
+     4.125
+    ]
+   },
+   "score_counts": {
+    "2.0": 1,
+    "2.5": 6,
+    "3.0": 3,
+    "3.5": 4,
+    "4.0": 5,
+    "4.5": 14,
+    "5.0": 7
+   }
+  },
+  "internal": {
+   "call_score": {
+    "n": 30,
+    "mean": 3.5,
+    "median": 3.5,
+    "sd": 0.841,
+    "ci95": [
+     3.217,
+     3.8
+    ]
+   },
+   "customer_score": {
+    "n": 0
+   },
+   "provided_score": {
+    "n": 30,
+    "mean": 3.423,
+    "median": 3.55,
+    "sd": 0.963,
+    "ci95": [
+     3.08,
+     3.757
+    ]
+   },
+   "score_counts": {
+    "2.0": 1,
+    "2.5": 5,
+    "3.0": 6,
+    "3.5": 10,
+    "4.5": 5,
+    "5.0": 3
+   }
+  }
+ },
+ "q1_pairwise": {
+  "support_minus_external": {
+   "diff": -1.017,
+   "ci95": [
+    -1.433,
+    -0.588
+   ],
+   "perm_p": 0.0002,
+   "n": [
+    30,
+    40
+   ],
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "support_minus_internal": {
+   "diff": -0.567,
+   "ci95": [
+    -1.0,
+    -0.133
+   ],
+   "perm_p": 0.0188,
+   "n": [
+    30,
+    30
+   ],
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "external_minus_internal": {
+   "diff": 0.45,
+   "ci95": [
+    0.042,
+    0.842
+   ],
+   "perm_p": 0.0432,
+   "n": [
+    40,
+    30
+   ],
+   "verdict": "supported (n adequate, CI excludes 0)"
+  }
+ },
+ "q1_by_title_rule": {
+  "support": {
+   "call_score": {
+    "n": 27,
+    "mean": 3.056,
+    "median": 2.5,
+    "sd": 0.881,
+    "ci95": [
+     2.722,
+     3.37
+    ]
+   },
+   "customer_score": {
+    "n": 27,
+    "mean": 2.944,
+    "median": 2.5,
+    "sd": 0.964,
+    "ci95": [
+     2.593,
+     3.297
+    ]
+   },
+   "provided_score": {
+    "n": 27,
+    "mean": 2.937,
+    "median": 2.4,
+    "sd": 0.858,
+    "ci95": [
+     2.619,
+     3.256
+    ]
+   },
+   "score_counts": {
+    "1.5": 1,
+    "2.0": 2,
+    "2.5": 12,
+    "3.0": 1,
+    "3.5": 3,
+    "4.0": 6,
+    "4.5": 1,
+    "5.0": 1
+   }
+  },
+  "external": {
+   "call_score": {
+    "n": 43,
+    "mean": 3.802,
+    "median": 4.0,
+    "sd": 1.03,
+    "ci95": [
+     3.5,
+     4.105
+    ]
+   },
+   "customer_score": {
+    "n": 43,
+    "mean": 3.709,
+    "median": 4.0,
+    "sd": 1.14,
+    "ci95": [
+     3.372,
+     4.035
+    ]
+   },
+   "provided_score": {
+    "n": 43,
+    "mean": 3.712,
+    "median": 3.9,
+    "sd": 1.027,
+    "ci95": [
+     3.412,
+     4.012
+    ]
+   },
+   "score_counts": {
+    "1.5": 1,
+    "2.0": 3,
+    "2.5": 6,
+    "3.0": 3,
+    "3.5": 4,
+    "4.0": 5,
+    "4.5": 14,
+    "5.0": 7
+   }
+  },
+  "internal": {
+   "call_score": {
+    "n": 30,
+    "mean": 3.5,
+    "median": 3.5,
+    "sd": 0.841,
+    "ci95": [
+     3.217,
+     3.8
+    ]
+   },
+   "customer_score": {
+    "n": 0
+   },
+   "provided_score": {
+    "n": 30,
+    "mean": 3.423,
+    "median": 3.55,
+    "sd": 0.963,
+    "ci95": [
+     3.08,
+     3.757
+    ]
+   },
+   "score_counts": {
+    "2.0": 1,
+    "2.5": 5,
+    "3.0": 6,
+    "3.5": 10,
+    "4.5": 5,
+    "5.0": 3
+   }
+  }
+ },
+ "q1_pairwise_title_rule": {
+  "support_minus_external": {
+   "diff": -0.747,
+   "ci95": [
+    -1.193,
+    -0.304
+   ],
+   "perm_p": 0.0034,
+   "n": [
+    27,
+    43
+   ],
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "support_minus_internal": {
+   "diff": -0.444,
+   "ci95": [
+    -0.893,
+    -0.015
+   ],
+   "perm_p": 0.0574,
+   "n": [
+    27,
+    30
+   ],
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "external_minus_internal": {
+   "diff": 0.302,
+   "ci95": [
+    -0.124,
+    0.712
+   ],
+   "perm_p": 0.1989,
+   "n": [
+    43,
+    30
+   ],
+   "verdict": "directional only"
+  }
+ },
+ "q1_label_changes": [
+  {
+   "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+   "stage0": "support",
+   "title_rule": "external"
+  },
+  {
+   "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+   "stage0": "support",
+   "title_rule": "external"
+  },
+  {
+   "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+   "stage0": "support",
+   "title_rule": "external"
+  }
+ ],
+ "q1_side_gap_model_labels": {
+  "support": {
+   "n_calls": 30,
+   "customer_neg_mean": 0.354,
+   "staff_neg_mean": 0.021,
+   "gap_mean": 0.334,
+   "gap_ci95": [
+    0.236,
+    0.429
+   ],
+   "calls_customer_more_negative": 22
+  },
+  "external": {
+   "n_calls": 40,
+   "customer_neg_mean": 0.16,
+   "staff_neg_mean": 0.005,
+   "gap_mean": 0.156,
+   "gap_ci95": [
+    0.095,
+    0.224
+   ],
+   "calls_customer_more_negative": 24
+  }
+ },
+ "q1_side_gap_provided_labels": {
+  "support": {
+   "n_calls": 30,
+   "customer_neg_mean": 0.45,
+   "staff_neg_mean": 0.096,
+   "gap_mean": 0.354,
+   "gap_ci95": [
+    0.248,
+    0.459
+   ],
+   "calls_customer_more_negative": 21
+  },
+  "external": {
+   "n_calls": 40,
+   "customer_neg_mean": 0.182,
+   "staff_neg_mean": 0.029,
+   "gap_mean": 0.153,
+   "gap_ci95": [
+    0.1,
+    0.213
+   ],
+   "calls_customer_more_negative": 31
+  }
+ },
+ "q2_trend": {
+  "monthly_overall": {
+   "2026-02": {
+    "n": 26,
+    "mean": 3.712,
+    "median": 3.75,
+    "sd": 0.802,
+    "ci95": [
+     3.404,
+     4.0
+    ]
+   },
+   "2026-03": {
+    "n": 36,
+    "mean": 2.944,
+    "median": 2.75,
+    "sd": 0.901,
+    "ci95": [
+     2.667,
+     3.236
+    ]
+   },
+   "2026-04": {
+    "n": 38,
+    "mean": 3.908,
+    "median": 4.5,
+    "sd": 0.922,
+    "ci95": [
+     3.618,
+     4.184
+    ]
+   }
+  },
+  "monthly_by_type": {
+   "2026-02": {
+    "support": {
+     "n": 8,
+     "mean": 3.0,
+     "median": 2.5,
+     "sd": 0.707,
+     "ci95": [
+      2.625,
+      3.5
+     ]
+    },
+    "external": {
+     "n": 10,
+     "mean": 4.35,
+     "median": 4.5,
+     "sd": 0.474,
+     "ci95": [
+      4.05,
+      4.6
+     ]
+    },
+    "internal": {
+     "n": 8,
+     "mean": 3.625,
+     "median": 3.5,
+     "sd": 0.582,
+     "ci95": [
+      3.25,
+      4.0
+     ]
+    }
+   },
+   "2026-03": {
+    "support": {
+     "n": 13,
+     "mean": 2.654,
+     "median": 2.5,
+     "sd": 0.944,
+     "ci95": [
+      2.192,
+      3.154
+     ]
+    },
+    "external": {
+     "n": 13,
+     "mean": 3.308,
+     "median": 3.0,
+     "sd": 1.011,
+     "ci95": [
+      2.808,
+      3.846
+     ]
+    },
+    "internal": {
+     "n": 10,
+     "mean": 2.85,
+     "median": 2.75,
+     "sd": 0.53,
+     "ci95": [
+      2.55,
+      3.15
+     ]
+    }
+   },
+   "2026-04": {
+    "support": {
+     "n": 9,
+     "mean": 3.278,
+     "median": 2.5,
+     "sd": 1.003,
+     "ci95": [
+      2.722,
+      3.889
+     ]
+    },
+    "external": {
+     "n": 17,
+     "mean": 4.206,
+     "median": 4.5,
+     "sd": 0.772,
+     "ci95": [
+      3.824,
+      4.529
+     ]
+    },
+    "internal": {
+     "n": 12,
+     "mean": 3.958,
+     "median": 4.0,
+     "sd": 0.891,
+     "ci95": [
+      3.458,
+      4.458
+     ]
+    }
+   }
+  },
+  "weekly_overall": {
+   "2026-02-02": {
+    "n": 5,
+    "mean": 4.0
+   },
+   "2026-02-09": {
+    "n": 6,
+    "mean": 3.75
+   },
+   "2026-02-16": {
+    "n": 7,
+    "mean": 3.429
+   },
+   "2026-02-23": {
+    "n": 8,
+    "mean": 3.75
+   },
+   "2026-03-02": {
+    "n": 7,
+    "mean": 4.071
+   },
+   "2026-03-09": {
+    "n": 13,
+    "mean": 2.346
+   },
+   "2026-03-16": {
+    "n": 9,
+    "mean": 2.833
+   },
+   "2026-03-23": {
+    "n": 7,
+    "mean": 3.071
+   },
+   "2026-03-30": {
+    "n": 6,
+    "mean": 4.75
+   },
+   "2026-04-06": {
+    "n": 8,
+    "mean": 3.562
+   },
+   "2026-04-13": {
+    "n": 9,
+    "mean": 3.556
+   },
+   "2026-04-20": {
+    "n": 12,
+    "mean": 3.958
+   },
+   "2026-04-27": {
+    "n": 3,
+    "mean": 4.0
+   }
+  },
+  "weekly_by_type": {
+   "2026-02-02": {
+    "support": {
+     "n": 2,
+     "mean": 3.25
+    },
+    "external": {
+     "n": 2,
+     "mean": 5.0
+    },
+    "internal": {
+     "n": 1,
+     "mean": 3.5
+    }
+   },
+   "2026-02-09": {
+    "support": {
+     "n": 2,
+     "mean": 3.0
+    },
+    "external": {
+     "n": 2,
+     "mean": 4.25
+    },
+    "internal": {
+     "n": 2,
+     "mean": 4.0
+    }
+   },
+   "2026-02-16": {
+    "support": {
+     "n": 2,
+     "mean": 2.5
+    },
+    "external": {
+     "n": 3,
+     "mean": 4.0
+    },
+    "internal": {
+     "n": 2,
+     "mean": 3.5
+    }
+   },
+   "2026-02-23": {
+    "support": {
+     "n": 2,
+     "mean": 3.25
+    },
+    "external": {
+     "n": 3,
+     "mean": 4.333
+    },
+    "internal": {
+     "n": 3,
+     "mean": 3.5
+    }
+   },
+   "2026-03-02": {
+    "support": {
+     "n": 2,
+     "mean": 4.0
+    },
+    "external": {
+     "n": 4,
+     "mean": 4.25
+    },
+    "internal": {
+     "n": 1,
+     "mean": 3.5
+    }
+   },
+   "2026-03-09": {
+    "support": {
+     "n": 6,
+     "mean": 1.917
+    },
+    "external": {
+     "n": 3,
+     "mean": 3.167
+    },
+    "internal": {
+     "n": 4,
+     "mean": 2.375
+    }
+   },
+   "2026-03-16": {
+    "support": {
+     "n": 3,
+     "mean": 3.0
+    },
+    "external": {
+     "n": 3,
+     "mean": 2.667
+    },
+    "internal": {
+     "n": 3,
+     "mean": 2.833
+    }
+   },
+   "2026-03-23": {
+    "support": {
+     "n": 2,
+     "mean": 3.0
+    },
+    "external": {
+     "n": 3,
+     "mean": 2.833
+    },
+    "internal": {
+     "n": 2,
+     "mean": 3.5
+    }
+   },
+   "2026-03-30": {
+    "support": {
+     "n": 1,
+     "mean": 4.5
+    },
+    "external": {
+     "n": 3,
+     "mean": 4.833
+    },
+    "internal": {
+     "n": 2,
+     "mean": 4.75
+    }
+   },
+   "2026-04-06": {
+    "support": {
+     "n": 3,
+     "mean": 2.833
+    },
+    "external": {
+     "n": 3,
+     "mean": 4.333
+    },
+    "internal": {
+     "n": 2,
+     "mean": 3.5
+    }
+   },
+   "2026-04-13": {
+    "support": {
+     "n": 2,
+     "mean": 3.25
+    },
+    "external": {
+     "n": 4,
+     "mean": 3.75
+    },
+    "internal": {
+     "n": 3,
+     "mean": 3.5
+    }
+   },
+   "2026-04-20": {
+    "support": {
+     "n": 2,
+     "mean": 3.75
+    },
+    "external": {
+     "n": 6,
+     "mean": 4.083
+    },
+    "internal": {
+     "n": 4,
+     "mean": 3.875
+    }
+   },
+   "2026-04-27": {
+    "support": {
+     "n": 1,
+     "mean": 2.5
+    },
+    "external": {
+     "n": 1,
+     "mean": 4.5
+    },
+    "internal": {
+     "n": 1,
+     "mean": 5.0
+    }
+   }
+  }
+ },
+ "q2_dip": {
+  "all_calls": {
+   "label": "all calls",
+   "n_march": 36,
+   "n_other": 64,
+   "march_mean": 2.944,
+   "other_mean": 3.828,
+   "diff": -0.884,
+   "ci95": [
+    -1.238,
+    -0.515
+   ],
+   "perm_p": 0.0001,
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "excl_touches_incident": {
+   "label": "excluding calls that touch the incident",
+   "n_march": 13,
+   "n_other": 45,
+   "march_mean": 3.615,
+   "other_mean": 3.933,
+   "diff": -0.318,
+   "ci95": [
+    -0.81,
+    0.157
+   ],
+   "perm_p": 0.2716,
+   "verdict": "directional only"
+  },
+  "excl_core_incident": {
+   "label": "excluding core-incident calls (primary theme)",
+   "n_march": 20,
+   "n_other": 62,
+   "march_mean": 3.425,
+   "other_mean": 3.839,
+   "diff": -0.414,
+   "ci95": [
+    -0.835,
+    0.004
+   ],
+   "perm_p": 0.0669,
+   "verdict": "directional only"
+  },
+  "type_adjusted_monthly_mean": {
+   "2026-02": 3.728,
+   "2026-03": 2.974,
+   "2026-04": 3.853
+  },
+  "type_mix_by_month": {
+   "2026-02": {
+    "support": 0.308,
+    "external": 0.385,
+    "internal": 0.308
+   },
+   "2026-03": {
+    "support": 0.361,
+    "external": 0.361,
+    "internal": 0.278
+   },
+   "2026-04": {
+    "support": 0.237,
+    "external": 0.447,
+    "internal": 0.316
+   }
+  },
+  "within_march_touch_vs_not": {
+   "n": [
+    23,
+    13
+   ],
+   "means": [
+    2.565,
+    3.615
+   ],
+   "diff": -1.05,
+   "ci95": [
+    -1.542,
+    -0.537
+   ],
+   "perm_p": 0.0004,
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "all_months_touch_vs_not": {
+   "n": [
+    42,
+    58
+   ],
+   "means": [
+    3.024,
+    3.862
+   ],
+   "diff": -0.838,
+   "ci95": [
+    -1.185,
+    -0.482
+   ],
+   "perm_p": 0.0001,
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "non_incident_by_type_march_vs_other": {
+   "support": {
+    "n": [
+     6,
+     14
+    ],
+    "march": 3.25,
+    "other": 3.286,
+    "diff": -0.036,
+    "ci95": [
+     -0.845,
+     0.726
+    ],
+    "verdict": "directional only"
+   },
+   "external": {
+    "n": [
+     4,
+     18
+    ],
+    "march": 4.25,
+    "other": 4.472,
+    "diff": -0.222,
+    "ci95": [
+     -0.792,
+     0.347
+    ],
+    "verdict": "directional only"
+   },
+   "internal": {
+    "n": [
+     3,
+     13
+    ],
+    "march": 3.5,
+    "other": 3.885,
+    "diff": -0.385,
+    "ci95": [
+     -0.808,
+     0.038
+    ],
+    "verdict": "directional only"
+   }
+  },
+  "touch_share_by_month": {
+   "2026-02": 0.0,
+   "2026-03": 0.639,
+   "2026-04": 0.5
+  }
+ },
+ "q3_outage": {
+  "first_core_incident_call": "2026-03-10",
+  "last_core_incident_call": "2026-04-17",
+  "n_touch": 42,
+  "touch_by_type": {
+   "support": 10,
+   "external": 18,
+   "internal": 14
+  },
+  "touch_by_week": {
+   "2026-03-09": {
+    "support": 6,
+    "external": 3,
+    "internal": 4
+   },
+   "2026-03-16": {
+    "support": 1,
+    "external": 3,
+    "internal": 3
+   },
+   "2026-03-23": {
+    "support": 0,
+    "external": 3,
+    "internal": 0
+   },
+   "2026-03-30": {
+    "support": 0,
+    "external": 1,
+    "internal": 0
+   },
+   "2026-04-06": {
+    "support": 1,
+    "external": 2,
+    "internal": 2
+   },
+   "2026-04-13": {
+    "support": 1,
+    "external": 3,
+    "internal": 1
+   },
+   "2026-04-20": {
+    "support": 1,
+    "external": 2,
+    "internal": 3
+   },
+   "2026-04-27": {
+    "support": 0,
+    "external": 1,
+    "internal": 1
+   }
+  },
+  "calls_flagged_before_first_core_call": [
+   {
+    "date": "2026-03-09",
+    "title": "Aegis / Keystone Health - Renewal Planning"
+   }
+  ],
+  "timeline": [
+   {
+    "date": "2026-03-09",
+    "type": "external",
+    "title": "Aegis / Keystone Health - Renewal Planning",
+    "core": false,
+    "call_score": 5.0,
+    "customer_score": 5.0
+   },
+   {
+    "date": "2026-03-10",
+    "type": "internal",
+    "title": "INCIDENT: Detect Pipeline Failure - War Room",
+    "core": true,
+    "call_score": 2.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-10",
+    "type": "support",
+    "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+    "core": true,
+    "call_score": 1.5,
+    "customer_score": 1.5
+   },
+   {
+    "date": "2026-03-11",
+    "type": "internal",
+    "title": "Detect Outage - Escalation Bridge",
+    "core": true,
+    "call_score": 2.0,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-11",
+    "type": "support",
+    "title": "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+    "core": true,
+    "call_score": 1.5,
+    "customer_score": 1.5
+   },
+   {
+    "date": "2026-03-12",
+    "type": "external",
+    "title": "Aegis / Northstar Pharma - Urgent: Detect Outage Impact",
+    "core": true,
+    "call_score": 2.0,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-12",
+    "type": "internal",
+    "title": "Detect Outage - Customer Impact Assessment",
+    "core": true,
+    "call_score": 2.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-12",
+    "type": "support",
+    "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+    "core": true,
+    "call_score": 2.0,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-13",
+    "type": "support",
+    "title": "Support Case #6573 - Ridgeline Logistics Detect Data Gaps",
+    "core": true,
+    "call_score": 2.0,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-14",
+    "type": "support",
+    "title": "Support Case #5889 - Ridgeline Logistics Detect Latency Issues",
+    "core": true,
+    "call_score": 2.5,
+    "customer_score": 2.5
+   },
+   {
+    "date": "2026-03-14",
+    "type": "external",
+    "title": "Aegis / Meridian Capital - Service Reliability Discussion",
+    "core": true,
+    "call_score": 2.5,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-14",
+    "type": "internal",
+    "title": "Detect Outage - Root Cause Analysis",
+    "core": true,
+    "call_score": 2.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-15",
+    "type": "support",
+    "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+    "core": true,
+    "call_score": 2.0,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-16",
+    "type": "internal",
+    "title": "Detect Outage - Remediation Plan Review",
+    "core": true,
+    "call_score": 3.0,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-17",
+    "type": "external",
+    "title": "Aegis / Helix Data - Post-Incident Review",
+    "core": true,
+    "call_score": 2.5,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-18",
+    "type": "support",
+    "title": "Support Case #7537 - Forge Industries Detect Recovery Confirmation",
+    "core": true,
+    "call_score": 3.5,
+    "customer_score": 3.5
+   },
+   {
+    "date": "2026-03-18",
+    "type": "internal",
+    "title": "Detect Outage - Post-Incident Review",
+    "core": true,
+    "call_score": 3.0,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-19",
+    "type": "external",
+    "title": "Aegis / Quantum Edge - Renewal Concerns",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-20",
+    "type": "internal",
+    "title": "Competitive Threat Assessment - Post Outage",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-03-21",
+    "type": "external",
+    "title": "Aegis / Nova Retail Group - Renewal Discussion",
+    "core": false,
+    "call_score": 3.0,
+    "customer_score": 2.5
+   },
+   {
+    "date": "2026-03-24",
+    "type": "external",
+    "title": "Aegis / Steelpoint Manufacturing - Contract Review",
+    "core": false,
+    "call_score": 3.0,
+    "customer_score": 3.0
+   },
+   {
+    "date": "2026-03-26",
+    "type": "external",
+    "title": "Aegis / Summit Trust - Platform Concerns Discussion",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-03-28",
+    "type": "external",
+    "title": "Aegis / Ironclad Financial - Account Recovery Check-in",
+    "core": false,
+    "call_score": 3.0,
+    "customer_score": 2.5
+   },
+   {
+    "date": "2026-04-05",
+    "type": "external",
+    "title": "Aegis / Trailhead Marketplace - Renewal Confirmation",
+    "core": false,
+    "call_score": 4.5,
+    "customer_score": 4.5
+   },
+   {
+    "date": "2026-04-07",
+    "type": "internal",
+    "title": "Detect Reliability - 30-Day Review",
+    "core": true,
+    "call_score": 3.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-09",
+    "type": "external",
+    "title": "Aegis / Forge Industries - PCI DSS Compliance Review",
+    "core": false,
+    "call_score": 4.5,
+    "customer_score": 4.5
+   },
+   {
+    "date": "2026-04-10",
+    "type": "internal",
+    "title": "Competitive Response Strategy",
+    "core": false,
+    "call_score": 3.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-10",
+    "type": "support",
+    "title": "Support Case #8179 - Clearwater Medical Overage Charges Dispute",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.5
+   },
+   {
+    "date": "2026-04-11",
+    "type": "external",
+    "title": "Aegis / Cobalt Software - Q2 Planning",
+    "core": false,
+    "call_score": 3.5,
+    "customer_score": 3.0
+   },
+   {
+    "date": "2026-04-14",
+    "type": "external",
+    "title": "Aegis / Ironworks Corp - Vendor Comparison Discussion",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-04-15",
+    "type": "support",
+    "title": "Support Case #6147 - Summit Trust Detect Alert Delays",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.5
+   },
+   {
+    "date": "2026-04-16",
+    "type": "external",
+    "title": "Aegis / Pinnacle Insurance - Detect Roadmap Review",
+    "core": false,
+    "call_score": 3.5,
+    "customer_score": 3.5
+   },
+   {
+    "date": "2026-04-17",
+    "type": "external",
+    "title": "Aegis / Axiom Labs - Multi-Year Renewal",
+    "core": false,
+    "call_score": 4.5,
+    "customer_score": 4.5
+   },
+   {
+    "date": "2026-04-17",
+    "type": "internal",
+    "title": "Weekly Engineering Standup",
+    "core": true,
+    "call_score": 3.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-20",
+    "type": "internal",
+    "title": "SOC 2 Type II - Final Review",
+    "core": false,
+    "call_score": 4.5,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-22",
+    "type": "support",
+    "title": "Support Case #3536 - Stratos Cloud LogVault Integration Timeout",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.0
+   },
+   {
+    "date": "2026-04-22",
+    "type": "external",
+    "title": "Aegis / Brightpath Commerce - Competitive Evaluation",
+    "core": false,
+    "call_score": 2.5,
+    "customer_score": 2.5
+   },
+   {
+    "date": "2026-04-23",
+    "type": "external",
+    "title": "Aegis / Bridgeport Health - Renewal Finalization",
+    "core": false,
+    "call_score": 4.5,
+    "customer_score": 4.5
+   },
+   {
+    "date": "2026-04-24",
+    "type": "internal",
+    "title": "Win/Loss Analysis - Q1",
+    "core": false,
+    "call_score": 3.0,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-26",
+    "type": "internal",
+    "title": "All Hands - April Update",
+    "core": false,
+    "call_score": 3.0,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-28",
+    "type": "internal",
+    "title": "Detect Team - Reliability Sprint Retro",
+    "core": false,
+    "call_score": 5.0,
+    "customer_score": null
+   },
+   {
+    "date": "2026-04-28",
+    "type": "external",
+    "title": "Aegis / Atlas Precision - Annual Review & Renewal",
+    "core": false,
+    "call_score": 4.5,
+    "customer_score": 4.5
+   }
+  ],
+  "external_pre_vs_post": {
+   "cutoff": "2026-03-10",
+   "n_pre": 15,
+   "n_post": 25,
+   "pre_mean": 4.367,
+   "post_mean": 3.7,
+   "diff_post_minus_pre": -0.667,
+   "ci95": [
+    -1.12,
+    -0.207
+   ],
+   "perm_p": 0.0262,
+   "verdict": "supported (n adequate, CI excludes 0)"
+  },
+  "external_post_touch_vs_not": {
+   "n": [
+    17,
+    8
+   ],
+   "means": [
+    3.265,
+    4.625
+   ],
+   "customer_means": [
+    3.029,
+    4.625
+   ],
+   "diff": -1.36,
+   "ci95": [
+    -1.827,
+    -0.882
+   ],
+   "verdict": "directional only"
+  },
+  "external_by_window": {
+   "pre": {
+    "n": 15,
+    "mean": 4.367,
+    "median": 4.5,
+    "sd": 0.516,
+    "ci95": [
+     4.1,
+     4.6
+    ]
+   },
+   "acute_mar10_31": {
+    "n": 8,
+    "mean": 2.625,
+    "median": 2.5,
+    "sd": 0.354,
+    "ci95": [
+     2.375,
+     2.812
+    ]
+   },
+   "april": {
+    "n": 17,
+    "mean": 4.206,
+    "median": 4.5,
+    "sd": 0.772,
+    "ci95": [
+     3.824,
+     4.529
+    ]
+   }
+  },
+  "external_by_window_customer": {
+   "pre": {
+    "n": 15,
+    "mean": 4.367,
+    "median": 4.5,
+    "sd": 0.516,
+    "ci95": [
+     4.1,
+     4.6
+    ]
+   },
+   "acute_mar10_31": {
+    "n": 8,
+    "mean": 2.25,
+    "median": 2.0,
+    "sd": 0.378,
+    "ci95": [
+     2.062,
+     2.5
+    ]
+   },
+   "april": {
+    "n": 17,
+    "mean": 4.147,
+    "median": 4.5,
+    "sd": 0.88,
+    "ci95": [
+     3.706,
+     4.529
+    ]
+   }
+  },
+  "most_affected_accounts": [
+   {
+    "account": "blackridgeinvest",
+    "calls": [
+     {
+      "date": "2026-02-07",
+      "type": "external",
+      "title": "Aegis / Blackridge Investments - Renewal Discussion",
+      "touch": false,
+      "customer_score": 5.0,
+      "call_score": 5.0
+     },
+     {
+      "date": "2026-03-12",
+      "type": "support",
+      "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+      "touch": true,
+      "customer_score": 2.0,
+      "call_score": 2.0
+     },
+     {
+      "date": "2026-04-21",
+      "type": "external",
+      "title": "Aegis / Blackridge Investments - HIPAA Compliance Review",
+      "touch": false,
+      "customer_score": 4.5,
+      "call_score": 4.5
+     },
+     {
+      "date": "2026-04-25",
+      "type": "support",
+      "title": "Support Case #8811 - Blackridge Investments Custom Compliance Template",
+      "touch": false,
+      "customer_score": 5.0,
+      "call_score": 5.0
+     }
+    ],
+    "first_customer_score": 5.0,
+    "last_customer_score": 5.0,
+    "min_customer_score": 2.0,
+    "last_call_date": "2026-04-25",
+    "n_calls": 4
+   },
+   {
+    "account": "clearwatermed",
+    "calls": [
+     {
+      "date": "2026-04-07",
+      "type": "external",
+      "title": "Aegis / Clearwater Medical - Comply v2 Deployment Kickoff",
+      "touch": false,
+      "customer_score": 5.0,
+      "call_score": 5.0
+     },
+     {
+      "date": "2026-04-10",
+      "type": "support",
+      "title": "Support Case #8179 - Clearwater Medical Overage Charges Dispute",
+      "touch": true,
+      "customer_score": 2.5,
+      "call_score": 2.5
+     }
+    ],
+    "first_customer_score": 5.0,
+    "last_customer_score": 2.5,
+    "min_customer_score": 2.5,
+    "last_call_date": "2026-04-10",
+    "n_calls": 2
+   },
+   {
+    "account": "cobaltsoftware",
+    "calls": [
+     {
+      "date": "2026-03-10",
+      "type": "support",
+      "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+      "touch": true,
+      "customer_score": 1.5,
+      "call_score": 1.5
+     },
+     {
+      "date": "2026-04-11",
+      "type": "external",
+      "title": "Aegis / Cobalt Software - Q2 Planning",
+      "touch": true,
+      "customer_score": 3.0,
+      "call_score": 3.5
+     }
+    ],
+    "first_customer_score": 1.5,
+    "last_customer_score": 3.0,
+    "min_customer_score": 1.5,
+    "last_call_date": "2026-04-11",
+    "n_calls": 2
+   },
+   {
+    "account": "forgeindustries",
+    "calls": [
+     {
+      "date": "2026-03-18",
+      "type": "support",
+      "title": "Support Case #7537 - Forge Industries Detect Recovery Confirmation",
+      "touch": true,
+      "customer_score": 3.5,
+      "call_score": 3.5
+     },
+     {
+      "date": "2026-04-03",
+      "type": "support",
+      "title": "Support Case #1993 - Forge Industries Comply v2 Early Access Question",
+      "touch": false,
+      "customer_score": 4.5,
+      "call_score": 4.5
+     },
+     {
+      "date": "2026-04-09",
+      "type": "external",
+      "title": "Aegis / Forge Industries - PCI DSS Compliance Review",
+      "touch": true,
+      "customer_score": 4.5,
+      "call_score": 4.5
+     }
+    ],
+    "first_customer_score": 3.5,
+    "last_customer_score": 4.5,
+    "min_customer_score": 3.5,
+    "last_call_date": "2026-04-09",
+    "n_calls": 3
+   },
+   {
+    "account": "northstarpharma",
+    "calls": [
+     {
+      "date": "2026-03-12",
+      "type": "external",
+      "title": "Aegis / Northstar Pharma - Urgent: Detect Outage Impact",
+      "touch": true,
+      "customer_score": 2.0,
+      "call_score": 2.0
+     },
+     {
+      "date": "2026-03-15",
+      "type": "support",
+      "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+      "touch": true,
+      "customer_score": 2.0,
+      "call_score": 2.0
+     }
+    ],
+    "first_customer_score": 2.0,
+    "last_customer_score": 2.0,
+    "min_customer_score": 2.0,
+    "last_call_date": "2026-03-15",
+    "n_calls": 2
+   },
+   {
+    "account": "ridgelinelogistics",
+    "calls": [
+     {
+      "date": "2026-03-07",
+      "type": "external",
+      "title": "Aegis / Ridgeline Logistics - Identity Roadmap Discussion",
+      "touch": false,
+      "customer_score": 3.5,
+      "call_score": 3.5
+     },
+     {
+      "date": "2026-03-13",
+      "type": "support",
+      "title": "Support Case #6573 - Ridgeline Logistics Detect Data Gaps",
+      "touch": true,
+      "customer_score": 2.0,
+      "call_score": 2.0
+     },
+     {
+      "date": "2026-03-14",
+      "type": "support",
+      "title": "Support Case #5889 - Ridgeline Logistics Detect Latency Issues",
+      "touch": true,
+      "customer_score": 2.5,
+      "call_score": 2.5
+     }
+    ],
+    "first_customer_score": 3.5,
+    "last_customer_score": 2.5,
+    "min_customer_score": 2.0,
+    "last_call_date": "2026-03-14",
+    "n_calls": 3
+   },
+   {
+    "account": "stratoscloud",
+    "calls": [
+     {
+      "date": "2026-03-06",
+      "type": "external",
+      "title": "Aegis / Stratos Cloud - Audit Preparation",
+      "touch": false,
+      "customer_score": 4.5,
+      "call_score": 4.5
+     },
+     {
+      "date": "2026-04-22",
+      "type": "support",
+      "title": "Support Case #3536 - Stratos Cloud LogVault Integration Timeout",
+      "touch": true,
+      "customer_score": 2.0,
+      "call_score": 2.5
+     }
+    ],
+    "first_customer_score": 4.5,
+    "last_customer_score": 2.0,
+    "min_customer_score": 2.0,
+    "last_call_date": "2026-04-22",
+    "n_calls": 2
+   },
+   {
+    "account": "summittrust",
+    "calls": [
+     {
+      "date": "2026-02-06",
+      "type": "support",
+      "title": "Support Case #9279 - Summit Trust Billing Inquiry",
+      "touch": false,
+      "customer_score": 4.0,
+      "call_score": 4.0
+     },
+     {
+      "date": "2026-03-26",
+      "type": "external",
+      "title": "Aegis / Summit Trust - Platform Concerns Discussion",
+      "touch": true,
+      "customer_score": 2.0,
+      "call_score": 2.5
+     },
+     {
+      "date": "2026-04-15",
+      "type": "support",
+      "title": "Support Case #6147 - Summit Trust Detect Alert Delays",
+      "touch": true,
+      "customer_score": 2.5,
+      "call_score": 2.5
+     }
+    ],
+    "first_customer_score": 4.0,
+    "last_customer_score": 2.5,
+    "min_customer_score": 2.0,
+    "last_call_date": "2026-04-15",
+    "n_calls": 3
+   },
+   {
+    "account": "trailheadmkt",
+    "calls": [
+     {
+      "date": "2026-03-11",
+      "type": "support",
+      "title": "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+      "touch": true,
+      "customer_score": 1.5,
+      "call_score": 1.5
+     },
+     {
+      "date": "2026-04-05",
+      "type": "external",
+      "title": "Aegis / Trailhead Marketplace - Renewal Confirmation",
+      "touch": true,
+      "customer_score": 4.5,
+      "call_score": 4.5
+     }
+    ],
+    "first_customer_score": 1.5,
+    "last_customer_score": 4.5,
+    "min_customer_score": 1.5,
+    "last_call_date": "2026-04-05",
+    "n_calls": 2
+   }
+  ],
+  "external_april_vs_pre": {
+   "n_april": 17,
+   "n_pre": 15,
+   "april_mean": 4.206,
+   "pre_mean": 4.367,
+   "diff": -0.161,
+   "ci95": [
+    -0.6,
+    0.263
+   ],
+   "perm_p": 0.5171
+  },
+  "external_april_touch_vs_not": {
+   "n": [
+    9,
+    8
+   ],
+   "means": [
+    3.833,
+    4.625
+   ]
+  }
+ },
+ "q4_trajectory": {
+  "by_type": {
+   "support": {
+    "n": 30,
+    "start_mean": 2.683,
+    "end_mean": 3.183,
+    "delta_mean": 0.5,
+    "delta_ci95": [
+     0.35,
+     0.65
+    ],
+    "n_improve": 22,
+    "n_flat": 7,
+    "n_worse": 1,
+    "provided_neg_share_first_third": 0.286,
+    "provided_neg_share_last_third": 0.207,
+    "neg_share_first_third": 0.182,
+    "neg_share_last_third": 0.158
+   },
+   "external": {
+    "n": 40,
+    "start_mean": 3.525,
+    "end_mean": 4.075,
+    "delta_mean": 0.55,
+    "delta_ci95": [
+     0.438,
+     0.662
+    ],
+    "n_improve": 32,
+    "n_flat": 8,
+    "n_worse": 0,
+    "provided_neg_share_first_third": 0.161,
+    "provided_neg_share_last_third": 0.048,
+    "neg_share_first_third": 0.109,
+    "neg_share_last_third": 0.039
+   },
+   "internal": {
+    "n": 30,
+    "start_mean": 3.2,
+    "end_mean": 3.65,
+    "delta_mean": 0.45,
+    "delta_ci95": [
+     0.35,
+     0.55
+    ],
+    "n_improve": 24,
+    "n_flat": 6,
+    "n_worse": 0,
+    "provided_neg_share_first_third": 0.218,
+    "provided_neg_share_last_third": 0.097,
+    "neg_share_first_third": 0.124,
+    "neg_share_last_third": 0.079
+   }
+  },
+  "calls_ending_worse": [
+   {
+    "date": "2026-03-11",
+    "type": "support",
+    "title": "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+    "start": 2.0,
+    "end": 1.5,
+    "theme": "Incident and Outage Response",
+    "touches_incident": true,
+    "call_score": 1.5,
+    "neg_first_third": 0.58,
+    "neg_last_third": 0.5,
+    "evidence_quote": "depending on how this is handled over the next 24 hours, we're going to have a very serious conversation about the future of this contract."
+   }
+  ],
+  "calls_ending_strained": [
+   {
+    "date": "2026-03-11",
+    "type": "support",
+    "title": "Support Case #3266 - Trailhead Marketplace Detect Alerts Not Firing",
+    "start": 2.0,
+    "end": 1.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-10",
+    "type": "support",
+    "title": "URGENT: Cobalt Software - Aegis Detect Dashboard Down",
+    "start": 1.5,
+    "end": 2.0,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-13",
+    "type": "support",
+    "title": "Support Case #6573 - Ridgeline Logistics Detect Data Gaps",
+    "start": 2.0,
+    "end": 2.0,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-15",
+    "type": "support",
+    "title": "ESCALATION: Northstar Pharma - Detect Outage Impact on Compliance",
+    "start": 2.0,
+    "end": 2.0,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-02-24",
+    "type": "support",
+    "title": "Support Case #3677 - Coastal Living Co MFA Token Failures",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": false
+   },
+   {
+    "date": "2026-03-10",
+    "type": "internal",
+    "title": "INCIDENT: Detect Pipeline Failure - War Room",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-11",
+    "type": "internal",
+    "title": "Detect Outage - Escalation Bridge",
+    "start": 2.0,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-12",
+    "type": "external",
+    "title": "Aegis / Northstar Pharma - Urgent: Detect Outage Impact",
+    "start": 1.5,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-12",
+    "type": "support",
+    "title": "URGENT: Blackridge Investments - Complete Loss of Threat Visibility",
+    "start": 2.0,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-14",
+    "type": "external",
+    "title": "Aegis / Meridian Capital - Service Reliability Discussion",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-16",
+    "type": "support",
+    "title": "Support Case #3103 - Silverline Brands Detect False Positives After Patch",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": false
+   },
+   {
+    "date": "2026-03-17",
+    "type": "external",
+    "title": "Aegis / Helix Data - Post-Incident Review",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-19",
+    "type": "external",
+    "title": "Aegis / Quantum Edge - Renewal Concerns",
+    "start": 2.0,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-03-29",
+    "type": "support",
+    "title": "Support Case #8749 - Coastal Living Co SAML Certificate Rotation Bug",
+    "start": 2.0,
+    "end": 2.5,
+    "touches_incident": false
+   },
+   {
+    "date": "2026-04-10",
+    "type": "support",
+    "title": "Support Case #8179 - Clearwater Medical Overage Charges Dispute",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": true
+   },
+   {
+    "date": "2026-04-22",
+    "type": "support",
+    "title": "Support Case #3536 - Stratos Cloud LogVault Integration Timeout",
+    "start": 2.5,
+    "end": 2.5,
+    "touches_incident": true
+   }
+  ],
+  "ending_strained_by_type": {
+   "support": 10,
+   "external": 4,
+   "internal": 2
+  },
+  "n_improve_all": 78,
+  "n_flat_all": 21,
+  "n_ending_worse": 1,
+  "worse_by_type": {
+   "support": 1,
+   "external": 0,
+   "internal": 0
+  }
+ },
+ "q5_disagreement": {
+  "overall_offset": {
+   "n": 100,
+   "mean": 0.094,
+   "median": 0.10000000000000009,
+   "sd": 0.273,
+   "ci95": [
+    0.041,
+    0.148
+   ]
+  },
+  "mae": 0.234,
+  "pearson": 0.963,
+  "offset_by_type": {
+   "support": {
+    "n": 30,
+    "mean": 0.107,
+    "median": 0.10000000000000009,
+    "sd": 0.22,
+    "ci95": [
+     0.03,
+     0.187
+    ]
+   },
+   "external": {
+    "n": 40,
+    "mean": 0.098,
+    "median": 0.10000000000000009,
+    "sd": 0.236,
+    "ci95": [
+     0.023,
+     0.17
+    ]
+   },
+   "internal": {
+    "n": 30,
+    "mean": 0.077,
+    "median": 0.09999999999999987,
+    "sd": 0.362,
+    "ci95": [
+     -0.05,
+     0.203
+    ]
+   }
+  },
+  "bands": {
+   "definition": "low < 2.5 <= mid < 3.5 <= high",
+   "n_band_flips": 34,
+   "n_band_flips_with_abs_diff_lt_0.5": 25,
+   "note": "most band flips are 0.1-0.3 differences straddling an arbitrary threshold; only |diff| >= 0.6 is treated as material"
+  },
+  "flagged": [
+   {
+    "meeting_id": "01KQ7B802912366FC0A24D4F",
+    "date": "2026-04-26",
+    "type": "internal",
+    "title": "All Hands - April Update",
+    "ours": 3.0,
+    "customer_score": null,
+    "provided": 3.6,
+    "provided_overall": "mixed-positive",
+    "diff": -0.6,
+    "band_ours": "mid",
+    "band_provided": "high",
+    "turns": 51,
+    "ours_neg_neu_pos": [
+     6,
+     43,
+     2
+    ],
+    "provided_neg_neu_pos": [
+     5,
+     43,
+     3
+    ],
+    "traj": [
+     3.0,
+     3.0
+    ],
+    "theme": "Internal Planning and Delivery Cadence",
+    "evidence_quote": "On Detect \u2014 I want to flag that we should be careful about piling too much onto that module right now."
+   },
+   {
+    "meeting_id": "01KQ03B0303900521BB089CA",
+    "date": "2026-03-16",
+    "type": "internal",
+    "title": "Detect Outage - Remediation Plan Review",
+    "ours": 3.0,
+    "customer_score": null,
+    "provided": 2.4,
+    "provided_overall": "mixed-negative",
+    "diff": 0.6,
+    "band_ours": "mid",
+    "band_provided": "low",
+    "turns": 43,
+    "ours_neg_neu_pos": [
+     3,
+     37,
+     3
+    ],
+    "provided_neg_neu_pos": [
+     5,
+     38,
+     0
+    ],
+    "traj": [
+     3.0,
+     3.0
+    ],
+    "theme": "Incident and Outage Response",
+    "evidence_quote": "That's a little frustrating because I've been telling customers we're targeting end of today."
+   },
+   {
+    "meeting_id": "01KQ6A5CEAAFFBE3B0099E75",
+    "date": "2026-03-22",
+    "type": "support",
+    "title": "Support Case #6539 - Steelpoint Manufacturing LDAP Sync Failures",
+    "ours": 3.0,
+    "customer_score": 2.5,
+    "provided": 2.4,
+    "provided_overall": "mixed-negative",
+    "diff": 0.6,
+    "band_ours": "mid",
+    "band_provided": "low",
+    "turns": 44,
+    "ours_neg_neu_pos": [
+     10,
+     33,
+     1
+    ],
+    "provided_neg_neu_pos": [
+     12,
+     30,
+     2
+    ],
+    "traj": [
+     2.0,
+     3.0
+    ],
+    "theme": "Technical Integration and Performance Issues",
+    "evidence_quote": "I'm glad we found it but I'm also really annoyed that it took this long."
+   },
+   {
+    "meeting_id": "01KQ25D8AED944B5D2A9FF60",
+    "date": "2026-03-26",
+    "type": "support",
+    "title": "Support Case #1514 - Meridian Capital Granular Restore Request",
+    "ours": 4.0,
+    "customer_score": 4.0,
+    "provided": 3.4,
+    "provided_overall": "mixed-positive",
+    "diff": 0.6,
+    "band_ours": "high",
+    "band_provided": "mid",
+    "turns": 38,
+    "ours_neg_neu_pos": [
+     1,
+     32,
+     5
+    ],
+    "provided_neg_neu_pos": [
+     3,
+     32,
+     3
+    ],
+    "traj": [
+     3.5,
+     4.0
+    ],
+    "theme": "Product Adoption, Feedback and Expansion",
+    "evidence_quote": "Thanks for being straightforward about where the product is today \u2014 I'd rather have an honest answer than get told it's coming soon"
+   },
+   {
+    "meeting_id": "01KQ4529010F423FD9DB40BD",
+    "date": "2026-04-24",
+    "type": "internal",
+    "title": "Win/Loss Analysis - Q1",
+    "ours": 3.0,
+    "customer_score": null,
+    "provided": 2.4,
+    "provided_overall": "mixed-negative",
+    "diff": 0.6,
+    "band_ours": "mid",
+    "band_provided": "low",
+    "turns": 40,
+    "ours_neg_neu_pos": [
+     15,
+     20,
+     5
+    ],
+    "provided_neg_neu_pos": [
+     21,
+     18,
+     1
+    ],
+    "traj": [
+     2.5,
+     3.5
+    ],
+    "theme": "Competitive Strategy and Win/Loss",
+    "evidence_quote": "There's some stuff here that's honestly pretty troubling."
+   },
+   {
+    "meeting_id": "01KQ38C4101D6774F2F02331",
+    "date": "2026-03-10",
+    "type": "internal",
+    "title": "INCIDENT: Detect Pipeline Failure - War Room",
+    "ours": 2.5,
+    "customer_score": null,
+    "provided": 1.8,
+    "provided_overall": "negative",
+    "diff": 0.7,
+    "band_ours": "mid",
+    "band_provided": "low",
+    "turns": 39,
+    "ours_neg_neu_pos": [
+     20,
+     18,
+     1
+    ],
+    "provided_neg_neu_pos": [
+     28,
+     11,
+     0
+    ],
+    "traj": [
+     2.5,
+     2.5
+    ],
+    "theme": "Incident and Outage Response",
+    "evidence_quote": "Yes, it was flagged, yes, it should have been prioritized, and now we're dealing with the consequences. I own that."
+   },
+   {
+    "meeting_id": "01KQ2331EFD78BF3B1CAB747",
+    "date": "2026-03-12",
+    "type": "internal",
+    "title": "Detect Outage - Customer Impact Assessment",
+    "ours": 2.5,
+    "customer_score": null,
+    "provided": 1.8,
+    "provided_overall": "negative",
+    "diff": 0.7,
+    "band_ours": "mid",
+    "band_provided": "low",
+    "turns": 55,
+    "ours_neg_neu_pos": [
+     17,
+     37,
+     1
+    ],
+    "provided_neg_neu_pos": [
+     29,
+     26,
+     0
+    ],
+    "traj": [
+     2.5,
+     3.0
+    ],
+    "theme": "Incident and Outage Response",
+    "evidence_quote": "This is a significant problem beyond just the outage itself. We have a monitoring product and we didn't monitor ourselves."
+   },
+   {
+    "meeting_id": "01KQ764171AC27A3A94DC695",
+    "date": "2026-04-07",
+    "type": "internal",
+    "title": "Detect Reliability - 30-Day Review",
+    "ours": 3.5,
+    "customer_score": null,
+    "provided": 2.8,
+    "provided_overall": "mixed-negative",
+    "diff": 0.7,
+    "band_ours": "high",
+    "band_provided": "mid",
+    "turns": 53,
+    "ours_neg_neu_pos": [
+     0,
+     47,
+     6
+    ],
+    "provided_neg_neu_pos": [
+     7,
+     38,
+     8
+    ],
+    "traj": [
+     3.0,
+     3.5
+    ],
+    "theme": "Incident and Outage Response",
+    "evidence_quote": "That's actually a good angle \u2014 turning a service recovery situation into a broader platform conversation. I like that."
+   }
+  ],
+  "n_material_abs_diff_ge_0.6": 8,
+  "n_material_internal_outage_ours_higher": 5,
+  "max_abs_diff": 0.7,
+  "internal_incident_calls_offset": {
+   "n": 14,
+   "mean": 0.236,
+   "median": 0.20000000000000018,
+   "sd": 0.391,
+   "ci95": [
+    0.036,
+    0.429
+   ]
+  },
+  "other_calls_offset": {
+   "n": 86,
+   "mean": 0.071,
+   "median": 0.10000000000000009,
+   "sd": 0.244,
+   "ci95": [
+    0.02,
+    0.12
+   ]
+  },
+  "n_abs_diff_ge_1": 0,
+  "turn_confusion_rows_provided_cols_model": {
+   "negative": {
+    "negative": 469,
+    "neutral": 246,
+    "positive": 7
+   },
+   "neutral": {
+    "negative": 37,
+    "neutral": 2245,
+    "positive": 146
+   },
+   "positive": {
+    "negative": 0,
+    "neutral": 444,
+    "positive": 719
+   }
+  },
+  "turn_label_shares": {
+   "model": {
+    "negative": 0.117,
+    "neutral": 0.681,
+    "positive": 0.202
+   },
+   "provided": {
+    "negative": 0.167,
+    "neutral": 0.563,
+    "positive": 0.27
+   }
+  },
+  "turn_agreement": 0.796,
+  "provided_positive_model_neutral_examples": [
+   {
+    "side": "customer",
+    "sentence": "Yeah, loud and clear. Hey Rachel, hey \u2014 is Chris on too?"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "And all of that archived data is encrypted with keys that you control \u2014 we support bring your own key if your compliance posture requires that level of control."
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Yeah, and that back and forth is where time really bleeds out. And honestly, Warren, from a CISO perspective, that remediation guidance also gives you a cleaner audit trail to show that gaps were iden"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Perfect. I'll get that initiated right now. You'll get an email from me within the hour with confirmation and I'll include a direct line for this case so you don't have to go through the queue again. "
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "That was kind of the whole point, right? Like the whole pitch of Comply v2 is that compliance shouldn't require a specialist to operate the tool. So the UX has to back that up."
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "That's fair, and that feedback is going to be heard, I promise you that \u2014 now let's get your team back online."
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Absolutely. I'll send you a follow-up email today summarizing what we talked about \u2014 the technical session plan, who we'll bring from our side, and the timeline. And I'll loop in Priya's contact info "
+   },
+   {
+    "side": "customer",
+    "sentence": "Okay fair enough, I can work with that \u2014 we've been doing way more manual stuff than that so that's fine."
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Yeah it's a fair question. So Comply integrates directly with your cloud infrastructure \u2014 we're talking your CloudPrime, GCP, Azure environments \u2014 and it's continuously pulling configuration data, acc"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Live data \u2014 so it's pulling from your Detect telemetry, your Identity configurations, your Protect backup logs, and then surfacing all of that against the control framework. So when an auditor asks yo"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Of course. I'll be in touch shortly. Take care."
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Yeah, I can touch on some of it \u2014 some of it's still under NDA so I'll be a little careful. But on Detect specifically, we're working on enhanced anomaly detection for OT environments, which is actual"
+   }
+  ],
+  "provided_positive_model_neutral_by_side": {
+   "aegis_staff": 380,
+   "customer": 64
+  },
+  "provided_negative_model_neutral_n": 246,
+  "provided_negative_model_neutral_by_side": {
+   "aegis_staff": 154,
+   "customer": 92
+  },
+  "provided_negative_model_neutral_examples": [
+   {
+    "side": "customer",
+    "sentence": "Oh god, yeah, the last time we went through a HIPAA audit my team spent like three weeks just pulling logs and documentation together \u2014 it was a nightmare."
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "It depends. I mean technically we could launch with SOC 2 and PCI DSS fully documented and say HIPAA and ISO 27001 docs are coming within two weeks of GA. But I don't love that from a product narrativ"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Sure. So as of about thirty minutes ago we had logged forty-seven inbound tickets directly related to the Detect outage. That's just tickets \u2014 that doesn't count the calls, the Slack pings through sha"
+   },
+   {
+    "side": "customer",
+    "sentence": "I mean, we did have our spring inventory sync run around that time, but we do that quarterly and it's never caused this before. And even if the change set was bigger it shouldn't be adding four hours,"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "Ananya, I appreciate you saying that but that's a process failure, not a you failure. We shouldn't have a single person making the call on when to post. That's a systemic issue."
+   },
+   {
+    "side": "customer",
+    "sentence": "Bearer token, OAuth 2.0 client credentials flow. And before you ask \u2014 yes, the tokens are valid, yes they're being refreshed properly, we're not hitting any 401s or 403s, the 503s start immediately af"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "That's a fair criticism and it's one I've already escalated internally. The post-incident review identified that our customer notification process was too slow and too passive. We've since put in redu"
+   },
+   {
+    "side": "aegis_staff",
+    "sentence": "I know. I know, and I won't pretend that's not a rough stretch. We take that seriously."
+   }
+  ]
+ },
+ "headlines": [
+  {
+   "id": "H1",
+   "strength": "strongest",
+   "finding": "Support calls score lowest (2.933) and external highest (3.95); support minus external is -1.017 (95% CI [-1.433, -0.588], p=0.0002), and still -0.747 (CI [-1.193, -0.304]) under the title-rule labels. In support calls customers carry the negativity: 35.4% of customer turns vs 2.1% of staff turns are negative (gap 0.334, CI [0.236, 0.429], customer more negative in 22 of 30 calls).",
+   "so_what": "Support leader: track the customer-side score, not the call average, and compare each type only to its own baseline.",
+   "could_be_wrong_if": "Support calls are selected for trouble, so the gap shows what the call is for rather than how well it was handled. Support vs internal and external vs internal are fragile (see q1_pairwise_title_rule)."
+  },
+  {
+   "id": "H2",
+   "strength": "medium",
+   "finding": "March dip of -0.884 (CI [-1.238, -0.515]) is concentrated in outage-touching calls (within March 2.565 vs 3.615, n=[23, 13]). Excluding calls that touch the outage the dip is -0.318 (CI [-0.81, 0.157], n March 13): not distinguishable from zero. Call-type mix does not explain it (type-adjusted monthly means {'2026-02': 3.728, '2026-03': 2.974, '2026-04': 3.853}). External April vs pre-outage: -0.161 (CI [-0.6, 0.263]).",
+   "so_what": "Engineering lead and support lead: the outage, not a general slide, explains most of the dip, and external calls were back near pre-outage levels by April.",
+   "could_be_wrong_if": "The outage flag is an LLM judgment, partly definitional; in the candidate's 20-call check it missed 3 and never over-flagged, so 42 is probably a floor (42 calls): a call about an outage is tense. Only 13 March calls remain after exclusion, so a residual dip cannot be ruled out."
+  },
+  {
+   "id": "H3",
+   "strength": "medium",
+   "finding": "The outage shows up in all three call types: 42 calls touch it ({'support': 10, 'external': 18, 'internal': 14}), peaking in the week of Mar 9 and continuing into April. External calls: pre-outage 4.367 (n=15), acute Mar 10-31 2.625 (n=8), April 4.206 (n=17). Of 9 accounts with an outage-touching support call and an external call, customer scores ended lower than they started for 4 (including summittrust, stratoscloud, clearwatermed, ridgelinelogistics) and higher for 3 (trailheadmkt, cobaltsoftware, forgeindustries).",
+   "so_what": "Sales manager: put the accounts that ended lower, and those with no call after mid-March (northstarpharma, ridgelinelogistics), on a follow-up list.",
+   "could_be_wrong_if": "Account comparisons are 2-4 calls with different purposes (renewal vs support), so they are leads to check, not conclusions. Dates in the dataset are inconsistent about when the outage started."
+  },
+  {
+   "id": "H4",
+   "strength": "weakest as a signal",
+   "finding": "78 of 100 calls end warmer than they start, 21 are flat and 1 gets worse; the mean uplift is 0.5 (support), 0.55 (external), 0.45 (internal). 16 calls still end at 2.5 or below ({'support': 10, 'external': 4, 'internal': 2}).",
+   "so_what": "Support leader: the useful signal is the list of calls that end strained, not the average uplift.",
+   "could_be_wrong_if": "The uplift is nearly uniform, which points to the scripted shape of the calls and the rubric's relief rule more than to customer satisfaction. In support, per-turn negativity barely falls (0.182 to 0.158) while the trajectory score rises."
+  },
+  {
+   "id": "H5",
+   "strength": "medium",
+   "finding": "Our score tracks the provided score (r=0.963, mean absolute difference 0.234, ours higher by 0.094 on average, CI [0.041, 0.148]); no call differs by 1 or more (max 0.7). 8 calls differ by 0.6 or more, 5 of them internal outage calls where ours is higher (internal outage-touching offset 0.236 vs 0.071 elsewhere). Of 444 turns the provided labels call positive and we call neutral, 380 are staff turns.",
+   "so_what": "Analytics owner: the provided score tracks the severity of the situation, ours tracks the tone; report both, and do not mix them in one trend.",
+   "could_be_wrong_if": "There are no gold labels. Agreement with an upstream AI output is consistency, not accuracy, and ours is also an LLM judgment with the D8 design choices (courtesy is neutral, lower tie-break)."
+  }
+ ]
+}

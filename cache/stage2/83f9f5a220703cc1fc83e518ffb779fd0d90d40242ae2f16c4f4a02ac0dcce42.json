@@ -1,0 +1,248 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (45 turns, indices 0 to 44; per_turn needs exactly 45 entries, one per index in order):\n[0] Sarah Chen (aegis_staff): Hi, good afternoon, this is Sarah Chen from Aegis Cloud Security support, I have Dr. Cheng and Mr. Burke on the line from Vanta Health Systems, and my colleague Priya Patel is joining as well — Priya, you there?\n[1] Priya Patel (aegis_staff): Yeah, I'm here, hi everyone.\n[2] Dr. Linda Cheng (customer): Hello, yes, Dr. Linda Cheng here, and Raymond is with me as well.\n[3] Raymond Burke (customer): Raymond Burke, yeah, hi, thanks for getting us on quickly.\n[4] Sarah Chen (aegis_staff): Of course, so I've had a chance to look at your case notes, Support Case 1750, and I understand you're seeing issues with your SIEM connector in Aegis Detect — can you walk us through what you're experiencing from your end?\n[5] Dr. Linda Cheng (customer): Sure, Raymond, do you want to take this one since you've been dealing with it directly?\n[6] Raymond Burke (customer): Yeah, absolutely — so, um, we integrated Aegis Detect with our LogVault SIEM environment about six weeks ago, and for the first couple of weeks it was working fine, events were flowing through, we were getting alerts, everything looked good — but starting around, I want to say February 8th or 9th, we started noticing significant gaps in event data reaching LogVault.\n[7] Sarah Chen (aegis_staff): And when you say gaps, are we talking about partial data loss or like, complete windows of missing events?\n[8] Raymond Burke (customer): Both, honestly — there are periods where we're getting maybe 20 or 30 percent of the expected event volume, and then there are windows, sometimes 45 minutes to an hour, where we get absolutely nothing into LogVault.\n[9] Dr. Linda Cheng (customer): I want to underscore something here — we are a healthcare organization, we're dealing with PHI, we have HIPAA obligations, and having blind spots in our threat monitoring is not, it's not acceptable from a compliance and security posture standpoint, this is genuinely concerning to us.\n[10] Sarah Chen (aegis_staff): Dr. Cheng, I completely understand, and I want to be transparent with you — that concern is absolutely valid and we're taking this seriously, which is why Priya joined me on this call.\n[11] Priya Patel (aegis_staff): Yeah, and I want to add — we've escalated this internally on our side as well, so you have our full attention on this, I promise.\n[12] Dr. Linda Cheng (customer): I appreciate that, but I have to be honest with you, we've been sitting on this issue for almost ten days now, we submitted the case on the 9th, we've had two email exchanges, and this is the first time we're actually talking to someone — that response time is not what we were sold on when we signed up for the enterprise tier.\n[13] Priya Patel (aegis_staff): That's — yeah, that's a fair point and I'm not going to make excuses for that, the delay in getting to a live call was not acceptable and I'm sorry for that, let's use this time to actually dig in and get you some answers.\n[14] Sarah Chen (aegis_staff): Thank you — okay, so Raymond, can you tell me which version of the Aegis Detect SIEM connector you're running, and what your connector configuration looks like in terms of the forwarding mode?\n[15] Raymond Burke (customer): Yeah, give me one second, I have the config pulled up — okay, so we're on connector version 3.4.1, and we're using the push-based forwarding mode, not pull, and the endpoint is pointing to our LogVault HEC endpoint on port 8088.\n[16] Sarah Chen (aegis_staff): Okay, and are you using TLS on that HEC connection?\n[17] Raymond Burke (customer): Yes, TLS 1.2, with a self-signed cert — and look, I already know what you're going to say about the self-signed cert, but we verified the cert pinning configuration in the connector, that's not the issue.\n[18] Sarah Chen (aegis_staff): Okay, fair enough, I wasn't going to go straight there actually — um, what I'm more interested in is, are you seeing any errors or backpressure indicators in the connector logs on the Aegis side, like, do you have access to the connector diagnostic logs and if so what are they showing around those gap windows?\n[19] Raymond Burke (customer): We do have the logs, yeah, and I actually exported them before this call — what we're seeing is a lot of, um, connection timeout errors to the HEC endpoint, and then the connector seems to just... drop the buffer instead of retrying, which is — that seems like a bug to me, honestly.\n[20] Priya Patel (aegis_staff): Connection timeouts dropping the buffer instead of queuing for retry — okay, Sarah, I think I know what this might be.\n[21] Sarah Chen (aegis_staff): Yeah, I think I'm landing in the same place — Raymond, can you confirm, is your LogVault HEC endpoint behind a load balancer, and do you have any rate limiting or connection throttling configured on that endpoint?\n[22] Raymond Burke (customer): Yes to the load balancer — we have an F5 in front of it, and I think, yeah, there is a connection rate limit set, I'd have to check the exact number but I believe it's something like 50 concurrent connections.\n[23] Sarah Chen (aegis_staff): Okay so here's what I think is happening — in connector version 3.4.1, there's a known issue where if the HEC endpoint returns a connection timeout, specifically due to upstream throttling from something like an F5, the connector's retry logic doesn't kick in correctly, it treats the timeout as a terminal error rather than a transient one, and it flushes the buffer.\n[24] Raymond Burke (customer): So we're losing events — not just delayed, actually losing them.\n[25] Sarah Chen (aegis_staff): In those specific timeout scenarios, yes, the events in that buffer window would be dropped — I want to be straightforward with you about that.\n[26] Dr. Linda Cheng (customer): That is — okay, that's a significant problem, and I have to say, if this is a known issue in 3.4.1, why were we not notified proactively, why did we have to discover this ourselves after ten days of degraded monitoring?\n[27] Priya Patel (aegis_staff): That's a completely legitimate question and honestly I don't have a good answer for why you weren't notified, and I'm going to flag that internally as a process failure on our part — customers on affected versions should have been alerted.\n[28] Dr. Linda Cheng (customer): I mean, look, I'm not trying to be difficult here, we chose Aegis Detect specifically because of the reliability promises around healthcare environments, and right now I'm sitting here wondering if we made the right call.\n[29] Sarah Chen (aegis_staff): I hear you, and I understand why you're feeling that way — what I can tell you is that connector version 3.5.0 has a fix for exactly this retry behavior, it was released on February 3rd, and upgrading to that version should resolve the buffer drop issue.\n[30] Raymond Burke (customer): And the upgrade process — how disruptive is that, because we can't just, you know, take down our SIEM connector in the middle of the day, we need to plan for that.\n[31] Sarah Chen (aegis_staff): The connector upgrade itself is typically a rolling restart, it usually takes about 3 to 5 minutes and the interruption to event flow is minimal — we're talking a very brief gap, not anything close to what you're experiencing now — but I'd strongly recommend doing it during a lower-traffic window just to be safe.\n[32] Raymond Burke (customer): Okay, and is there anything we can do right now, like today, to reduce the event loss while we plan the upgrade, because we're still in a degraded state.\n[33] Sarah Chen (aegis_staff): Yes — there are two things you can do immediately: first, if you can increase the connection rate limit on your F5 to something like 100 or 150 concurrent connections, that'll reduce the frequency of the timeouts triggering the bug, and second, you can actually adjust a parameter in the connector config called retry_on_timeout and set it to true, that's not the full fix but it'll enable some retry behavior even on the older version.\n[34] Raymond Burke (customer): Wait, there's a retry_on_timeout parameter that we can set manually — is that documented anywhere, because I did not see that in the connector documentation.\n[35] Sarah Chen (aegis_staff): Uh... honestly, it's a configuration parameter that was added in a patch but the docs weren't updated at the same time — which is, yeah, I know, that's not great, and I'll flag that for our documentation team as well.\n[36] Dr. Linda Cheng (customer): Undocumented parameters, delayed support response, proactive notification failures — I'm keeping a list here, and I do want to have a broader conversation with our account team about the support experience, but let's finish resolving the immediate issue first.\n[37] Priya Patel (aegis_staff): Understood, and I think that conversation is absolutely warranted — I'll personally make sure your account executive knows to reach out to you this week.\n[38] Sarah Chen (aegis_staff): Okay — Raymond, I'm going to send you an email right after this call with the exact config syntax for the retry_on_timeout parameter, the steps for upgrading to 3.5.0, and the recommended F5 connection limit settings — does that work?\n[39] Raymond Burke (customer): Yes, that works, and can you also include whatever documentation exists on that parameter, even if it's just internal notes, because I want to understand the full behavior before I push any config changes to production.\n[40] Sarah Chen (aegis_staff): Absolutely, I'll include everything I have — and I'd also recommend we schedule a follow-up call for after you've done the upgrade to 3.5.0, just to verify the event flow is healthy and you're not seeing any more gaps.\n[41] Dr. Linda Cheng (customer): Yeah, let's do that — and Sarah, Priya, I want to say I appreciate that you actually dug in and found something today, that's more progress than we've made in ten days of emails, I just — the overall experience getting here has been frustrating.\n[42] Priya Patel (aegis_staff): I completely understand, and your frustration is warranted — we'll do better, and we're going to make sure this gets fully resolved for you.\n[43] Raymond Burke (customer): Alright — thank you both, we'll apply the interim config change today and plan the upgrade for this weekend, and we'll expect that follow-up email shortly.\n[44] Sarah Chen (aegis_staff): You'll have it within the hour — thank you Dr. Cheng, Raymond, we'll talk soon."
+  },
+  "response_text": "{\n  \"call_score\": 2.5,\n  \"customer_score\": 2.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"negative\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"negative\"},\n    {\"index\": 13, \"label\": \"negative\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"negative\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"negative\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"negative\"},\n    {\"index\": 27, \"label\": \"negative\"},\n    {\"index\": 28, \"label\": \"negative\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"negative\"},\n    {\"index\": 35, \"label\": \"negative\"},\n    {\"index\": 36, \"label\": \"negative\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"neutral\"},\n    {\"index\": 41, \"label\": \"neutral\"},\n    {\"index\": 42, \"label\": \"neutral\"},\n    {\"index\": 43, \"label\": \"neutral\"},\n    {\"index\": 44, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 2.5,\n    \"end\": 3.0\n  },\n  \"evidence_quote\": \"right now I'm sitting here wondering if we made the right call.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 2.5,
+    "customer_score": 2.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "negative"
+      },
+      {
+        "index": 13,
+        "label": "negative"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "negative"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "negative"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "negative"
+      },
+      {
+        "index": 27,
+        "label": "negative"
+      },
+      {
+        "index": 28,
+        "label": "negative"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "negative"
+      },
+      {
+        "index": 35,
+        "label": "negative"
+      },
+      {
+        "index": 36,
+        "label": "negative"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "neutral"
+      },
+      {
+        "index": 41,
+        "label": "neutral"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      },
+      {
+        "index": 44,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 2.5,
+      "end": 3.0
+    },
+    "evidence_quote": "right now I'm sitting here wondering if we made the right call.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 762,
+    "prompt_tokens": 5074,
+    "total_tokens": 5836,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.006663,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.006663,
+      "upstream_inference_prompt_cost": 0.0038055,
+      "upstream_inference_completions_cost": 0.0028575
+    }
+  },
+  "latency_s": 5.828,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:08.719198+00:00",
+  "key": "83f9f5a220703cc1fc83e518ffb779fd0d90d40242ae2f16c4f4a02ac0dcce42"
+}

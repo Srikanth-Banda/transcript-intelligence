@@ -1,0 +1,15 @@
+org,touched,n_pre,n_post,pre,post,delta
+atlasprecision,True,1,1,4.0,4.5,0.5
+blackridgeinvest,True,1,3,5.0,3.83,-1.17
+bridgeporthealth,True,1,1,4.5,4.5,0.0
+brightpathcommerce,True,3,1,3.33,2.5,-0.83
+coastalliving,False,2,2,3.5,3.25,-0.25
+crestlinewealth,False,1,2,4.0,3.5,-0.5
+frostbyte,False,1,1,4.5,4.0,-0.5
+meridiancapital,True,1,2,4.0,3.0,-1.0
+nimbusplatform,False,1,1,3.5,5.0,1.5
+novaretail,True,1,1,2.5,2.5,0.0
+redwoodclinical,False,1,1,3.5,4.5,1.0
+ridgelinelogistics,True,1,2,3.5,2.25,-1.25
+stratoscloud,True,1,1,4.5,2.0,-2.5
+summittrust,True,1,2,4.0,2.25,-1.75

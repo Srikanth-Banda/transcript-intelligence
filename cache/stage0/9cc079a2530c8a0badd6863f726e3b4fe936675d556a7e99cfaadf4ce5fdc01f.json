@@ -1,0 +1,73 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 2
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 2 from Aegis, 1 from outside Aegis\n\nopening:\nDavid Kim: Hi, this is David Kim calling from Aegis Cloud Security support, I have case number 3536 here for Stratos Cloud — am I speaking with Damien?\nDamien Rowe: Yeah, yeah that's me. Damien Rowe. Thanks for calling back, I've been waiting on this for like — look, we submitted this ticket yesterday morning and this is kind of urgent for us.\nDavid Kim: I completely understand, Damien, and I apologize for the wait. I also have my team lead Priya Patel joining us on the call today, she's been looped in given the priority of the case.\nPriya Patel: Hi Damien, thanks for your patience. We definitely want to get to the bottom of this with you today.\nDamien Rowe: Okay, sure. I appreciate that. So — look, I'll just get into it. We've been running Aegis Detect integrated with our LogVault environment, right, and starting around — I want to say April 18th, maybe 19th — we started seeing consistent timeout errors when Detect tries to push event data to our LogVault HTTP Event Collector endpoint. It's not intermittent, it's basically every... every batch that goes through.\nDavid Kim: Okay, so consistent timeouts hitting the HEC endpoint. And when you say every batch — are these on a scheduled interval or is this continuous streaming from Detect?\nDamien Rowe: We have it set to push every five minutes. And it was working fine, totally fine, for months before this. Nothing changed on our end — we didn't update LogVault, we didn't change the HEC token, nothing. So whatever broke, it broke on your side.\nDavid Kim: I hear you, and I want to be careful not to make assumptions before we dig into the logs, but I do want to look at this thoroughly. Can I ask — are you seeing any error codes coming back, or is it just a straight connection timeout with no response from the HEC endpoint?"
+  },
+  "response_text": "{\"label\":\"support\",\"evidence_quote\":\"this is David Kim calling from Aegis Cloud Security support, I have case number 3536 here for Stratos Cloud\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"David Kim\",\"side\":\"aegis_staff\"},{\"speaker\":\"Damien Rowe\",\"side\":\"customer\"},{\"speaker\":\"Priya Patel\",\"side\":\"aegis_staff\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "this is David Kim calling from Aegis Cloud Security support, I have case number 3536 here for Stratos Cloud",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "David Kim",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Damien Rowe",
+        "side": "customer"
+      },
+      {
+        "speaker": "Priya Patel",
+        "side": "aegis_staff"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 144,
+    "prompt_tokens": 2041,
+    "total_tokens": 2185,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002761,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002761,
+      "upstream_inference_prompt_cost": 0.0002041,
+      "upstream_inference_completions_cost": 7.2e-05
+    }
+  },
+  "latency_s": 1.629,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:36:34.151884+00:00",
+  "key": "9cc079a2530c8a0badd6863f726e3b4fe936675d556a7e99cfaadf4ce5fdc01f"
+}

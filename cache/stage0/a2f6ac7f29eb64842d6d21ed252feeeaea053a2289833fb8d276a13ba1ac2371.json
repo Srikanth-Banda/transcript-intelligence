@@ -1,0 +1,79 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 1,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 4 total, 2 from Aegis, 2 from outside Aegis\n\nopening:\nJames Mitchell: Alright, I think everyone's joined now — Victor, Olivia, good to see you both again.\nVictor Zheng: Hey James, good to be here. Really excited to finally get this kicked off.\nOlivia Strand: Same here, yeah. Thanks for making time on a Thursday afternoon, I know you all are heads down on a lot right now.\nJames Mitchell: Of course, of course. And I want to introduce Ananya Sharma — she's one of our senior engineers on the Identity side and she's going to be your main technical point of contact through the onboarding process.\nAnanya Sharma: Hi everyone! Really happy to be working with you. I've actually looked through the notes from your sales calls and the infrastructure questionnaire you filled out, so I have a decent picture of where you're starting from.\nVictor Zheng: Oh that's great, yeah that saves us from having to re-explain everything from scratch. We really appreciate that.\nAnanya Sharma: Absolutely, so — maybe just to set the stage for today, the goal is to walk through your Identity module setup, understand your current IAM landscape, and start mapping out the SSO and MFA configuration. Does that match what you were expecting?\nVictor Zheng: Yeah that's exactly right. And honestly, Olivia and I were talking before this call — the SSO piece is probably our biggest priority right now. We have users spread across like eight different tools and the login experience is just... it's a mess."
+  },
+  "response_text": "{\n  \"label\": \"external\",\n  \"evidence_quote\": \"she's going to be your main technical point of contact through the onboarding process\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"James Mitchell\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Victor Zheng\",\n      \"side\": \"customer\"\n    },\n    {\n      \"speaker\": \"Olivia Strand\",\n      \"side\": \"customer\"\n    },\n    {\n      \"speaker\": \"Ananya Sharma\",\n      \"side\": \"aegis_staff\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "she's going to be your main technical point of contact through the onboarding process",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "James Mitchell",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Victor Zheng",
+        "side": "customer"
+      },
+      {
+        "speaker": "Olivia Strand",
+        "side": "customer"
+      },
+      {
+        "speaker": "Ananya Sharma",
+        "side": "aegis_staff"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 156,
+    "prompt_tokens": 844,
+    "total_tokens": 1000,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.001218,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.001218,
+      "upstream_inference_prompt_cost": 0.000633,
+      "upstream_inference_completions_cost": 0.000585
+    }
+  },
+  "latency_s": 2.889,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:36:45.470152+00:00",
+  "key": "a2f6ac7f29eb64842d6d21ed252feeeaea053a2289833fb8d276a13ba1ac2371"
+}

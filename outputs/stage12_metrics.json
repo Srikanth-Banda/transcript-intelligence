@@ -1,0 +1,300 @@
+{
+  "stage1": {
+    "n": 100,
+    "ok": 100,
+    "status": {
+      "ok": 100
+    },
+    "other_share": 0.0,
+    "by_theme": {
+      "Product Adoption, Feedback and Expansion": 24,
+      "Incident and Outage Response": 18,
+      "Technical Integration and Performance Issues": 16,
+      "Commercial Renewals and Retention": 14,
+      "Internal Planning and Delivery Cadence": 12,
+      "Onboarding and Implementation Scoping": 7,
+      "Competitive Strategy and Win/Loss": 5,
+      "Billing and Usage Disputes": 4
+    },
+    "by_product_area": {
+      "Detect": 31,
+      "Platform/General": 22,
+      "Comply": 21,
+      "Identity": 15,
+      "Protect": 11
+    },
+    "by_incident": {
+      "none": 58,
+      "2026-03-detect-outage": 42
+    },
+    "theme_by_type": {
+      "Billing and Usage Disputes": {
+        "external": 0,
+        "internal": 0,
+        "support": 4
+      },
+      "Commercial Renewals and Retention": {
+        "external": 14,
+        "internal": 0,
+        "support": 0
+      },
+      "Competitive Strategy and Win/Loss": {
+        "external": 1,
+        "internal": 4,
+        "support": 0
+      },
+      "Incident and Outage Response": {
+        "external": 3,
+        "internal": 8,
+        "support": 7
+      },
+      "Internal Planning and Delivery Cadence": {
+        "external": 0,
+        "internal": 12,
+        "support": 0
+      },
+      "Onboarding and Implementation Scoping": {
+        "external": 7,
+        "internal": 0,
+        "support": 0
+      },
+      "Product Adoption, Feedback and Expansion": {
+        "external": 14,
+        "internal": 5,
+        "support": 5
+      },
+      "Technical Integration and Performance Issues": {
+        "external": 1,
+        "internal": 1,
+        "support": 14
+      }
+    },
+    "incident_by_type": {
+      "2026-03-detect-outage": {
+        "external": 18,
+        "internal": 14,
+        "support": 10
+      },
+      "none": {
+        "external": 22,
+        "internal": 16,
+        "support": 20
+      }
+    },
+    "quote_exact": 99,
+    "quote_loose": 99,
+    "quote_within_30_words": 60,
+    "retried": 0,
+    "with_tags": 79,
+    "confidence": {
+      "high": 98,
+      "medium": 2
+    },
+    "cost": 0.29658999999999996
+  },
+  "stage1_stability": {
+    "n": 20,
+    "primary_theme_agreement": 1.0,
+    "product_area_agreement": 1.0,
+    "incident_agreement": 1.0,
+    "tag_set_mean_jaccard": 0.95,
+    "disagreements": [],
+    "cost_run2": 0.053649
+  },
+  "stage2": {
+    "n": 100,
+    "status": {
+      "ok": 100
+    },
+    "attempts": {
+      "1": 100
+    },
+    "quote_exact": 100,
+    "quote_loose": 100,
+    "quote_within_25_words": 88,
+    "per_turn_complete": 100,
+    "sentence_level_agreement_with_provided": {
+      "overall": {
+        "n": 4313,
+        "agreement": 0.7959656851379551,
+        "confusion_rows_provided_cols_model": {
+          "negative": {
+            "negative": 469,
+            "neutral": 246,
+            "positive": 7
+          },
+          "neutral": {
+            "negative": 37,
+            "neutral": 2245,
+            "positive": 146
+          },
+          "positive": {
+            "negative": 0,
+            "neutral": 444,
+            "positive": 719
+          }
+        }
+      },
+      "external": {
+        "n": 1821,
+        "agreement": 0.7655134541460736,
+        "confusion_rows_provided_cols_model": {
+          "negative": {
+            "negative": 128,
+            "neutral": 53,
+            "positive": 3
+          },
+          "neutral": {
+            "negative": 15,
+            "neutral": 773,
+            "positive": 58
+          },
+          "positive": {
+            "negative": 0,
+            "neutral": 298,
+            "positive": 493
+          }
+        }
+      },
+      "internal": {
+        "n": 1301,
+        "agreement": 0.8147578785549577,
+        "confusion_rows_provided_cols_model": {
+          "negative": {
+            "negative": 132,
+            "neutral": 88,
+            "positive": 2
+          },
+          "neutral": {
+            "negative": 16,
+            "neutral": 758,
+            "positive": 43
+          },
+          "positive": {
+            "negative": 0,
+            "neutral": 92,
+            "positive": 170
+          }
+        }
+      },
+      "support": {
+        "n": 1191,
+        "agreement": 0.8219983207388749,
+        "confusion_rows_provided_cols_model": {
+          "negative": {
+            "negative": 209,
+            "neutral": 105,
+            "positive": 2
+          },
+          "neutral": {
+            "negative": 6,
+            "neutral": 714,
+            "positive": 45
+          },
+          "positive": {
+            "negative": 0,
+            "neutral": 54,
+            "positive": 56
+          }
+        }
+      },
+      "label_shares_model": {
+        "neutral": 0.6805,
+        "positive": 0.2022,
+        "negative": 0.1173
+      },
+      "label_shares_provided": {
+        "neutral": 0.5629,
+        "positive": 0.2696,
+        "negative": 0.1674
+      }
+    },
+    "call_score_vs_provided_score": {
+      "all": {
+        "pearson": 0.9625444180900434,
+        "spearman": 0.9590816388673015,
+        "mean_abs_diff": 0.234,
+        "n": 100
+      },
+      "external": {
+        "pearson": 0.9665433634588072,
+        "spearman": 0.9169595271867286,
+        "mean_abs_diff": 0.22250000000000006,
+        "n": 40
+      },
+      "internal": {
+        "pearson": 0.9284415206581516,
+        "spearman": 0.9272839943030807,
+        "mean_abs_diff": 0.29,
+        "n": 30
+      },
+      "support": {
+        "pearson": 0.9709186822277441,
+        "spearman": 0.9564245414864131,
+        "mean_abs_diff": 0.19333333333333338,
+        "n": 30
+      }
+    },
+    "distribution": {
+      "call_score_counts": {
+        "1.5": 2,
+        "2.0": 6,
+        "2.5": 23,
+        "3.0": 10,
+        "3.5": 17,
+        "4.0": 11,
+        "4.5": 20,
+        "5.0": 11
+      },
+      "half_step_share": 0.62,
+      "mean_by_type": {
+        "external": 3.95,
+        "internal": 3.5,
+        "support": 2.933
+      },
+      "provided_mean_by_type": {
+        "external": 3.852,
+        "internal": 3.423,
+        "support": 2.827
+      },
+      "customer_score_counts": {
+        "1.5": 2,
+        "2.0": 15,
+        "2.5": 11,
+        "3.0": 2,
+        "3.5": 6,
+        "4.0": 11,
+        "4.5": 15,
+        "5.0": 8
+      },
+      "trajectory_mean_start_end_by_type": {
+        "external": [
+          3.525,
+          4.075
+        ],
+        "internal": [
+          3.2,
+          3.65
+        ],
+        "support": [
+          2.683,
+          3.183
+        ]
+      }
+    },
+    "cost": 0.6085419999999999
+  },
+  "stage2_stability": {
+    "n": 20,
+    "n_customer": 14,
+    "call_score_mad": 0.075,
+    "call_score_identical": 17,
+    "customer_score_mad": 0.14285714285714285,
+    "traj_start_mad": 0.0,
+    "traj_end_mad": 0.1,
+    "per_turn_label_agreement": 0.9290697674418604,
+    "per_turn_n": 860,
+    "max_call_score_diff": 0.5,
+    "cost_run2": 0.087748
+  }
+}

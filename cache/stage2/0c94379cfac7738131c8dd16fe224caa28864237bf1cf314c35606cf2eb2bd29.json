@@ -1,0 +1,240 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (43 turns, indices 0 to 42; per_turn needs exactly 43 entries, one per index in order):\n[0] Rachel Torres (aegis_staff): Alright, I think we've got everyone on — Derek, can you hear us okay?\n[1] Derek Owens (customer): Yeah, loud and clear. Good to go.\n[2] Rachel Torres (aegis_staff): Perfect. Okay so, welcome everyone — I'm Rachel Torres, Senior Account Manager here at Aegis, and I have Sofia Petrov with me today, she's one of our Senior Engineers on the Identity side of things. Sofia, you wanna say a quick hi?\n[3] Sofia Petrov (aegis_staff): Hey Derek, great to meet you. Really excited to be working with Crestline on this — Identity deployments in financial services are kind of my favorite thing to dig into, so, yeah, looking forward to the conversation.\n[4] Derek Owens (customer): Likewise, honestly. I've been looking forward to this one. We've had Protect and Detect running for a while now and the team's been happy, so adding Identity feels like a natural next step.\n[5] Rachel Torres (aegis_staff): That's great to hear, and yeah, that's — that's kind of the pattern we see with a lot of our financial services customers. They start with backup and threat monitoring and then once Identity is on the roadmap it sort of becomes a priority real fast, especially given the regulatory environment you're dealing with.\n[6] Derek Owens (customer): Exactly, yeah. We had our annual audit in February and the auditors flagged some gaps around privileged access management and MFA coverage across our admin accounts specifically. So that sort of lit a fire under us to get this moving.\n[7] Rachel Torres (aegis_staff): Okay, that's — that's actually super helpful context, Derek, thank you. So Sofia, that kind of shapes where we should probably start today, right?\n[8] Sofia Petrov (aegis_staff): Yeah, absolutely. So Derek, before I get into the actual deployment steps, can you give me a quick picture of your current identity landscape? Like, what are you using today for SSO or directory services, if anything?\n[9] Derek Owens (customer): Sure, so we're running Azure AD — or I guess it's Entra ID now, still getting used to that name — for our primary directory. We've got about 340 users total, around 40 of those are in elevated or admin roles. MFA right now is a mix of, uh, Nextera Authenticator and some legacy SMS-based auth that we've been meaning to deprecate for a while but just haven't gotten around to it.\n[10] Sofia Petrov (aegis_staff): Okay, great. And the SMS-based stuff — is that mostly for a specific group of users or is it kind of scattered across different departments?\n[11] Derek Owens (customer): Honestly it's a bit scattered. I think it's probably 20, maybe 25 users, a lot of them are in our wealth advisory group. Some of the senior advisors have been resistant to changing their auth flow, if I'm being honest.\n[12] Sofia Petrov (aegis_staff): Ha, yeah, that's — that's a very common story. We hear that a lot. The good news is Aegis Identity has some tooling around phased MFA policy rollout that makes that transition a lot smoother. You can essentially grandfather users into a migration window rather than doing a hard cutover, which tends to reduce the, uh, the pushback significantly.\n[13] Derek Owens (customer): Oh that's actually really good to know. My manager was asking about that specifically — like whether we'd have to do a big bang cutover. I was not looking forward to that conversation with the advisory team.\n[14] Sofia Petrov (aegis_staff): You can tell your manager that's a hard no on the big bang approach. We've got you.\n[15] Rachel Torres (aegis_staff): I love it. Okay so Sofia, do you want to walk Derek through sort of the high level deployment phases? I think that'll help frame the rest of the conversation.\n[16] Sofia Petrov (aegis_staff): Yeah, definitely. So, at a high level we're looking at three phases for a deployment like yours. Phase one is directory sync and SSO configuration — basically getting Aegis Identity talking to your Entra ID environment, setting up the SAML or OIDC connectors, depending on what your apps support. Phase two is MFA policy configuration and enrollment, which is where we'd handle that phased migration you mentioned. And then phase three is privileged access management, which sounds like it's actually going to be really important for you given what the auditors flagged.\n[17] Derek Owens (customer): Yeah, the PAM piece is huge for us. Can you tell me a bit more about what that looks like in practice? Like, are we talking just session recording, or is there more to it?\n[18] Sofia Petrov (aegis_staff): So it's quite a bit more than just session recording, which I think you'll find pretty compelling. Aegis Identity gives you just-in-time access provisioning for admin roles, so instead of users having standing admin privileges 24/7, they request elevated access for a specific window, it gets approved through a workflow, and then it auto-expires. You still get full session recording and audit logs, but the just-in-time piece is really what closes that standing privilege gap that auditors love to flag.\n[19] Derek Owens (customer): Okay, that's — yeah, that's exactly what we need. That's honestly the thing that's going to make my auditors happiest. We've had a few instances where terminated employees still had admin access longer than they should have because the offboarding process wasn't fully automated, and that's a conversation I don't want to have again.\n[20] Sofia Petrov (aegis_staff): The automated deprovisioning is actually one of the things our financial services customers consistently call out as like a — a real pain point solved. We can tie it directly into your HR system or your ticketing system so the moment an offboarding ticket is triggered, access is revoked automatically. No manual steps, full audit trail.\n[21] Derek Owens (customer): We're using ServiceNow for ITSM, would that work?\n[22] Sofia Petrov (aegis_staff): ServiceNow is one of our, uh, supported integrations out of the box, yeah. We've got a native connector.\n[23] Derek Owens (customer): Perfect. Okay I'm taking notes furiously over here.\n[24] Rachel Torres (aegis_staff): Ha, I love to hear it. So Derek, just while we're talking timelines — you mentioned the audit flagged some gaps. Do you have a target date in mind for when you want to have the Identity module fully deployed? Like, is there a next audit or a compliance checkpoint you're working toward?\n[25] Derek Owens (customer): Yeah, so our next internal compliance review is in August, and I'd really love to have everything buttoned up by end of July at the latest so we have time to generate some reports and actually show progress. Is that — is that a realistic window?\n[26] Sofia Petrov (aegis_staff): End of July is very doable. If we can get the kickoff scheduled within the next week or two, we're looking at roughly ten to twelve weeks of deployment work depending on how complex the app integrations get, and that puts us comfortably in the early July range for full deployment.\n[27] Derek Owens (customer): That's — yeah, that's better than I was expecting honestly. I had budgeted for like a four month process in my head.\n[28] Rachel Torres (aegis_staff): I mean, it can get longer if there are a lot of custom app integrations or if there's a lot of back and forth on MFA policy decisions, but for your environment as you've described it — 340 users, existing Entra ID foundation — we've got a really solid baseline to work from. Sofia's done probably a dozen of these in the financial services space at this point.\n[29] Sofia Petrov (aegis_staff): Closer to fifteen actually, but who's counting.\n[30] Derek Owens (customer): Ha, even better. Oh, one thing I did want to mention while I have you both — I saw the announcement about Aegis Comply v2 that went out earlier this month. We're not currently on the Comply module but the on-demand SOC 2 and the multi-framework reporting — that caught my eye. Is that something we could potentially layer in down the road?\n[31] Rachel Torres (aegis_staff): Oh, absolutely. And honestly the timing is great because the Identity deployment is going to generate a ton of the underlying audit data that Comply v2 pulls into those reports. Like, all of the access logs, the privileged session records, the MFA enrollment status — that all feeds directly into the compliance reporting engine. So by the time you're ready to look at Comply, you'll already have months of clean data to work with.\n[32] Derek Owens (customer): Oh that's a really good point, I hadn't thought about it that way. So it's not like starting from scratch with Comply, we'd already have a head start.\n[33] Rachel Torres (aegis_staff): Exactly. And just so you know, Comply v2 has SOC 2, PCI DSS, HIPAA, and ISO 27001 all supported now as of the April launch. I know financial services customers often need to juggle multiple frameworks, so having all of that in one place on demand — no more waiting for quarterly report runs — it's pretty compelling.\n[34] Derek Owens (customer): Yeah, I'm going to bring that up with our Chief Compliance Officer. She's been asking about the SOC 2 reporting specifically. But let's — let's get Identity locked in first and then circle back on Comply. One thing at a time.\n[35] Rachel Torres (aegis_staff): Totally, that's the right approach. Okay so in terms of next steps — I'm going to send over a deployment plan document after this call that Sofia will put together, it'll have the three phases laid out with rough timelines, the integration checklist for the Entra ID connector and ServiceNow, and what we'll need from your side to get started. Does that work?\n[36] Derek Owens (customer): Yeah, that's perfect. If you can also include the MFA migration framework stuff Sofia mentioned — the phased rollout approach — that would be great because I'm going to want to share that with my manager before the kickoff.\n[37] Sofia Petrov (aegis_staff): I'll include a section on that specifically, and I'll flag the just-in-time PAM stuff too since that sounds like it'll be an important talking point for your audit preparation.\n[38] Derek Owens (customer): Awesome. This has been — yeah, this has been really helpful. I feel a lot more confident about the timeline than I did going into this call. I'll loop my manager in on the doc once I get it and then let's get that kickoff on the calendar.\n[39] Sofia Petrov (aegis_staff): Sounds great. We'll aim to get the document to you by end of day Monday, and then we can do a quick kickoff call early next week if that works. Rachel, does that align with what you're thinking?\n[40] Rachel Torres (aegis_staff): Yep, that works perfectly on our end. Derek, I'll send a calendar invite with a few options for early next week. And as always, if anything comes up before then, don't hesitate to reach out — you've got my direct line. We're really excited to get this moving with the Crestline team.\n[41] Derek Owens (customer): Likewise, thanks so much Rachel, thanks Sofia. Talk soon.\n[42] Sofia Petrov (aegis_staff): Take care, Derek!"
+  },
+  "response_text": "{\n  \"call_score\": 4.5,\n  \"customer_score\": 4.5,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"positive\"},\n    {\"index\": 3, \"label\": \"positive\"},\n    {\"index\": 4, \"label\": \"positive\"},\n    {\"index\": 5, \"label\": \"positive\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"positive\"},\n    {\"index\": 13, \"label\": \"positive\"},\n    {\"index\": 14, \"label\": \"positive\"},\n    {\"index\": 15, \"label\": \"positive\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"positive\"},\n    {\"index\": 19, \"label\": \"positive\"},\n    {\"index\": 20, \"label\": \"positive\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"positive\"},\n    {\"index\": 24, \"label\": \"positive\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"positive\"},\n    {\"index\": 27, \"label\": \"positive\"},\n    {\"index\": 28, \"label\": \"positive\"},\n    {\"index\": 29, \"label\": \"positive\"},\n    {\"index\": 30, \"label\": \"positive\"},\n    {\"index\": 31, \"label\": \"positive\"},\n    {\"index\": 32, \"label\": \"positive\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"positive\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"positive\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"positive\"},\n    {\"index\": 41, \"label\": \"positive\"},\n    {\"index\": 42, \"label\": \"positive\"}\n  ],\n  \"trajectory\": {\n    \"start\": 4.5,\n    \"end\": 4.5\n  },\n  \"evidence_quote\": \"Awesome. This has been — yeah, this has been really helpful. I feel a lot more confident about the timeline than I did going into this call.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 4.5,
+    "customer_score": 4.5,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "positive"
+      },
+      {
+        "index": 3,
+        "label": "positive"
+      },
+      {
+        "index": 4,
+        "label": "positive"
+      },
+      {
+        "index": 5,
+        "label": "positive"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "positive"
+      },
+      {
+        "index": 13,
+        "label": "positive"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "positive"
+      },
+      {
+        "index": 19,
+        "label": "positive"
+      },
+      {
+        "index": 20,
+        "label": "positive"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "positive"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "positive"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "positive"
+      },
+      {
+        "index": 29,
+        "label": "positive"
+      },
+      {
+        "index": 30,
+        "label": "positive"
+      },
+      {
+        "index": 31,
+        "label": "positive"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "positive"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "positive"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "positive"
+      }
+    ],
+    "trajectory": {
+      "start": 4.5,
+      "end": 4.5
+    },
+    "evidence_quote": "Awesome. This has been — yeah, this has been really helpful. I feel a lot more confident about the timeline than I did going into this call.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 747,
+    "prompt_tokens": 5153,
+    "total_tokens": 5900,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.006666,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.006666,
+      "upstream_inference_prompt_cost": 0.00386475,
+      "upstream_inference_completions_cost": 0.00280125
+    }
+  },
+  "latency_s": 6.033,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:24:59.917244+00:00",
+  "key": "0c94379cfac7738131c8dd16fe224caa28864237bf1cf314c35606cf2eb2bd29"
+}

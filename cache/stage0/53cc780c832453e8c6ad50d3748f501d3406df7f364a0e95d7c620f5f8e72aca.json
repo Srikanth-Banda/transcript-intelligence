@@ -1,0 +1,79 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "google-ai-studio"
+    ],
+    "run": 1,
+    "reasoning_effort": "low",
+    "seed": 7
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 4 total, 2 from Aegis, 2 from outside Aegis\n\nopening:\nMaria Santos: Alright, I think we've got everyone now — Robert, Tanya, good to see you both. Thanks for making time today.\nRobert Langston: Yeah, of course. We've got a lot to get through so let's, uh, let's just jump in.\nMaria Santos: Absolutely. And I'll just introduce Kevin — he's one of our Solutions Architects and I brought him on today because some of the questions Tanya sent over ahead of this call are a bit more technical and I wanted to make sure we had the right person in the room.\nKevin O'Brien: Hey everyone, Kevin O'Brien. Happy to be here and, yeah, looking forward to the conversation.\nTanya Desai: Hi Kevin. Tanya Desai, Security Engineering. I'll probably be the one throwing the hard questions at you.\nKevin O'Brien: Ha, I'd expect nothing less. Bring it on.\nRobert Langston: So — look, Maria, I'm going to be straightforward with you. March has been... it's been a rough month for us in terms of our confidence in the platform. You know what I'm referring to.\nMaria Santos: The Detect outage. Yes, absolutely, and I want to address that head on. That's honestly one of the main reasons I pushed for this call rather than just sending an email."
+  },
+  "response_text": "{\n  \"label\": \"external\",\n  \"evidence_quote\": \"I'll just introduce Kevin — he's one of our Solutions Architects and I brought him on today because some of the questions Tanya sent over ahead of this call are a bit more technical\",\n  \"confidence\": \"high\",\n  \"speaker_sides\": [\n    {\n      \"speaker\": \"Maria Santos\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Robert Langston\",\n      \"side\": \"customer\"\n    },\n    {\n      \"speaker\": \"Kevin O'Brien\",\n      \"side\": \"aegis_staff\"\n    },\n    {\n      \"speaker\": \"Tanya Desai\",\n      \"side\": \"customer\"\n    }\n  ]\n}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "I'll just introduce Kevin — he's one of our Solutions Architects and I brought him on today because some of the questions Tanya sent over ahead of this call are a bit more technical",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Maria Santos",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Robert Langston",
+        "side": "customer"
+      },
+      {
+        "speaker": "Kevin O'Brien",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Tanya Desai",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 181,
+    "prompt_tokens": 823,
+    "total_tokens": 1004,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.001296,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.001296,
+      "upstream_inference_prompt_cost": 0.00061725,
+      "upstream_inference_completions_cost": 0.00067875
+    }
+  },
+  "latency_s": 2.932,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T20:37:04.633015+00:00",
+  "key": "53cc780c832453e8c6ad50d3748f501d3406df7f364a0e95d7c620f5f8e72aca"
+}

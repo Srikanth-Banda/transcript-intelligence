@@ -1,0 +1,73 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 1
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 3 total, 1 from Aegis, 2 from outside Aegis\n\nopening:\nMaria Santos: Hi Brianna, thanks for making time today — I know you're probably slammed this week.\nBrianna Foster: Yeah, honestly it's been a rough couple of weeks, but, um, we needed to have this conversation so here we are.\nMaria Santos: I totally understand, and I appreciate you being direct about that — I'd rather we just get into it than dance around things.\nBrianna Foster: I also pulled in Leo from our security engineering team because honestly he's the one who's been living in your platform day to day and he has, uh, a lot of thoughts.\nMaria Santos: Hey Leo, good to have you on — I've seen your support tickets come through and I definitely want to make sure we address what you've been seeing.\nLeo Marquez: Yeah, hi Maria. I'll be honest, I've been pretty frustrated. Like, the past week especially has been... not great.\nMaria Santos: So let's start there — can you walk me through what's been happening from your perspective? I want to hear it directly from you.\nBrianna Foster: Okay so, the outage. March tenth through the eleventh. We had a six-hour window where Aegis Detect just... went dark. No alerts, no visibility, nothing. And we're a tech company, we have compliance obligations, we have customers who depend on us being secure — that's not a minor inconvenience."
+  },
+  "response_text": "{\"label\":\"support\",\"evidence_quote\":\"I've seen your support tickets come through and I definitely want to make sure we address what you've been seeing.\",\"confidence\":\"medium\",\"speaker_sides\":[{\"speaker\":\"Maria Santos\",\"side\":\"aegis_staff\"},{\"speaker\":\"Brianna Foster\",\"side\":\"customer\"},{\"speaker\":\"Leo Marquez\",\"side\":\"customer\"}]}",
+  "parsed": {
+    "label": "support",
+    "evidence_quote": "I've seen your support tickets come through and I definitely want to make sure we address what you've been seeing.",
+    "confidence": "medium",
+    "speaker_sides": [
+      {
+        "speaker": "Maria Santos",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Brianna Foster",
+        "side": "customer"
+      },
+      {
+        "speaker": "Leo Marquez",
+        "side": "customer"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 514,
+    "prompt_tokens": 1855,
+    "total_tokens": 2369,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 378,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0004425,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0004425,
+      "upstream_inference_prompt_cost": 0.0001855,
+      "upstream_inference_completions_cost": 0.000257
+    }
+  },
+  "latency_s": 3.793,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:35:53.332906+00:00",
+  "key": "083f8ae9be9dc29ece58a2ef5cc398d660603492ce589d0b8c5ba2fd2d63c164"
+}

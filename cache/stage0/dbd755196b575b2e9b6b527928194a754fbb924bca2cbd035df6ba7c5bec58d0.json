@@ -1,0 +1,81 @@
+{
+  "stage": "stage0",
+  "prompt_version": "stage0_v1",
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 3000,
+    "provider_order": [
+      "anthropic"
+    ],
+    "run": 1
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You classify one recorded call at Aegis Cloud Security, a B2B SaaS company, as either \"support\" or \"external\". A customer is present on this call.\n\nDefinitions:\n- support: a customer brings a specific problem or request, and an Aegis support-desk agent handles it. The agent introduces themself as part of Aegis support, often references a case, ticket or the customer's issue, and the call is about resolving that issue.\n- external: a scheduled relationship call between an Aegis account manager, sales or customer-success person and a customer. Typical purposes are renewal, contract, planning, onboarding, product feedback, a roadmap or compliance review. The Aegis side drives an agenda; there is no support case being worked.\n\nYou will receive:\n- counts of attendees from Aegis and from outside Aegis.\n- opening: the first turns of the conversation, each as speaker and sentence. Base your answer on what the speakers say and who they say they are. No meeting name or title is provided and none should be inferred or guessed; use only the words spoken.\n\nRules:\n1. Decide from the opening. Say who the Aegis person claims to be (for example \"from Aegis support\", \"senior support\", \"account manager\") and what the call is for.\n2. Quote one short verbatim passage from the opening that most supports your label in `evidence_quote`. Copy it exactly; do not paraphrase.\n3. `confidence`: \"high\" when the opening clearly shows the purpose and role; \"medium\" when it points one way but is thin; \"low\" when the opening is ambiguous (for example only greetings).\n4. `speaker_sides`: for every distinct speaker in the opening, say \"customer\" (works at the outside company) or \"aegis_staff\" (works at Aegis).\n5. Never answer \"internal\". Only \"support\" or \"external\" are valid here. If unsure, choose the closer label and set confidence to \"low\".\n\nReturn only JSON with these keys:\n{\n  \"label\": \"support\" | \"external\",\n  \"evidence_quote\": \"<verbatim text from the opening>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\",\n  \"speaker_sides\": [{\"speaker\": \"<name>\", \"side\": \"customer\" | \"aegis_staff\"}]\n}",
+    "user": "attendees: 5 total, 3 from Aegis, 2 from outside Aegis\n\nopening:\nAisha Johnson: Alright, I think we've got everyone on now — Natalie, Ajay, good to see you both, welcome to the Comply v2 kickoff!\nNatalie Simmons: Thanks Aisha, really excited to finally be here, it feels like we've been building up to this for a while.\nNatalie Simmons: Yeah, same here, we've been looking forward to getting started — Ajay especially, he's been, uh, chomping at the bit on the compliance side.\nAjay Mehta: Ha, guilty as charged — our last audit cycle was, let's just say, not fun, so anything that makes that smoother is a win in my book.\nAisha Johnson: We totally hear you on that, and honestly that's exactly what Comply v2 was built for, so I think you're going to be really happy — let me also just quickly introduce Kevin and Mike who are joining me today.\nKevin O'Brien: Hey everyone, Kevin O'Brien here, Solutions Architect — I'll be the one getting into the weeds with you on the technical deployment side, really glad to be on this call.\nMike Romano: And I'm Mike Romano, Staff Engineer, so I'm sort of Kevin's partner in crime on the implementation — if anything breaks I'm the one you can blame.\nAjay Mehta: Ha, we'll hold you to that Mike."
+  },
+  "response_text": "{\"label\":\"external\",\"evidence_quote\":\"welcome to the Comply v2 kickoff!\",\"confidence\":\"high\",\"speaker_sides\":[{\"speaker\":\"Aisha Johnson\",\"side\":\"aegis_staff\"},{\"speaker\":\"Natalie Simmons\",\"side\":\"customer\"},{\"speaker\":\"Ajay Mehta\",\"side\":\"customer\"},{\"speaker\":\"Kevin O'Brien\",\"side\":\"aegis_staff\"},{\"speaker\":\"Mike Romano\",\"side\":\"aegis_staff\"}]}",
+  "parsed": {
+    "label": "external",
+    "evidence_quote": "welcome to the Comply v2 kickoff!",
+    "confidence": "high",
+    "speaker_sides": [
+      {
+        "speaker": "Aisha Johnson",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Natalie Simmons",
+        "side": "customer"
+      },
+      {
+        "speaker": "Ajay Mehta",
+        "side": "customer"
+      },
+      {
+        "speaker": "Kevin O'Brien",
+        "side": "aegis_staff"
+      },
+      {
+        "speaker": "Mike Romano",
+        "side": "aegis_staff"
+      }
+    ]
+  },
+  "usage": {
+    "completion_tokens": 177,
+    "prompt_tokens": 1867,
+    "total_tokens": 2044,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.0002752,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.0002752,
+      "upstream_inference_prompt_cost": 0.0001867,
+      "upstream_inference_completions_cost": 8.85e-05
+    }
+  },
+  "latency_s": 1.345,
+  "finish_reason": "stop",
+  "model_returned": "anthropic/claude-haiku-5.5",
+  "provider_returned": "Anthropic",
+  "timestamp": "2026-10-29T20:35:57.144287+00:00",
+  "key": "dbd755196b575b2e9b6b527928194a754fbb924bca2cbd035df6ba7c5bec58d0"
+}

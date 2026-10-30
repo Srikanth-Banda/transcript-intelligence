@@ -1,0 +1,1299 @@
+{
+  "prompt": "stage1_pilot_assign_v2",
+  "split_seed": 37,
+  "batches": [
+    [
+      "01AB1C",
+      "05678C",
+      "0D70E2",
+      "1ED8F5",
+      "24624D",
+      "25FEC8",
+      "2AB5AF",
+      "2F2C03",
+      "3DA9C2",
+      "3FB020",
+      "4B6251",
+      "547007",
+      "571940",
+      "5798C7",
+      "670E6D",
+      "7315E7",
+      "8C81E8",
+      "91F2C3",
+      "94B6C4",
+      "9597D0",
+      "A55CCD",
+      "A9FF60",
+      "B1B5EC",
+      "B52846",
+      "D10880"
+    ],
+    [
+      "0540CA",
+      "0AE694",
+      "107F0F",
+      "1FF9CE",
+      "26FFAD",
+      "2AA9F5",
+      "31FAFD",
+      "3D3491",
+      "4B7D41",
+      "698E84",
+      "6CCBE7",
+      "754FB8",
+      "7814CB",
+      "8DCF95",
+      "973B16",
+      "A19AF2",
+      "A24D4F",
+      "B09D1E",
+      "C9E300",
+      "D57E90",
+      "D897A0",
+      "DC6D94",
+      "DD7656",
+      "EA6697",
+      "EFB1A6"
+    ],
+    [
+      "036285",
+      "0571F1",
+      "0D92AB",
+      "13B60D",
+      "458216",
+      "57F042",
+      "5ADCF8",
+      "632514",
+      "653175",
+      "70206E",
+      "7CDAB4",
+      "8022CA",
+      "92B34B",
+      "970775",
+      "A7F71B",
+      "A98889",
+      "B089CA",
+      "B0C7D9",
+      "C898C9",
+      "CA1F5A",
+      "DB40BD",
+      "DC89B6",
+      "EB4171",
+      "EF0B75",
+      "F02331"
+    ],
+    [
+      "00227D",
+      "05B3F0",
+      "099E75",
+      "16916D",
+      "174FDD",
+      "30237B",
+      "39CFC7",
+      "433FFC",
+      "4DC695",
+      "51360A",
+      "580008",
+      "657CF1",
+      "71D752",
+      "74D53C",
+      "99EE7D",
+      "9EDE37",
+      "A8C495",
+      "AAFF8B",
+      "AB668D",
+      "AD7C35",
+      "B62A59",
+      "C9FE34",
+      "CAB747",
+      "D2AE7F",
+      "E7A00D"
+    ]
+  ],
+  "checks": [
+    {
+      "expected": 25,
+      "returned": 25,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "bad_theme": [],
+      "bad_tag": [],
+      "bad_product": [],
+      "quotes": 25,
+      "quote_exact": 24,
+      "quote_loose": 25
+    },
+    {
+      "expected": 25,
+      "returned": 25,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "bad_theme": [],
+      "bad_tag": [],
+      "bad_product": [],
+      "quotes": 25,
+      "quote_exact": 24,
+      "quote_loose": 25
+    },
+    {
+      "expected": 25,
+      "returned": 25,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "bad_theme": [],
+      "bad_tag": [],
+      "bad_product": [],
+      "quotes": 25,
+      "quote_exact": 25,
+      "quote_loose": 25
+    },
+    {
+      "expected": 25,
+      "returned": 25,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "bad_theme": [],
+      "bad_tag": [],
+      "bad_product": [],
+      "quotes": 25,
+      "quote_exact": 25,
+      "quote_loose": 25
+    }
+  ],
+  "assignments": [
+    {
+      "meeting_id": "01AB1C",
+      "primary_theme": "Billing and Usage Ingestion Disputes",
+      "tags": [
+        "Compliance Product Adoption and Expansion",
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "We got our April invoice and there are overage charges totaling just over four thousand dollars that I do not understand and frankly did not expect. At all.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "05678C",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "The current reporting in Comply is... it's okay, but it's pretty static.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "0D70E2",
+      "primary_theme": "Competitive Strategy and Enablement",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Six hours of zero threat monitoring visibility is not something our customers are just going to brush off, and our competitors are absolutely going to use this against us.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "1ED8F5",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Billing and Usage Ingestion Disputes"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Your current contract runs through end of March, so we wanted to get ahead of it a bit, talk through the current structure, see if anything needs to be adjusted going into the next term.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "24624D",
+      "primary_theme": "Competitive Strategy and Enablement",
+      "tags": [],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Okay cool, so I figured we should probably carve out some time to actually go through the competitive landscape before the product review next week, because I feel like we've been kind of operating on vibes a little bit.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "25FEC8",
+      "primary_theme": "Other / new theme",
+      "tags": [],
+      "product_area": "Platform/General",
+      "other_description": "Internal team sync preparing evidence and operational readiness for an upcoming SOC 2 Type II audit.",
+      "evidence_quote": "Okay so, the reason I pulled everyone together today — as you all know we've got our SOC 2 Type II audit window coming up, and I want to make sure we're not scrambling at the last minute.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "2AB5AF",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Alright, I think we've got everyone on now — Natalie, Ajay, good to see you both, welcome to the Comply v2 kickoff!",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "2F2C03",
+      "primary_theme": "Billing and Usage Ingestion Disputes",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "And basically the issue is we upgraded to Comply v2 when it launched on the seventh and we're seeing a billing discrepancy that we can't quite figure out.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "3DA9C2",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "What we're seeing is a lot of, um, connection timeout errors to the HEC endpoint, and then the connector seems to just... drop the buffer instead of retrying, which is — that seems like a bug to me, honestly.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "3FB020",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So, um, welcome everyone — this is our threat detection tuning session for Harborview Banking.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "4B6251",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So, um, I wanted to reach out specifically because your renewal is coming up at the end of next month and I just — I want to make sure we're in a good place and that you're getting value out of the platform.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "547007",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So the core value proposition with Comply is that it maps your environment continuously to whatever frameworks you're targeting — SOC 2, ISO 27001, we also support PCI DSS and HIPAA — and it generates audit-ready reports on demand.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "571940",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Perfect, yeah that's — honestly that's exactly why I wanted to get you on early access for the Comply v2 demo because what you're about to see is going to be really relevant to that audit cycle.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "5798C7",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Looks like you submitted a request around custom reporting in Aegis Comply — is that right?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "670E6D",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "The fix is migrating your tenant to a less-loaded node cluster. I can initiate that request right now as an emergency rebalance — that goes to our infrastructure team with a priority flag.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "7315E7",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So what I can see from our internal status is that there was a cascading failure in the event ingestion layer — it looks like a single component went down and it took the rest of the processing queue with it, engineering is working on isolating and restarting the affected nodes.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "8C81E8",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion",
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So Wayne, the whole purpose of today is really just — it's your annual review, renewal's coming up at the end of May, and I want to make sure we're doing right by you before we get into any of that paperwork stuff.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "91F2C3",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Backup Performance and Scalability"
+      ],
+      "product_area": "Aegis Protect",
+      "other_description": "Internal engineering quarterly roadmap and sprint planning meeting for Aegis Protect backup and restore features.",
+      "evidence_quote": "Okay so — quarterly planning for Protect, Q2 is coming up fast, I want to make sure we actually go into it with a solid plan this time and not scrambling like we did in Q4.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "94B6C4",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "The reason I wanted to have this call is really around some gaps we're hitting on the IAM side — specifically around how Aegis Identity handles role management at scale.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "9597D0",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Aegis Comply",
+      "other_description": "Internal product and engineering design review for Comply v2 architecture and reporting specs ahead of launch.",
+      "evidence_quote": "Alright, so the purpose of today's call is really to do a proper design review for Comply v2 before we lock the spec.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A55CCD",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Identity Authentication and Directory Provisioning"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "Internal product and engineering quarterly roadmap planning session for Aegis Identity.",
+      "evidence_quote": "Okay so — Q2 roadmap planning for Identity. I'm really excited about this one honestly, I think we have a genuinely strong quarter ahead of us.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A9FF60",
+      "primary_theme": "Backup Performance and Scalability",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "Granular file-level restore, like truly arbitrary path-based restore from within a snapshot, that's not currently a supported workflow in Protect.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "B1B5EC",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Okay, I want to run through the launch day checklist today — make sure we're all aligned, flag any blockers, and just kind of do a final gut check before Tuesday.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "B52846",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion",
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "I'll be honest with you — and I don't want this to feel like an ambush — but we've been having some pretty serious conversations internally about whether Aegis is still the right fit for us.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "D10880",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "Internal team review of evidence packages and operational documentation for Aegis's own upcoming SOC 2 Type II audit.",
+      "evidence_quote": "Okay so, uh, really the reason I pulled everyone together today is we need to do a final walk-through of the SOC 2 Type II materials before we hand them off to the auditors, and honestly I'm — I'm feeling pretty good about where we landed.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "0540CA",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Pipeline Outage Technical Remediation",
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "Internal engineering status standup discussing progress on the Detect ingestion pipeline refactor and cross-product Comply v2 timelines.",
+      "evidence_quote": "Okay, so usual format — let's do a quick status round, then I want to spend some time on the Detect pipeline work and the Comply v2 timeline.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "0AE694",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So from what I can tell in the logs, the primary ingestion node started throwing out-of-memory errors around 6:47 AM.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "107F0F",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So Aegis Comply v2 went generally available on April 7th — just a couple weeks ago — and the headline feature for a customer in your situation is really the on-demand compliance reporting.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "1FF9CE",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Exactly, SCIM 2.0, yeah — we want Okta to be the source of truth, so when someone is offboarded in Okta it automatically propagates through to Aegis Identity and their access is revoked.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "26FFAD",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Okay so as of yesterday, April 21st, we've had 847 unique tenants generate at least one on-demand report.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "2AA9F5",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Okay, that's — that structure makes sense, I like that you're not forcing me to decide on Detect before I've even seen the full pitch, so yeah, let's lock in the core renewal and then do the Detect conversation separately.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "31FAFD",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So you're currently on Protect and Detect. We're proposing a renewal of both of those, same tier, with a three percent uplift which is honestly below our standard rate increase — and I'll explain why in a second.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "3D3491",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Essentially the pipeline that takes in events from the agents and processes them for the dashboard hit some kind of cascading issue.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "4B7D41",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Identity Authentication and Directory Provisioning"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Look, I'll be honest with you — our renewal is coming up and I'm getting pressure from my CISO and from our compliance team and everyone is sort of, uh, looking at the platform and asking questions that I'm finding it hard to answer right now.",
+      "confidence": "medium"
+    },
+    {
+      "meeting_id": "698E84",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "About 38 to 42 percent of our user base is hitting the failure. We have around 1,200 users in Aegis Identity and somewhere between 450 and 500 of them are completely locked out.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "6CCBE7",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Aegis Detect is currently experiencing a platform-wide outage affecting the event processing pipeline.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "754FB8",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Without getting too far ahead of ourselves, what's coming in the Comply v2 roadmap is really designed to address exactly this — multi-framework support where a single piece of evidence can map across HIPAA, SOC 2, and other frameworks simultaneously.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "7814CB",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "My CISO has asked me to do a formal review of our threat monitoring vendor options.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "8DCF95",
+      "primary_theme": "Backup Performance and Scalability",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "So basically, we set up the S3 connector in Aegis Protect about three weeks ago, it was working fine initially. But starting around, I want to say, last Thursday or Friday, we started seeing backup jobs failing partway through.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "973B16",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Identity Authentication and Directory Provisioning"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Absolutely, so — maybe just to set the stage for today, the goal is to walk through your Identity module setup, understand your current IAM landscape, and start mapping out the SSO and MFA configuration.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A19AF2",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "Internal monthly retrospective and operational planning sync reviewing cross-functional engineering, QA, and sales metrics.",
+      "evidence_quote": "So, February wrap — I want to keep this tight, maybe twenty minutes. Megan, you want to kick us off on the product side?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A24D4F",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Pipeline Outage Technical Remediation",
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "Internal all-hands operational review meeting covering post-mortem updates, product release metrics, and upcoming quarterly planning.",
+      "evidence_quote": "So I want to cover a few things — we'll do a quick retrospective on the March Detect outage, then talk about the Comply v2 launch, and then get into Q2 planning for the roadmap.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "B09D1E",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "So it started, um, I'd say around 7 AM this morning, and it's not all users — it seems to be specifically the users who are enrolled in TOTP-based MFA through Aegis Identity, they're getting token validation failures even though the tokens are generating correctly on their authenticator apps.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "C9E300",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Pipeline Outage Technical Remediation",
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "Internal engineering sync reviewing post-mortem action items, circuit breaker implementation, and Comply bug fixes.",
+      "evidence_quote": "Okay so, usual format — let's do quick status updates, then I want to spend the bulk of the time on the post-mortem follow-ups from the Detect outage and also figure out where we are with the Comply v2 rollout now that we're ten days post-launch.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "D57E90",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Backup Performance and Scalability"
+      ],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "So generally for Aegis Protect we're looking at about a four to six week process broken into three phases.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "D897A0",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So — so the event processing pipeline went down at approximately 2:47 AM this morning. We're seeing a cascading failure that started in the ingestion layer and basically knocked out the entire threat monitoring feed for Detect.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "DC6D94",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So the circuit breaker that was added to protect the pipeline — it has a payload threshold, and at your event volume, the five-minute batch is generating a payload that's hitting that limit.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "DD7656",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So let's talk about the renewal because that's technically why we're here. Our contract comes up end of Q2 and, uh, I'll be transparent — the board is asking questions.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "EA6697",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "We wanted to get together to walk through the renewal terms and just, uh, make sure we're on the same page before anything needs to be signed.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "EFB1A6",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "Customer roadmap review and feature request session focused on entity grouping, alerting thresholds, and threat intelligence feeds.",
+      "evidence_quote": "Of course, absolutely — okay so, I've got the agenda pulled up, we wanted to walk through some of the Detect roadmap items, and I know you had some specific feature requests you wanted to put on the table today.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "036285",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So with Comply v2 — and this just went GA two days ago, April 7th — we've built out on-demand reporting that's fully mapped to PCI DSS controls.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "0571F1",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Competitive Strategy and Enablement"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Our current Aegis contract comes up for renewal in July and I don't want to be scrambling at the last minute either way.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "0D92AB",
+      "primary_theme": "Other / new theme",
+      "tags": [],
+      "product_area": "Platform/General",
+      "other_description": "Internal engineering sprint retrospective and sprint planning meeting covering backlog items and capacity.",
+      "evidence_quote": "So, um, first thing — I want to do a quick retro on sprint eleven before we get into planning.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "13B60D",
+      "primary_theme": "Backup Performance and Scalability",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "So you're seeing slow backup performance with Aegis Protect — can you walk me through what you're experiencing?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "458216",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So, Evelyn, today's really about finalizing the renewal for Bridgeport and making sure you're set up well going into the next contract year.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "57F042",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So I'm pulling up support case number 3296 here — you're reporting a formatting issue with Aegis Comply v2 reports?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "5ADCF8",
+      "primary_theme": "Backup Performance and Scalability",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "The reason I called this is, uh, we've been getting some pretty alarming signals from the Protect module over the last couple of weeks and I think we need to talk through what's actually happening before this becomes a customer-facing issue.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "632514",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Identity Authentication and Directory Provisioning"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "Internal sprint retrospective and planning session for the Aegis Identity engineering team.",
+      "evidence_quote": "Yeah, let's try to stay focused on Identity sprint stuff today though — we can't let the Detect fallout bleed into every single retro.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "653175",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So the main thing I wanted to go through today is just the launch readiness checklist for Comply v2.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "70206E",
+      "primary_theme": "Other / new theme",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "Internal engineering sprint planning sync reviewing backlog tickets and estimation for the Detect team.",
+      "evidence_quote": "Okay so, uh, let's just do a quick run through of what we're carrying over from last sprint and then figure out what we're committing to for this one.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "7CDAB4",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Okay so — April 7th is six days away, which honestly feels very real now, and I wanted to get the four of us together to go through the GA deployment plan for Comply v2 and make sure we're all aligned on the rollout sequence.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "8022CA",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Actually that's kind of why we're here today, right, so — Thomas, I also want to introduce Kevin, he's our solutions architect and he's going to be the technical lead on your ISO 27001 prep work.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "92B34B",
+      "primary_theme": "Backup Performance and Scalability",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "Yes, absolutely, I pulled up the case right before you called actually — so you're seeing backup jobs running well past their scheduled windows, is that right?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "970775",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "We have been dealing with an incident on our end — specifically in the Detect event processing pipeline.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A7F71B",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "David, hi, this is Lauren Bishop, I'm the VP of Infrastructure over at Cobalt Software, and I need you to understand right now that this is a critical situation — our Aegis Detect dashboard is completely down and we have zero visibility into our threat monitoring.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A98889",
+      "primary_theme": "Billing and Usage Ingestion Disputes",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "So, just to frame this up — the case notes say you're seeing a discrepancy on your February invoice, is that right?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "B089CA",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "The immediate thing we're doing — and this is already in progress, the team started on it yesterday — is deploying redundant processing nodes.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "B0C7D9",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Backup Performance and Scalability"
+      ],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "So Raymond, just to set the stage for today — the goal of this workshop is really to dig into your backup strategy, understand your current environment at Vanta Health, and start mapping out how Aegis Protect can fit into what you're already doing, does that sound right to you?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "C898C9",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation",
+        "Competitive Strategy and Enablement"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Okay but how do we know that? Like, I appreciate the explanation but we're being asked to renew a contract and our confidence in the infrastructure is shaken.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "CA1F5A",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Okay great. So, um, I think the main thing we wanted to get through today is the Identity roadmap for Q2, specifically around the MFA expansion and then the SSO connector work.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "DB40BD",
+      "primary_theme": "Competitive Strategy and Enablement",
+      "tags": [],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Sure. So in Q1 we had — I'm looking at my sheet here — 34 closed-lost opportunities with a total combined ACV of around 2.1 million. Of those, 22 had a named competitor as the reason or it was noted in the loss notes.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "DC89B6",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "You're right, I'll just say it — we are currently dealing with a platform-wide issue affecting Aegis Detect's event processing pipeline.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "EB4171",
+      "primary_theme": "Competitive Strategy and Enablement",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "No worries. Okay, so, the reason I called this is — we've had three deals in the last two weeks where SentinelShield came up pretty aggressively in late-stage conversations, and I want to make sure we're all aligned on how we're positioning against them going forward.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "EF0B75",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [
+        "Customer Implementation and Architecture Scoping"
+      ],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "Hey Nathan, great to meet you. Really looking forward to digging into your SOC 2 prep situation and seeing how we can help.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "F02331",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So, uh, at approximately 9:14 AM Pacific we started seeing alerts — or rather, the absence of alerts — from the Detect event processing pipeline.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "00227D",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So I've got the case here, case number 8811, and it looks like you're coming in with a feature request around custom compliance templates in Aegis Comply.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "05B3F0",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "Internal engineering retrospective discussing the reliability sprint and technical fixes implemented after the March outage.",
+      "evidence_quote": "So, uh, officially this is the retro for the reliability sprint we kicked off after the March outage, and honestly I want to start by just saying — I think you both crushed it.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "099E75",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Sure, so — basically our Active Directory sync through Aegis Identity just stopped working. Users aren't getting provisioned, group memberships aren't syncing, and we've got about, uh, I'd say 200 plus employees who can't get into systems they need access to.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "16916D",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [
+        "Customer Implementation and Architecture Scoping"
+      ],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "So, um, the whole reason I wanted to get this call on the books is that we've got Comply v2 going GA on April seventh — so like a week from today — and I really wanted to get you guys in front of it early, kind of a sneak peek before the broader announcement goes out.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "174FDD",
+      "primary_theme": "Compliance Product Adoption and Expansion",
+      "tags": [],
+      "product_area": "Aegis Comply",
+      "other_description": "",
+      "evidence_quote": "And we just — we really want to know if there's any way to get early access before the general release because our SOC 2 audit window is coming up and the timing would be really helpful.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "30237B",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Okay — so let's talk about the renewal itself. Your current term is up at the end of Q2, so we've got a bit of runway but I don't want to leave it too late.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "39CFC7",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So the plan is — and stop me if you want to reorder anything — I was thinking we'd do a quick look at where you are with the platform overall, talk through the renewal terms, and then get into any open items or concerns you have.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "433FFC",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "The event ingestion pipeline — this is the core processing layer that pulls in telemetry from customer environments — it had a cascading failure.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "4DC695",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So, uh, today's agenda — this is officially the 30-day post-incident review for the Detect outage that happened March 10th through the 18th.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "51360A",
+      "primary_theme": "Backup Performance and Scalability",
+      "tags": [],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "Yes, this is Linda Cheng, and I have to say I'm — I'm really frustrated right now, we've been dealing with this API issue for going on three days and it is actively impacting our backup workflows.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "580008",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "So, just to set the agenda for today — I wanted to walk through where things stand on the renewal, get your feedback on how the platform's been performing, and then we can talk about what your roadmap looks like for the rest of the year.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "657CF1",
+      "primary_theme": "Other / new theme",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "Support call regarding a post-patch spike in false positive behavioral anomaly alerts on Aegis Detect.",
+      "evidence_quote": "So I pulled up Support Case 3103 before this call — you're seeing a spike in false positives from Aegis Detect after a patch was applied, is that right?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "71D752",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Backup Performance and Scalability"
+      ],
+      "product_area": "Aegis Protect",
+      "other_description": "",
+      "evidence_quote": "So typically what we'd do is — phase one is your tier-one critical workloads, so in your case that's probably the CDP and your e-commerce platform.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "74D53C",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation",
+        "Competitive Strategy and Enablement"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Charles, I also want to put something on the table — and I want to be thoughtful about how I say this because I don't want it to feel transactional.",
+      "confidence": "medium"
+    },
+    {
+      "meeting_id": "99EE7D",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion",
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Good to hear. Okay so, the reason we're all here — obviously the renewal is coming up, I think you're looking at end of May for the contract anniversary, so I wanted to make sure we had plenty of runway to actually have a real conversation about it rather than just firing off a DocuSign at the last minute.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "9EDE37",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Of course, so I'm calling regarding support case number 7537, the Detect recovery confirmation for Forge Industries — is this still a good time?",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "A8C495",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "So the plan for today — I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "AAFF8B",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "So basically, we push policy updates through Identity — role assignments, access group changes — and they're just... not propagating. Or they are, but it's taking, like, four, five hours sometimes.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "AB668D",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Pipeline Outage Technical Remediation"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Our renewal is in June, Maria. I'll be very blunt with you — if I don't have something substantially better to bring to my CISO before that renewal conversation, I don't know that we're going to be renewing.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "AD7C35",
+      "primary_theme": "Billing and Usage Ingestion Disputes",
+      "tags": [
+        "Identity Authentication and Directory Provisioning"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Yeah so, uh, we received our January invoice last week and there's a line item on there that doesn't quite match what we expected based on our contract.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "B62A59",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Sure, so — we rotated our SAML signing certificate yesterday, standard procedure, we do this every six months, and after the rotation a significant portion of our users are getting authentication failures when they try to SSO into our internal tools.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "C9FE34",
+      "primary_theme": "Identity Authentication and Directory Provisioning",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "So the agenda I had in mind — I wanted to walk through where we are on the Identity roadmap, get your input on some of the features we're scoping, and then just make sure we're aligned on what Ridgeline actually needs over the next couple of quarters.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "CAB747",
+      "primary_theme": "Pipeline Outage Technical Remediation",
+      "tags": [
+        "Commercial Renewals and Retention"
+      ],
+      "product_area": "Aegis Detect",
+      "other_description": "",
+      "evidence_quote": "Sure. So as of about thirty minutes ago we had logged forty-seven inbound tickets directly related to the Detect outage.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "D2AE7F",
+      "primary_theme": "Customer Implementation and Architecture Scoping",
+      "tags": [
+        "Identity Authentication and Directory Provisioning"
+      ],
+      "product_area": "Aegis Identity",
+      "other_description": "",
+      "evidence_quote": "Yeah, definitely. So, at a high level we're looking at three phases for a deployment like yours. Phase one is directory sync and SSO configuration — basically getting Aegis Identity talking to your Entra ID environment, setting up the SAML or OIDC connectors, depending on what your apps support.",
+      "confidence": "high"
+    },
+    {
+      "meeting_id": "E7A00D",
+      "primary_theme": "Commercial Renewals and Retention",
+      "tags": [
+        "Compliance Product Adoption and Expansion"
+      ],
+      "product_area": "Platform/General",
+      "other_description": "",
+      "evidence_quote": "Okay so should we just jump in? I was thinking we'd kind of do a quick check-in on how the platform's been performing for you this year, and then we can talk about the renewal terms and what the next contract period might look like.",
+      "confidence": "high"
+    }
+  ],
+  "usage": [
+    {
+      "completion_tokens": 3207,
+      "prompt_tokens": 56963,
+      "total_tokens": 60170,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.0547485,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0547485,
+        "upstream_inference_prompt_cost": 0.04272225,
+        "upstream_inference_completions_cost": 0.01202625
+      }
+    },
+    {
+      "completion_tokens": 3270,
+      "prompt_tokens": 55613,
+      "total_tokens": 58883,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.05397225,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.05397225,
+        "upstream_inference_prompt_cost": 0.04170975,
+        "upstream_inference_completions_cost": 0.0122625
+      }
+    },
+    {
+      "completion_tokens": 3034,
+      "prompt_tokens": 53691,
+      "total_tokens": 56725,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.05164575,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.05164575,
+        "upstream_inference_prompt_cost": 0.04026825,
+        "upstream_inference_completions_cost": 0.0113775
+      }
+    },
+    {
+      "completion_tokens": 3253,
+      "prompt_tokens": 58113,
+      "total_tokens": 61366,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null,
+        "image_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "image_tokens": null,
+        "text_tokens": null,
+        "video_tokens": 0
+      },
+      "cost": 0.0557835,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 0.0557835,
+        "upstream_inference_prompt_cost": 0.04358475,
+        "upstream_inference_completions_cost": 0.01219875
+      }
+    }
+  ]
+}

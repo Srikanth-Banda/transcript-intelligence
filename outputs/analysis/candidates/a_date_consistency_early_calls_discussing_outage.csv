@@ -1,0 +1,7 @@
+date,type,title,strict_hits,incident_flag
+2026-02-03,support,Support Case #3286 - Vanta Health Systems API Integration Error,4,False
+2026-02-04,external,Aegis / Coastal Living Co - Onboarding Kickoff,3,False
+2026-02-07,external,Aegis / Blackridge Investments - Renewal Discussion,4,False
+2026-02-11,external,Aegis / Brightpath Commerce - Detect Module Deployment,5,False
+2026-02-14,support,Support Case #6635 - Nova Retail Group SSO Login Failures,2,False
+2026-03-09,external,Aegis / Keystone Health - Renewal Planning,3,True

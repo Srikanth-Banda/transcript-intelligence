@@ -1,0 +1,244 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (44 turns, indices 0 to 43; per_turn needs exactly 44 entries, one per index in order):\n[0] James Mitchell (aegis_staff): Hey Kendra, thanks for making time today — I know your schedule's been packed.\n[1] Kendra Wallace (customer): Yeah, it has been, but this is an important one so I made sure to block it off. Good to connect, James.\n[2] James Mitchell (aegis_staff): Absolutely. So the plan for today — I wanted to walk through the Aegis Detect deployment for Brightpath, kind of go over the onboarding steps, talk through your environment specifics, and make sure we're set up for a smooth rollout. Does that work for you?\n[3] Kendra Wallace (customer): Yeah that works. I've got our infrastructure lead, Marcus, looped in on some of the technical details so I may reference some notes he sent over. He couldn't make the call today unfortunately.\n[4] James Mitchell (aegis_staff): No problem at all, happy to follow up directly with Marcus as well after this. So, just to level-set — Brightpath is running primarily on CloudPrime, correct? With some Azure footprint for certain workloads?\n[5] Kendra Wallace (customer): That's right. We're about seventy percent CloudPrime, the rest is Azure. We use Azure mainly for some of our analytics pipelines and a couple of internal tools. Core commerce infrastructure — storefront, order management, payments — that's all CloudPrime.\n[6] James Mitchell (aegis_staff): Got it, that's helpful context. Aegis Detect handles both environments natively so that's not a concern, but it does affect how we sequence the deployment. Typically we recommend starting with the primary cloud environment first, getting the agents and event collectors stabilized there, and then extending to the secondary.\n[7] Kendra Wallace (customer): That makes sense. So CloudPrime first, then we layer in Azure. What's the typical timeline for something like that, for an environment our size?\n[8] James Mitchell (aegis_staff): For a mid-market retail footprint like Brightpath's — and I'm ballparking here based on what you shared in the scoping doc — you're probably looking at two to three weeks for the initial CloudPrime deployment to get to a stable monitored state. Azure would be an additional week, week and a half maybe.\n[9] Kendra Wallace (customer): Okay so roughly a month end to end. That's... that's workable. We were hoping to have something operational before our spring peak season, which starts ramping up in late March.\n[10] James Mitchell (aegis_staff): Yeah, and that's actually why I wanted to get this call in this week. If we kick off deployment by end of next week, mid-February, we should be comfortably ahead of that window. You'd have at minimum the CloudPrime side fully operational with time to spare.\n[11] Kendra Wallace (customer): Good. That's good. Okay, so what does the actual kickoff involve? What do we need to prepare on our end?\n[12] James Mitchell (aegis_staff): So the first thing is IAM permissions — we'll need read access to your CloudPrime CloudTrail logs, VPC Flow Logs, and if you have GuardDuty enabled we'll want to pull from that as well. Our onboarding team will send over a specific permissions template, it's pretty straightforward, a predefined IAM role with least-privilege scoping.\n[13] Kendra Wallace (customer): We do have GuardDuty running, yes. And CloudTrail is enabled across all regions. VPC Flow Logs — I'd have to check with Marcus on that one, I believe we have them enabled for production VPCs but maybe not all of them.\n[14] James Mitchell (aegis_staff): That's fine, we can work with partial coverage initially and expand. It's not a blocker. The other thing we'll need is a point of contact on your infrastructure team for the technical onboarding sessions — that'd probably be Marcus?\n[15] Kendra Wallace (customer): Yeah, Marcus Okonkwo, he's our head of cloud infrastructure. I'll make sure he's looped in. He's very hands-on so honestly once you get him the technical docs he'll probably have it half done before the onboarding call even happens.\n[16] James Mitchell (aegis_staff): Ha, I love that type. That makes the process a lot smoother honestly. Okay so — on the Detect side specifically, I want to make sure we talk about alerting configuration because that's usually where onboarding takes the most time. You can get the data flowing pretty quickly, but tuning the alerts so you're not buried in noise — that's the art of it.\n[17] Kendra Wallace (customer): Yeah, alert fatigue is a real concern for us. Our security team is small — it's two dedicated security engineers plus myself staying involved. We can't have them chasing false positives all day.\n[18] James Mitchell (aegis_staff): Totally understandable, and that's a really common scenario especially in retail where you've got... a lot of legitimate high-volume traffic patterns that can look suspicious if you don't tune for them. Aegis Detect has baseline learning built in — it runs in observation mode for the first seven days and builds a behavioral baseline before it starts generating production alerts.\n[19] Kendra Wallace (customer): Oh, that's actually — I didn't know that. That's a good feature. So it won't just start firing off alerts the moment it's connected?\n[20] James Mitchell (aegis_staff): Right, exactly. You can override that and go straight to active alerting if you want, but for most customers we recommend the observation period. Gives the system time to understand your normal traffic patterns — your order processing spikes, your batch jobs, whatever recurring patterns you have — and it significantly reduces that initial false positive noise.\n[21] Kendra Wallace (customer): That's going to make my security team much happier. Okay. What about integrations — we use PagerDuty for incident response, and our logging goes into LogVault. Does Detect play well with those?\n[22] James Mitchell (aegis_staff): Both are supported out of the box. PagerDuty integration is pretty much plug and play — you configure your API key in the Detect settings, map your severity levels to PagerDuty escalation policies, and alerts route through automatically. LogVault is also a native integration, we can push event data and alert context into your existing LogVault indexes.\n[23] Kendra Wallace (customer): Perfect. That's — yeah that's what we needed to hear. We weren't sure if we'd have to do custom work there.\n[24] James Mitchell (aegis_staff): Nope, no custom development required for either of those. There's a configuration guide in the onboarding portal that walks through it step by step. Marcus should be able to knock that out without too much trouble.\n[25] Kendra Wallace (customer): Good. Um — okay, I do want to ask about something. I was reading some community forums, I think it was a security subreddit, and someone mentioned there had been some reliability issues with Detect recently? I don't know if that was... accurate or if it was FUD from a competitor or what.\n[26] James Mitchell (aegis_staff): Yeah, I appreciate you bringing that up directly. There was an incident — it was in December, I believe — an event processing issue that caused some monitoring gaps for a period of time. I'd rather be straightforward about it than have you find out through the grapevine.\n[27] Kendra Wallace (customer): What happened exactly?\n[28] James Mitchell (aegis_staff): The short version is there was a failure in the event ingestion pipeline — a cascading failure that resulted in a single point of failure being exposed. Monitoring visibility was interrupted. Our engineering team identified the root cause and the fix that went in was adding redundant processing nodes and implementing a circuit breaker pattern so that kind of cascading failure can't propagate the same way again.\n[29] Kendra Wallace (customer): How long was the outage?\n[30] James Mitchell (aegis_staff): It was a few hours. I don't want to give you an imprecise number — I can send you the post-incident report if you want the specifics. We published it internally and shared it with customers.\n[31] Kendra Wallace (customer): Yeah, please do send that. I'd want to review it and share it with Marcus and our security team. We need to understand the risk profile before we're fully dependent on this for monitoring.\n[32] James Mitchell (aegis_staff): Absolutely, I'll include it in the follow-up email today. And I think it'll give you confidence when you see the remediation steps — the architecture changes are substantial. It wasn't a patch, it was a real structural fix.\n[33] Kendra Wallace (customer): Okay. I appreciate the transparency on that. It would have been more concerning if you'd tried to brush it off.\n[34] James Mitchell (aegis_staff): Yeah, no — that's not how I operate and it's not how Aegis operates. Issues happen, what matters is how you respond to them. Alright, let me also touch on the onboarding support model so you know what to expect. You'll be assigned a dedicated onboarding engineer — they'll run the technical sessions with Marcus, be available for questions during the deployment, and they stay with you through the first thirty days post go-live.\n[35] Kendra Wallace (customer): Is that the same person throughout or does it rotate?\n[36] James Mitchell (aegis_staff): Same person throughout the onboarding period, yes. After the thirty days you transition to our standard support team but you'd still have me as your AE point of contact for anything account-level.\n[37] Kendra Wallace (customer): That's good. Continuity matters. Okay — I think I have what I need for today. What are the concrete next steps coming out of this call?\n[38] James Mitchell (aegis_staff): From my side — I'll send the post-incident report, the IAM permissions template, and the onboarding portal credentials this afternoon. I'll also loop in our onboarding team to schedule the kickoff session with Marcus, aiming for early next week. From your side, if you can confirm Marcus as the technical contact and maybe do a quick check on those VPC Flow Log configurations, that'd set us up well.\n[39] Kendra Wallace (customer): I can do that. I'll send you Marcus's contact info after this call and I'll let him know to expect outreach. He'll probably want to get on a call with your onboarding engineer before the formal kickoff just to go through architecture questions.\n[40] James Mitchell (aegis_staff): Perfect, we can absolutely set that up. I'll make sure the onboarding engineer knows to expect a technically detailed conversation — in a good way.\n[41] Kendra Wallace (customer): Ha. Yeah, Marcus doesn't do surface-level. Alright James, I think this was a good call. Let's get moving on this.\n[42] James Mitchell (aegis_staff): Agreed. You'll have everything from me by end of day. Thanks Kendra, talk soon.\n[43] Kendra Wallace (customer): Thanks, bye."
+  },
+  "response_text": "{\n  \"call_score\": 4.0,\n  \"customer_score\": 4.0,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"positive\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"neutral\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"neutral\"},\n    {\"index\": 15, \"label\": \"positive\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"positive\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"positive\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"positive\"},\n    {\"index\": 24, \"label\": \"neutral\"},\n    {\"index\": 25, \"label\": \"negative\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"neutral\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"positive\"},\n    {\"index\": 33, \"label\": \"positive\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"positive\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"positive\"},\n    {\"index\": 41, \"label\": \"positive\"},\n    {\"index\": 42, \"label\": \"neutral\"},\n    {\"index\": 43, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.5,\n    \"end\": 4.0\n  },\n  \"evidence_quote\": \"Alright James, I think this was a good call. Let's get moving on this.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 4.0,
+    "customer_score": 4.0,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "positive"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "neutral"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "neutral"
+      },
+      {
+        "index": 15,
+        "label": "positive"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "positive"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "positive"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "positive"
+      },
+      {
+        "index": 24,
+        "label": "neutral"
+      },
+      {
+        "index": 25,
+        "label": "negative"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "neutral"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "positive"
+      },
+      {
+        "index": 33,
+        "label": "positive"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "positive"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      },
+      {
+        "index": 43,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.5,
+      "end": 4.0
+    },
+    "evidence_quote": "Alright James, I think this was a good call. Let's get moving on this.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 750,
+    "prompt_tokens": 4967,
+    "total_tokens": 5717,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00653775,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00653775,
+      "upstream_inference_prompt_cost": 0.00372525,
+      "upstream_inference_completions_cost": 0.0028125
+    }
+  },
+  "latency_s": 8.219,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:23:04.251086+00:00",
+  "key": "e58703b953007cbe8b72cbd8a6f1d848c1b4e9a6cefb39c4cce502455996f20c"
+}

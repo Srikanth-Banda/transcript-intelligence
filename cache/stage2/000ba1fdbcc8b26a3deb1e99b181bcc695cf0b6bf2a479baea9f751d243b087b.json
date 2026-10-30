@@ -1,0 +1,240 @@
+{
+  "stage": "stage2",
+  "prompt_version": "stage2_v1",
+  "model_requested": "google/gemini-3.8-flash",
+  "params": {
+    "temperature": 0.0,
+    "max_tokens": 10000,
+    "reasoning_effort": "low",
+    "seed": 7,
+    "run": 1,
+    "provider_order": [
+      "google-ai-studio"
+    ]
+  },
+  "structured_mode": "json_schema",
+  "retried": false,
+  "request": {
+    "system": "You rate the emotional tone of one recorded call at Aegis Cloud Security, a B2B SaaS company. You will receive the full transcript as numbered turns, each with index, speaker, side (\"customer\" = works at an outside company, \"aegis_staff\" = works at Aegis) and sentence. You are given nothing else about the call: no title, no call type, no summary and no earlier scores. Judge only from the words in the transcript.\n\nScore the TONE of the speakers, not how serious the topic is.\n\nWhole-call score (call_score, all speakers, 1 to 5). Anchors:\n- 5 (Warm): At least one speaker shows clear enthusiasm, delight, praise or gratitude beyond courtesy (for example \"really excited\", \"this is exactly what we needed\"), and this recurs across the call. No complaint and no unresolved problem. The call ends with mutual positivity or a firm positive next step. Borderline: A friendly planning call with a single enthusiastic remark is a 4, not a 5. A 5 needs enthusiasm to be a recurring feature of the call.\n- 4 (Constructive): Cooperative and friendly. May include a small concern, a minor delay, or a question that is answered smoothly. Light appreciation (\"thanks, that helps\"). The call ends agreed and settled. Borderline: A problem is raised, fixed during the call, and the speaker says they are glad: 4, because relief counts as positive. If the frustration before the fix was strong and repeated, score 3.5.\n- 3 (Neutral or balanced): Businesslike, factual or procedural (status rounds, walkthroughs, routine tracking), OR positives and negatives are roughly equal. Concerns are raised and handled calmly without visible frustration. Borderline: A calm, factual discussion of a serious outage in which nobody expresses frustration is a 3. The seriousness of the topic does not lower the score; only the tone of the speakers does.\n- 2 (Strained): At least one speaker states dissatisfaction, impatience, worry about impact, or doubt about the other party, and this lasts across more than one turn or the problem is unresolved or only partly resolved at the end. Everyone stays professional. At most a mild mention of reconsidering (\"we may look at other options\"). Borderline: One sharp remark in an otherwise calm call that ends resolved is a 3, not a 2. A customer who says they might be \"shopping platforms\" but stays constructive and agrees next steps is a 2: a stated risk, not an ultimatum.\n- 1 (Breakdown): Anger, accusations or sustained hostility; a firm threat to cancel or leave, or an ultimatum with a deadline; visible distress; or the conversation stops being productive. The call ends with the relationship at serious risk and no agreed path. Borderline: A firm \"we will terminate unless this is fixed by Friday\" is a 1 or 1.5. The same sentence delivered calmly with an agreed escalation path is a 2.\nUse a half step (for example 2.5) when the call clearly sits between two adjacent levels. If you are torn between two levels and a problem is still unresolved at the end of the call, take the lower; otherwise take the higher.\n\nCustomer-side score (customer_score, 1 to 5). Score only the turns whose side is \"customer\"; staff turns give context but are not scored. If no turn has side \"customer\", return null. Anchors:\n- 5 (Delighted): The customer expresses delight, strong satisfaction or praise beyond courtesy, more than once, and raises no open problem. Borderline: \"Thanks, great\" at the end of a routine call is a 4 at most. Delight must be specific (\"this is exactly what we needed\").\n- 4 (Satisfied): The customer is cooperative, satisfied or reassured. Thanks come with substance (\"that fixed it, thanks\"). Any concern raised was resolved. Borderline: A customer who was frustrated early and clearly relieved at the end scores 3 to 3.5, not 4, because the frustration was real.\n- 3 (Neutral or mixed): The customer is factual, with no clear satisfaction or dissatisfaction, or satisfaction and dissatisfaction are about equal across the call. Borderline: A customer who states one concern calmly and accepts the answer is a 3.\n- 2 (Dissatisfied): The customer states frustration, impatience, dissatisfaction or worry about impact, or says the problem is still not solved. Still civil. Borderline: Stating that a problem hurts the business without anger (\"this is costing us\") is a 2 if repeated or unresolved, otherwise 3.\n- 1 (Angry or leaving): The customer is angry, repeatedly says the situation is unacceptable, or gives a firm ultimatum or threat to leave or escalate formally. Borderline: \"I'm not happy\" is a 2. \"If this isn't fixed today we are leaving\" is a 1.\nThe customer-side score ignores staff tone: staff apologies, cheerfulness and staff-to-staff tension affect call_score only. The two scores can differ (cheerful staff and a frustrated customer; calm customer and alarmed staff).\n\nRules:\n1. Technical words are topic, not mood. Words such as outage, failure, breach, error, down or critical describe the subject. They do not make a turn negative. A turn is negative only when the speaker expresses frustration, worry, tension, blame or dissatisfaction.\n2. Courtesy is neutral. Greetings, thanks, \"I understand\", \"let me look into that\" and protocol apologies (\"I'm sorry for the inconvenience\") are neutral. A turn is positive only if it shows appreciation beyond courtesy, enthusiasm, praise, agreement with evident satisfaction, or relief. A staff apology that itself shows alarm or distress is negative.\n3. Sarcasm and understatement. Judge the intended meaning, not the literal words. \"Great, another outage\" is negative. Understatement (\"it's a bit of a problem\" about a total loss of service) is read at its real weight.\n4. Resolved versus unresolved. The end of the call matters. A problem that is fixed during the call and met with relief lifts the tone; a problem still open at the end holds the score down. Do not give credit for promises alone (\"we will look into it\") unless the speaker accepts them with evident reassurance.\n5. Per-turn labels. Label every turn on its own by tone: negative (frustration, worry, tension, blame, dissatisfaction, impatience, threat, or alarmed bad news), neutral (factual, procedural, questions, courtesy, calm bad news), positive (appreciation beyond courtesy, enthusiasm, praise, relief, evident satisfaction). A turn with both positive and negative tone takes the stronger one; if equal, neutral. Very short turns (\"yeah\", \"okay\") are neutral unless the words or the context make the tone clear. Return one entry for EVERY turn, in order, using the turn's index.\n6. Trajectory. Let n be the number of turns. The first third is the first ceil(n/3) turns and the last third is the last ceil(n/3) turns. Score each on the same 1 to 5 whole-call scale (half steps allowed). Count turns, not minutes.\n7. Evidence quote. Copy one short passage (up to 25 words) character for character from a single turn, including punctuation and dashes, choosing the one that most influenced call_score. Do not paraphrase, join separate turns, or add ellipses.\n8. confidence: \"high\" when the tone is clear and consistent, \"medium\" when it shifts or is mixed, \"low\" when the transcript is too short or ambiguous to judge.\n\nIllustrative example A (invented for this prompt; not dataset content). A customer call.\nTurns:\n0 | Dana | aegis_staff | Thanks for calling Aegis support, how can I help?\n1 | Lee | customer | Our sync has been down since this morning and my team can't log in. This is the second time this month.\n2 | Dana | aegis_staff | I'm sorry about that. I can see the failed job and I'm restarting it now.\n3 | Lee | customer | Okay. Honestly I'm frustrated, we've lost half a day.\n4 | Dana | aegis_staff | Understood. It's running again, can you try a login?\n5 | Lee | customer | That works. Thanks, that's a relief.\nOutput:\n{\"call_score\": 3.5, \"customer_score\": 3, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"negative\"}, {\"index\": 2, \"label\": \"neutral\"}, {\"index\": 3, \"label\": \"negative\"}, {\"index\": 4, \"label\": \"neutral\"}, {\"index\": 5, \"label\": \"positive\"}], \"trajectory\": {\"start\": 2.5, \"end\": 4}, \"evidence_quote\": \"Honestly I'm frustrated, we've lost half a day.\", \"confidence\": \"medium\"}\n\nIllustrative example B (invented for this prompt; not dataset content). An internal call with no customer.\nTurns:\n0 | Sam | aegis_staff | Quick status round. Priya, you first?\n1 | Priya | aegis_staff | Ingestion refactor is sixty percent done, retry logic is in review.\n2 | Priya | aegis_staff | Before we move on, can we talk about the outage? The noise from it is still eating our week.\n3 | Sam | aegis_staff | Fair. Let's stay on the sprint today and take the outage in the retro.\n4 | Priya | aegis_staff | Fine, but it keeps getting pushed.\n5 | Sam | aegis_staff | Noted. I'll put it first on the retro agenda.\nOutput:\n{\"call_score\": 2.5, \"customer_score\": null, \"per_turn\": [{\"index\": 0, \"label\": \"neutral\"}, {\"index\": 1, \"label\": \"neutral\"}, {\"index\": 2, \"label\": \"negative\"}, {\"index\": 3, \"label\": \"neutral\"}, {\"index\": 4, \"label\": \"negative\"}, {\"index\": 5, \"label\": \"neutral\"}], \"trajectory\": {\"start\": 3, \"end\": 2.5}, \"evidence_quote\": \"Fine, but it keeps getting pushed.\", \"confidence\": \"medium\"}\n\nThe examples show the format and how the rules apply. They are not the answer for any real call.\n\nReturn only JSON, nothing else:\n{\n  \"call_score\": <number, 1 to 5 in half steps>,\n  \"customer_score\": <number in half steps, or null when no turn has side \"customer\">,\n  \"per_turn\": [{\"index\": 0, \"label\": \"negative\" | \"neutral\" | \"positive\"}, ...],\n  \"trajectory\": {\"start\": <number 1 to 5>, \"end\": <number 1 to 5>},\n  \"evidence_quote\": \"<verbatim text from one turn>\",\n  \"confidence\": \"low\" | \"medium\" | \"high\"\n}",
+    "user": "transcript (43 turns, indices 0 to 42; per_turn needs exactly 43 entries, one per index in order):\n[0] Ananya Sharma (aegis_staff): Alright, I think everyone's on — Hannah, Nina, can you both hear me okay?\n[1] Hannah Liu (aegis_staff): Yep, loud and clear.\n[2] Nina Kowalski (aegis_staff): Same here, I'm good.\n[3] Ananya Sharma (aegis_staff): Okay great. So, um, I think the main thing we wanted to get through today is the Identity roadmap for Q2, specifically around the MFA expansion and then the SSO connector work. Hannah, do you want to kind of set the stage?\n[4] Hannah Liu (aegis_staff): Yeah, for sure. So, at a high level, the ask from leadership is that we have a clearer story around Aegis Identity by end of Q2. Right now the feedback we're getting from sales is that the IAM side feels a little thin compared to what SentinelShield is putting out there. So the focus areas are — one, the MFA policy engine, and two, the SSO connector library, we want to expand that significantly.\n[5] Ananya Sharma (aegis_staff): Right, and I think the SSO connector piece is actually the more tractable one in the near term. We already have the SAML 2.0 foundation in place, so adding connectors for, say, Okta, Azure AD, that's — it's work but it's not like, greenfield work.\n[6] Nina Kowalski (aegis_staff): How many connectors are we talking about? Because from a QA standpoint, each one is basically its own test surface.\n[7] Hannah Liu (aegis_staff): Yeah, that's a fair point. I think we were penciling in something like six to eight new connectors by end of Q2. But I want to hear what's realistic from Ananya's side before we commit to that number publicly.\n[8] Ananya Sharma (aegis_staff): Six to eight is... doable, but it depends a lot on how we scope the testing cycles. Like if Nina's team needs, what, two weeks per connector for full regression?\n[9] Nina Kowalski (aegis_staff): It's not quite that bad. For a connector where the underlying SAML flow is already validated, we can probably get that down to, I'd say, a week of focused testing if we have good test environments set up. The problem is historically we've had to wait on engineering to provision those environments and that's where time gets lost.\n[10] Ananya Sharma (aegis_staff): Okay yeah, that's a real bottleneck. I actually put a ticket in — I want to say like two sprints ago — to get a dedicated staging tenant for Identity testing and it's still sitting in the infrastructure queue.\n[11] Hannah Liu (aegis_staff): I didn't know that was still open. Do you know who's blocking it?\n[12] Ananya Sharma (aegis_staff): It's not really blocked, it just hasn't been prioritized. I think the infra team has been heads down on the Detect pipeline work so everything else kind of got deprioritized.\n[13] Hannah Liu (aegis_staff): Okay, I can follow up with the infra lead on that. That actually needs to happen regardless of what we decide today, so let me just take that as an action item.\n[14] Nina Kowalski (aegis_staff): That would be great, yeah.\n[15] Hannah Liu (aegis_staff): So, going back to MFA — Ananya, what's the current state of the policy engine? I know we had some design discussions back in December but I feel like things shifted after the holidays.\n[16] Ananya Sharma (aegis_staff): Yeah, so the design did shift a bit. The original plan was to build a rules-based engine where admins could define MFA requirements per user group and per application. That's still the core of it. What changed is we're now also looking at adding a risk-signal layer, so the system can factor in things like login location, device fingerprint, time of day — and then either require step-up auth or flag it for review.\n[17] Hannah Liu (aegis_staff): Okay, that's — I mean, that's a bigger scope than what I had in my head. Is that all in scope for Q2 or is the risk-signal piece more of a later phase?\n[18] Ananya Sharma (aegis_staff): Honestly I think we should phase it. The core rules engine, that's Q2. The risk-signal layer I'd push to Q3 at the earliest. It requires integrating with some telemetry pipelines that aren't fully built out yet.\n[19] Nina Kowalski (aegis_staff): That makes sense to me. From a QA perspective, testing adaptive MFA is significantly more complex — you basically need to simulate all these different environmental conditions. So keeping that separate is probably the right call.\n[20] Hannah Liu (aegis_staff): Agreed. And honestly from a product narrative standpoint, we can still tell a strong story with the rules-based engine. Being able to say you can set granular MFA policies per role, per app, that's already differentiated from what CyberNova offers right now.\n[21] Ananya Sharma (aegis_staff): Yeah I think that's right. CyberNova's IAM is pretty much all-or-nothing on MFA from what I've seen.\n[22] Hannah Liu (aegis_staff): Okay so let's try to nail down some rough timelines. If we're targeting the rules engine for Q2, what does that look like sprint by sprint? I know it's early but even a rough shape would help me with planning.\n[23] Ananya Sharma (aegis_staff): So, rough shape — I'd say February and into early March is design finalization and we start building out the policy schema, the data model. Mid-March through April is core implementation. And then ideally late April we're handing off to Nina's team for testing, which gives us... a May release window if everything goes smoothly.\n[24] Nina Kowalski (aegis_staff): May is tight but not impossible. The thing I'd flag is that late April hand-off only works if the spec is really locked before we start testing. Last time, and I don't want to relitigate this, but last time we got a build that was still in flux and we wasted like a week and a half.\n[25] Ananya Sharma (aegis_staff): No that's a totally fair callout, and I take ownership of that — the spec on the last feature wasn't clean enough when it went to QA. What I'd suggest is we set a hard cutoff, like spec is locked two weeks before the hand-off date, and if it's not locked, we don't hand off.\n[26] Hannah Liu (aegis_staff): I'm supportive of that. And from my side, I'll make sure the acceptance criteria are written into the spec from the beginning so Nina's team isn't guessing at what done looks like.\n[27] Nina Kowalski (aegis_staff): That would genuinely help a lot. If we have acceptance criteria upfront, we can start building test cases in parallel with development instead of waiting.\n[28] Hannah Liu (aegis_staff): Good, let's make that the standard going forward for Identity work. Okay, so — SSO connectors. Do we want to talk about prioritization? Like which connectors do we tackle first?\n[29] Hannah Liu (aegis_staff): Yeah, so I've been looking at this. Based on what sales has been logging in the CRM, Okta is by far the most requested. After that it's Azure AD, then Google Workspace. Everything else is pretty scattered — Ping Identity comes up occasionally, Duo, a few others.\n[30] Ananya Sharma (aegis_staff): Okay so Okta, Azure AD, Google Workspace as the first three. That actually makes sense from an engineering standpoint too because those three have the most mature and well-documented APIs, so we're less likely to hit weird edge cases.\n[31] Nina Kowalski (aegis_staff): From a testing standpoint I'll need access to sandbox environments for all three. Okta I'm pretty sure we have a dev account already. Azure AD and Google Workspace I'd need to confirm.\n[32] Ananya Sharma (aegis_staff): We definitely have the Okta dev account. Azure AD — I think we have one through our internal Nextera agreement but I'd have to check with IT. Google Workspace I'm not sure about.\n[33] Hannah Liu (aegis_staff): Can you both just check and send me what you find? I'd rather know now if there's a gap so we can sort it out before it becomes a blocker in March.\n[34] Ananya Sharma (aegis_staff): Yeah I'll check on the Azure one this week.\n[35] Nina Kowalski (aegis_staff): Same, I'll figure out the Okta account situation and confirm it's still active.\n[36] Hannah Liu (aegis_staff): Great. Okay I think we're in decent shape on the high-level plan. Let me just recap what I've got — MFA policy rules engine is the Q2 priority, spec locked mid-April, hand-off to QA late April, targeting May GA. SSO connectors, starting with Okta, Azure AD, Google Workspace. And I'm following up on the infra staging environment ticket. Does that sound right to everyone?\n[37] Ananya Sharma (aegis_staff): That covers it from my side. The one thing I'd add is we should probably schedule a mid-point check-in, like sometime in March, just to make sure we're on track before things get too far along.\n[38] Hannah Liu (aegis_staff): Agreed. I'll put something on the calendar for mid-March — same group, probably thirty minutes.\n[39] Nina Kowalski (aegis_staff): Works for me.\n[40] Hannah Liu (aegis_staff): Alright, I think that's everything. Thanks both, this was a useful sync.\n[41] Ananya Sharma (aegis_staff): Yeah, good to get on the same page. Talk soon.\n[42] Nina Kowalski (aegis_staff): Thanks everyone, bye."
+  },
+  "response_text": "{\n  \"call_score\": 3.5,\n  \"customer_score\": null,\n  \"per_turn\": [\n    {\"index\": 0, \"label\": \"neutral\"},\n    {\"index\": 1, \"label\": \"neutral\"},\n    {\"index\": 2, \"label\": \"neutral\"},\n    {\"index\": 3, \"label\": \"neutral\"},\n    {\"index\": 4, \"label\": \"neutral\"},\n    {\"index\": 5, \"label\": \"neutral\"},\n    {\"index\": 6, \"label\": \"neutral\"},\n    {\"index\": 7, \"label\": \"neutral\"},\n    {\"index\": 8, \"label\": \"neutral\"},\n    {\"index\": 9, \"label\": \"negative\"},\n    {\"index\": 10, \"label\": \"neutral\"},\n    {\"index\": 11, \"label\": \"neutral\"},\n    {\"index\": 12, \"label\": \"neutral\"},\n    {\"index\": 13, \"label\": \"neutral\"},\n    {\"index\": 14, \"label\": \"positive\"},\n    {\"index\": 15, \"label\": \"neutral\"},\n    {\"index\": 16, \"label\": \"neutral\"},\n    {\"index\": 17, \"label\": \"neutral\"},\n    {\"index\": 18, \"label\": \"neutral\"},\n    {\"index\": 19, \"label\": \"neutral\"},\n    {\"index\": 20, \"label\": \"neutral\"},\n    {\"index\": 21, \"label\": \"neutral\"},\n    {\"index\": 22, \"label\": \"neutral\"},\n    {\"index\": 23, \"label\": \"neutral\"},\n    {\"index\": 24, \"label\": \"negative\"},\n    {\"index\": 25, \"label\": \"neutral\"},\n    {\"index\": 26, \"label\": \"neutral\"},\n    {\"index\": 27, \"label\": \"positive\"},\n    {\"index\": 28, \"label\": \"neutral\"},\n    {\"index\": 29, \"label\": \"neutral\"},\n    {\"index\": 30, \"label\": \"neutral\"},\n    {\"index\": 31, \"label\": \"neutral\"},\n    {\"index\": 32, \"label\": \"neutral\"},\n    {\"index\": 33, \"label\": \"neutral\"},\n    {\"index\": 34, \"label\": \"neutral\"},\n    {\"index\": 35, \"label\": \"neutral\"},\n    {\"index\": 36, \"label\": \"neutral\"},\n    {\"index\": 37, \"label\": \"neutral\"},\n    {\"index\": 38, \"label\": \"neutral\"},\n    {\"index\": 39, \"label\": \"neutral\"},\n    {\"index\": 40, \"label\": \"positive\"},\n    {\"index\": 41, \"label\": \"positive\"},\n    {\"index\": 42, \"label\": \"neutral\"}\n  ],\n  \"trajectory\": {\n    \"start\": 3.0,\n    \"end\": 3.5\n  },\n  \"evidence_quote\": \"Thanks both, this was a useful sync.\",\n  \"confidence\": \"high\"\n}",
+  "parsed": {
+    "call_score": 3.5,
+    "customer_score": null,
+    "per_turn": [
+      {
+        "index": 0,
+        "label": "neutral"
+      },
+      {
+        "index": 1,
+        "label": "neutral"
+      },
+      {
+        "index": 2,
+        "label": "neutral"
+      },
+      {
+        "index": 3,
+        "label": "neutral"
+      },
+      {
+        "index": 4,
+        "label": "neutral"
+      },
+      {
+        "index": 5,
+        "label": "neutral"
+      },
+      {
+        "index": 6,
+        "label": "neutral"
+      },
+      {
+        "index": 7,
+        "label": "neutral"
+      },
+      {
+        "index": 8,
+        "label": "neutral"
+      },
+      {
+        "index": 9,
+        "label": "negative"
+      },
+      {
+        "index": 10,
+        "label": "neutral"
+      },
+      {
+        "index": 11,
+        "label": "neutral"
+      },
+      {
+        "index": 12,
+        "label": "neutral"
+      },
+      {
+        "index": 13,
+        "label": "neutral"
+      },
+      {
+        "index": 14,
+        "label": "positive"
+      },
+      {
+        "index": 15,
+        "label": "neutral"
+      },
+      {
+        "index": 16,
+        "label": "neutral"
+      },
+      {
+        "index": 17,
+        "label": "neutral"
+      },
+      {
+        "index": 18,
+        "label": "neutral"
+      },
+      {
+        "index": 19,
+        "label": "neutral"
+      },
+      {
+        "index": 20,
+        "label": "neutral"
+      },
+      {
+        "index": 21,
+        "label": "neutral"
+      },
+      {
+        "index": 22,
+        "label": "neutral"
+      },
+      {
+        "index": 23,
+        "label": "neutral"
+      },
+      {
+        "index": 24,
+        "label": "negative"
+      },
+      {
+        "index": 25,
+        "label": "neutral"
+      },
+      {
+        "index": 26,
+        "label": "neutral"
+      },
+      {
+        "index": 27,
+        "label": "positive"
+      },
+      {
+        "index": 28,
+        "label": "neutral"
+      },
+      {
+        "index": 29,
+        "label": "neutral"
+      },
+      {
+        "index": 30,
+        "label": "neutral"
+      },
+      {
+        "index": 31,
+        "label": "neutral"
+      },
+      {
+        "index": 32,
+        "label": "neutral"
+      },
+      {
+        "index": 33,
+        "label": "neutral"
+      },
+      {
+        "index": 34,
+        "label": "neutral"
+      },
+      {
+        "index": 35,
+        "label": "neutral"
+      },
+      {
+        "index": 36,
+        "label": "neutral"
+      },
+      {
+        "index": 37,
+        "label": "neutral"
+      },
+      {
+        "index": 38,
+        "label": "neutral"
+      },
+      {
+        "index": 39,
+        "label": "neutral"
+      },
+      {
+        "index": 40,
+        "label": "positive"
+      },
+      {
+        "index": 41,
+        "label": "positive"
+      },
+      {
+        "index": 42,
+        "label": "neutral"
+      }
+    ],
+    "trajectory": {
+      "start": 3.0,
+      "end": 3.5
+    },
+    "evidence_quote": "Thanks both, this was a useful sync.",
+    "confidence": "high"
+  },
+  "usage": {
+    "completion_tokens": 723,
+    "prompt_tokens": 4834,
+    "total_tokens": 5557,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null,
+      "text_tokens": null,
+      "image_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null,
+      "video_tokens": 0
+    },
+    "cost": 0.00633675,
+    "is_byok": false,
+    "cost_details": {
+      "upstream_inference_cost": 0.00633675,
+      "upstream_inference_prompt_cost": 0.0036255,
+      "upstream_inference_completions_cost": 0.00271125
+    }
+  },
+  "latency_s": 4.946,
+  "finish_reason": "stop",
+  "model_returned": "google/gemini-3.8-flash",
+  "provider_returned": "Google AI Studio",
+  "timestamp": "2026-10-29T21:22:56.335680+00:00",
+  "key": "000ba1fdbcc8b26a3deb1e99b181bcc695cf0b6bf2a479baea9f751d243b087b"
+}
